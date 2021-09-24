@@ -26,7 +26,7 @@
   <a class="menu-toggle rounded" href="#"><i class="fas fa-bars"></i></a>
   <nav id="sidebar-wrapper">
     <ul class="sidebar-nav">
-      <li class="sidebar-brand">Sistema de quejas</li>
+      <li class="sidebar-brand text-white font-weight-bold">Sistema de quejas</li>
       <li class="sidebar-nav-item"><a href="/">Inicio</a></li>
       <li class="sidebar-nav-item"><a href="about.php">Acerca de nosotros</a></li>
       <li class="sidebar-nav-item"><a href="./auth/userLogin.php">Iniciar sesion</a></li>
