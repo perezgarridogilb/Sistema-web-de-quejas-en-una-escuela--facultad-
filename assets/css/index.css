@@ -1,0 +1,34 @@
+:root {
+    --primary: #3598dc;
+}
+
+.bg-primary {
+  background-color: var(--primary);
+}
+
+.login {
+    min-height: 100vh;
+  }
+    
+  .login-heading {
+    font-weight: 300;
+  }
+  
+  .btn-login {
+    font-size: 0.9rem;
+    letter-spacing: 0.05rem;
+    padding: 0.75rem 1rem;
+  }
+  
+
+  .bg-password-image {
+    background: url("https://source.unsplash.com/oWTW-jNGl9I/600x800");
+    background-position: center;
+    background-size: cover;
+  }
+
+  form.user .form-control-user {
+    font-size: 0.8rem;
+    border-radius: 10rem;
+    padding: 1.5rem 1rem;
+  }
