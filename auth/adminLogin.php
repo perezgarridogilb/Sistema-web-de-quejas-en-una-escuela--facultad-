@@ -65,8 +65,7 @@ if (!empty($_POST)) {
                                     <div class="d-grid">
                                         <button class="btn btn-lg bg-primary text-white btn-login text-uppercase fw-bold mb-2" type="submit">Ingresar</button>
                                         <div class="text-center">
-                                            <a class="small" href="./passwordRecover.php">¿Olvidaste la contraseña?</a> <span class='text-secondary'>|</span> <a class="small" href="./crearUsuario.php">Crea una cuenta</a>
-
+                                            <a class="small" href="./userLogin.php">¿Eres usuario?</a>
                                         </div>
                                     </div>
                                 </form>
