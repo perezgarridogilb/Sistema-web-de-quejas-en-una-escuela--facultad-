@@ -33,8 +33,8 @@
         </ul>
     </nav>
 
-    <div class="container mt-5">
-        <h2 class="text-center">Crear queja</h2>
+    <div class="container">
+        <h2 class="text-center mt-5">Crear queja</h2>
 
         <form>
             <div class="form-group mb-5">
