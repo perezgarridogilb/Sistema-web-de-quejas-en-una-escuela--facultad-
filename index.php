@@ -17,7 +17,6 @@
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css" />
   <!-- Core theme CSS (includes Bootstrap)-->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
   <link href="assets/css/styles2.css" rel="stylesheet" />
 </head>
 
@@ -27,10 +26,10 @@
   <nav id="sidebar-wrapper">
     <ul class="sidebar-nav">
       <li class="sidebar-brand text-white font-weight-bold">Sistema de quejas</li>
-      <li class="sidebar-nav-item"><a href="/">Inicio</a></li>
-      <li class="sidebar-nav-item"><a href="about.php">Acerca de nosotros</a></li>
+      <li class="sidebar-nav-item"><a href="./">Inicio</a></li>
       <li class="sidebar-nav-item"><a href="./auth/userLogin.php">Iniciar sesion</a></li>
       <li class="sidebar-nav-item"><a href="./auth/crearUsuario.php">Crear nueva cuenta</a></li>
+      <li class="sidebar-nav-item"><a href="about.php">Acerca de nosotros</a></li>
     </ul>
   </nav>
   <!-- Header-->
