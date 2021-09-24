@@ -1,3 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link href="assets/css/index.css" rel="stylesheet">
+</head>
+
 <?php
 include("conexion.php");
 session_start();
@@ -24,43 +35,48 @@ if (!empty($_POST)) {
 }
 
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
 
-<head>
-  <title>*CHESSPIECE 2*</title>
-  <link href="style.css" rel="stylesheet" />
-  <meta http-equiv="Content-Type" />
-  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css">
-</head>
+<body>
+  <div class="container-fluid ps-md-0">
+    <div class="row g-0">
+      <div class="d-none d-md-flex col-md-4 col-lg-6 bg-secondary justify-content-center align-items-center">
+        <p class='text-center text-white h1'>
+          Usuarios
+        </p>
+      </div>
+      <div class="col-md-8 col-lg-6">
+        <div class="login d-flex align-items-center py-5">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-9 col-lg-8 mx-auto">
+                <h3 class="login-heading mb-4 text-center">Bienvenido de nuevo!</h3>
 
-<div id="menucontaine" align="right"><a href="sesion.php">Iniciar sesion</a></div>
-<div id="wrap">
-  <div id="masthead">
-  <h1 align="left">Sistema Web de quejas escolares</h1>
-    <div id="menucontainer">
-      <div id="menunav">
-        <ul>
-          <li><a href="index.php" class="current"><span>Home</span></a></li>
-          <li><a href="perfiles.php"><span>Perfiles</span></a></li>
-        </ul>
-        <div>
+                <!-- Sign In Form -->
+                <form action='sesion.php' method='POST'>
+                  <div class="form-floating mb-3">
+                    <input type="user" class="form-control" id="floatingInput" placeholder="name@example.com">
+                    <label for="floatingInput">Correo</label>
+                  </div>
+                  <div class="form-floating mb-3">
+                    <input type="pass" class="form-control" id="floatingPassword" placeholder="Password">
+                    <label for="floatingPassword">Contraseña</label>
+                  </div>
+
+                  <div class="d-grid">
+                    <button class="btn btn-lg bg-primary text-white btn-login text-uppercase fw-bold mb-2" type="submit">Ingresar</button>
+                    <div class="text-center">
+                      <a class="small" href="passwordRecover.html">¿Olvidaste la contraseña?</a> <span class='text-secondary'>|</span> <a class="small" href="crearUsuario.html">Crea una cuenta</a>
+
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-
-    <body>
-      <h1>Iniciar sesión</h1>
-      <span> o <a href="crearUsuario.php">Crear usuario</a></span>
-      <form action="sesion.php" method="POST">
-        <input name="user" type="text" placeholder="Ingresa tu email" required>
-        <input name="pass" type="password" placeholder="Ingresa tu contraseña" required>
-        <input type="submit" value="Ingresar">
-      </form>
-    </body>
-    <div id="footer"> <a href="#">homepage</a> | <a href="mailto:denise@mitchinson.net">contact</a> | <a href="http://validator.w3.org/check?uri=referer">html</a> | <a href="http://jigsaw.w3.org/css-validator">css</a> | &copy; 2007 Anyone | Design by <a href="http://www.mitchinson.net"> www.mitchinson.net</a><br />
-      This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 License</a> </div>
-    </body>
+  </div>
+</body>
 
 </html>
