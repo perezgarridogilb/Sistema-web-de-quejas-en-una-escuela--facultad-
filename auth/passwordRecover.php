@@ -11,7 +11,6 @@
 
     <title></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
 </head>
 
 <body class="bg-gradient-primary">
@@ -41,10 +40,10 @@
                                 </form>
                                 <div class="row justify-content-center">
                                     <div class="col text-center">
-                                        <a class="small" href="signup.html">Crea una cuenta!</a>
+                                        <a class="small" href="crearUsuario.php">Crea una cuenta!</a>
                                     </div>
                                     <div class="col text-center">
-                                        <a class="small" href="user_login.html">¿Ya tienes una cuenta? Ingresa!</a>
+                                        <a class="small" href="userLogin.php">¿Ya tienes una cuenta? Ingresa!</a>
                                     </div>
                                 </div>
                             </div>
