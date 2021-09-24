@@ -45,6 +45,9 @@ if (!empty($_POST)) {
         </p>
       </div>
       <div class="col-md-8 col-lg-6">
+        <div class='p-2'>
+          <a href='../'>Ir a inicio</a>
+        </div>
         <div class="login d-flex align-items-center py-5">
           <div class="container">
             <div class="row">

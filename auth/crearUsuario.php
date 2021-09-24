@@ -127,8 +127,13 @@ if (!empty($_POST)) {
 <body>
   <div class="signup-form">
     <form method="post">
+      <div class='p-2'>
+        <a href='../'>Ir a inicio</a>
+      </div>
+
       <h2>Registro</h2>
       <p>Rellena los campos para crear una nueva cuenta!</p>
+
       <hr>
       <div class="form-group">
         <div class="col"><input type="text" class="form-control" name="nombre" placeholder="Nombre(s)" required="required"></div>
