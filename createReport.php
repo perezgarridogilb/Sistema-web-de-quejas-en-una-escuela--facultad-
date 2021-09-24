@@ -26,10 +26,15 @@
     <nav id="sidebar-wrapper">
         <ul class="sidebar-nav">
             <li class="sidebar-brand text-white font-weight-bold">Sistema de quejas</li>
-            <li class="sidebar-nav-item"><a href="./">Inicio</a></li>
+            <li class="sidebar-nav-item"><a href="./index.php">Inicio</a></li>
+            <li class="sidebar-nav-item"><a href="./createReport.php">Crear reportes</a></li>
+            <li class="sidebar-nav-item"><a href="./listReports.php">Listar reportes</a></li>
+            <li class="sidebar-nav-item"><a href="./administrador/dashboard.php">Estadísticas</a></li>
+            <li class="sidebar-nav-item"><a href="about.php">Acerca de nosotros</a></li>
+            <hr>
             <li class="sidebar-nav-item"><a href="./auth/userLogin.php">Iniciar sesion</a></li>
             <li class="sidebar-nav-item"><a href="./auth/crearUsuario.php">Crear nueva cuenta</a></li>
-            <li class="sidebar-nav-item"><a href="about.php">Acerca de nosotros</a></li>
+            <li class="sidebar-nav-item"><a href="./auth/userLogin.php">Cerrar sesion</a></li>
         </ul>
     </nav>
 
