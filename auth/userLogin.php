@@ -17,7 +17,7 @@ if (!empty($_POST)) {
   /* Se utiliza antes de insertar una cadena en una base de datos, ya que elimina 
     cualquier carácter especial que pueda interferir con las operaciones de consulta */
   $password = sha1(mysqli_real_escape_string($conn, $_POST['pass']));
-  $sql = "SELECT id_usuario, nombre, correo, contraseña, tipo_usuario FROM users WHERE  correo='$_POST[user]' AND contraseña='$_POST[pass]' AND tipo=1";
+  $sql = "SELECT id_usuario, nombre, correo, contraseña, tipo_usuario FROM users WHERE  correo='$_POST[user]' AND contraseña='$_POST[pass]' AND tipo_usuario=1";
   $resultado = mysqli_query($conn, $sql);
   $rows = $resultado->num_rows;
   if ($rows > 0) {
