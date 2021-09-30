@@ -41,7 +41,7 @@
   <header class="masthead d-flex align-items-center">
     <div class="container px-4 px-lg-5 text-center">
       <h1 class="mb-1">Sistema de quejas</h1>
-      <h3 class="mb-5"><em>Bienvenido </em></h3>
+      <h3 class="mb-5"><em>Bienvenido, somos un sistema de seguimiento de quejas escolares que resuelve dudas, recolecta estadísticas y da retroalimentación.</em></h3>
       <a class="btn btn-primary btn-xl" href="./auth/crearUsuario.php">Crear una cuenta</a>
     </div>
   </header>
