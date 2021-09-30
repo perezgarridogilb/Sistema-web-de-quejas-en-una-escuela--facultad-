@@ -3,9 +3,11 @@ include("../conexion.php");
 
 if (!empty($_POST)) {
   /*$contraseña = sha1(mysqli_real_escape_string($conn, $_POST['pass']));*/
-  $sql = "INSERT INTO users (nombre, imagen, correo, contraseña, tipo_usuario) VALUES ('$_POST[nombre]', '$_POST[imagen]', '$_POST[correo]', '$_POST[password]', 1)";
+  $sql = "INSERT INTO users (nombre, imagen, correo, contraseña, tipo_usuario) VALUES ('$_POST[nombre]', '', '$_POST[correo]', '$_POST[password]', 0)";
   if ($conn->query($sql) === TRUE) {
-    header("Location: sesion.php");
+    $_SESSION['id_usuario'] = $row['id_usuario'];
+    $_SESSION['tipo_usuario'] = $row['tipo_usuario'];
+    header("Location: ../usuarios/index.php");
   } else {
     echo "Error: " . $sql . "<br>" . $sql . $conn->error . "<br>";
   }
@@ -144,9 +146,6 @@ if (!empty($_POST)) {
       </div>
       <div class="form-group">
         <input type="password" class="form-control" name="password" placeholder="Contraseña" required="required">
-      </div>
-      <div class="form-group">
-        <input type="password" class="form-control" name="confirm_password" placeholder="Confirmación de contraseña" required="required">
       </div>
       <div class="form-group">
         <button type="submit" class="btn btn-lg text-white">Registrar</button>
