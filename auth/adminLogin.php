@@ -12,21 +12,22 @@
 <?php
 include("../conexion.php");
 session_start();
+$failled_message = null;
 
-if (!empty($_POST)) {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     /* Se utiliza antes de insertar una cadena en una base de datos, ya que elimina 
     cualquier carácter especial que pueda interferir con las operaciones de consulta */
-    $password = sha1(mysqli_real_escape_string($conn, $_POST['pass']));
-    $sql = "SELECT id_usuario, nombre, correo, contraseña, tipo_usuario FROM users WHERE  correo='$_POST[user]' AND contraseña='$_POST[pass]' AND tipo_usuario=2";
+    $sql = "SELECT id_usuario, nombre, correo, contraseña, tipo_usuario FROM users WHERE  correo='$_POST[user]' AND contraseña='$_POST[pass]' AND tipo_usuario=1";
     $resultado = mysqli_query($conn, $sql);
     $rows = $resultado->num_rows;
+
     if ($rows > 0) {
         $row = mysqli_fetch_array($resultado);
         $_SESSION['id_usuario'] = $row['id_usuario'];
         $_SESSION['tipo_usuario'] = $row['tipo_usuario'];
-        header("Location: ./administrador/index.php");
+        header("Location: ../administrador/index.php");
     } else {
-        echo 'Usuario o contraseña incorrecto';
+        $failled_message = "Usuario y/o contraseña incorrecto";
     }
 }
 
@@ -37,7 +38,7 @@ if (!empty($_POST)) {
         <div class="row g-0">
             <div class="d-none d-md-flex col-md-4 col-lg-6 bg-secondary justify-content-center align-items-center">
                 <p class='text-center text-white h1'>
-                    Administradores
+                    Usuarios
                 </p>
             </div>
             <div class="col-md-8 col-lg-6">
@@ -45,27 +46,37 @@ if (!empty($_POST)) {
                     <a href='../'>Ir a inicio</a>
                 </div>
 
+
                 <div class="login d-flex align-items-center py-5">
                     <div class="container">
                         <div class="row">
                             <div class="col-md-9 col-lg-8 mx-auto">
-                                <h3 class="login-heading mb-4 text-center">Bienvenido de nuevo!</h3>
+                                <div class="login-heading mb-2">
+                                    <h3 class="text-center mb-2">Bienvenido de nuevo!</h3>
+                                    <?php if ($failled_message != null) {
+                                        echo "<div class='alert alert-danger'>";
+                                        echo $failled_message;
+                                        echo "</div>";
+                                    } ?>
 
+                                </div>
                                 <!-- Sign In Form -->
-                                <form action='sesion.php' method='POST'>
+                                <form method='POST'>
                                     <div class="form-floating mb-3">
-                                        <input type="user" class="form-control" id="floatingInput" placeholder="name@example.com">
+                                        <input name="user" type="email" class="form-control" placeholder="name@example.com" required>
                                         <label for="floatingInput">Correo</label>
                                     </div>
                                     <div class="form-floating mb-3">
-                                        <input type="pass" class="form-control" id="floatingPassword" placeholder="Password">
+                                        <input name="pass" type="password" class="form-control" placeholder="Password" required>
                                         <label for="floatingPassword">Contraseña</label>
                                     </div>
 
                                     <div class="d-grid">
                                         <button class="btn btn-lg bg-primary text-white btn-login text-uppercase fw-bold mb-2" type="submit">Ingresar</button>
                                         <div class="text-center">
-                                            <a class="small" href="./userLogin.php">¿Eres usuario?</a>
+                                            <a class="small" href="./passwordRecover.php">¿Olvidaste la contraseña?</a> <span class='text-secondary'>|</span> <a class="small" href="./crearUsuario.php">Crea una cuenta</a>
+                                            <br />
+                                            <a class="small" href="./adminLogin.php">¿Eres administrador?</a>
                                         </div>
                                     </div>
                                 </form>
