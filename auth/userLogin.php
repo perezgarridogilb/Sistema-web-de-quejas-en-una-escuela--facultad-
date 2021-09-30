@@ -17,18 +17,14 @@ if (!empty($_POST)) {
   /* Se utiliza antes de insertar una cadena en una base de datos, ya que elimina 
     cualquier carácter especial que pueda interferir con las operaciones de consulta */
   $password = sha1(mysqli_real_escape_string($conn, $_POST['pass']));
-  $sql = "SELECT id_usuario, nombre, correo, contraseña, tipo_usuario FROM users WHERE  correo='$_POST[user]' AND contraseña='$_POST[pass]'";
+  $sql = "SELECT id_usuario, nombre, correo, contraseña, tipo_usuario FROM users WHERE  correo='$_POST[user]' AND contraseña='$_POST[pass]' AND tipo=1";
   $resultado = mysqli_query($conn, $sql);
   $rows = $resultado->num_rows;
   if ($rows > 0) {
     $row = mysqli_fetch_array($resultado);
     $_SESSION['id_usuario'] = $row['id_usuario'];
     $_SESSION['tipo_usuario'] = $row['tipo_usuario'];
-    if ($_SESSION['tipo_usuario'] == 1) {
-      header("Location: ./usuarios/index.php");
-    } else {
-      header("Location: ./administrador/index.php");
-    }
+    header("Location: ./usuarios/index.php");
   } else {
     echo '<div class="alert alert-danger>Usuario o contraseña incorrecto</div>';
   }
