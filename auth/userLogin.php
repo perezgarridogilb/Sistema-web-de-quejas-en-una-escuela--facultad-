@@ -13,20 +13,21 @@
 include("../conexion.php");
 session_start();
 
-if (!empty($_POST)) {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
   /* Se utiliza antes de insertar una cadena en una base de datos, ya que elimina 
     cualquier carácter especial que pueda interferir con las operaciones de consulta */
-  $password = sha1(mysqli_real_escape_string($conn, $_POST['pass']));
-  $sql = "SELECT id_usuario, nombre, correo, contraseña, tipo_usuario FROM users WHERE  correo='$_POST[user]' AND contraseña='$_POST[pass]' AND tipo_usuario=1";
+  $sql = "SELECT id_usuario, nombre, correo, contraseña, tipo_usuario FROM users WHERE  correo='$_POST[user]' AND contraseña='$_POST[pass]' AND tipo_usuario=0";
   $resultado = mysqli_query($conn, $sql);
   $rows = $resultado->num_rows;
+  $failled_message = null;
+
   if ($rows > 0) {
     $row = mysqli_fetch_array($resultado);
     $_SESSION['id_usuario'] = $row['id_usuario'];
     $_SESSION['tipo_usuario'] = $row['tipo_usuario'];
-    header("Location: ./usuarios/index.php");
+    header("Location: ../usuarios/index.php");
   } else {
-    echo '<div class="alert alert-danger>Usuario o contraseña incorrecto</div>';
+    $failled_message = "Usuario y/o contraseña incorrecto";
   }
 }
 
@@ -44,20 +45,29 @@ if (!empty($_POST)) {
         <div class='p-2'>
           <a href='../'>Ir a inicio</a>
         </div>
+
+
         <div class="login d-flex align-items-center py-5">
           <div class="container">
             <div class="row">
               <div class="col-md-9 col-lg-8 mx-auto">
-                <h3 class="login-heading mb-4 text-center">Bienvenido de nuevo!</h3>
+                <div class="login-heading mb-2">
+                  <h3 class="text-center mb-2">Bienvenido de nuevo!</h3>
+                  <?php if ($failled_message != null) {
+                    echo "<div class='alert alert-danger'>";
+                    echo $failled_message;
+                    echo "</div>";
+                  } ?>
 
+                </div>
                 <!-- Sign In Form -->
-                <form action='sesion.php' method='POST'>
+                <form method='POST'>
                   <div class="form-floating mb-3">
-                    <input type="user" class="form-control" id="floatingInput" placeholder="name@example.com">
+                    <input name="user" type="email" class="form-control" placeholder="name@example.com" required>
                     <label for="floatingInput">Correo</label>
                   </div>
                   <div class="form-floating mb-3">
-                    <input type="pass" class="form-control" id="floatingPassword" placeholder="Password">
+                    <input name="pass" type="password" class="form-control" placeholder="Password" required>
                     <label for="floatingPassword">Contraseña</label>
                   </div>
 
