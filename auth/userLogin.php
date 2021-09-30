@@ -12,6 +12,7 @@
 <?php
 include("../conexion.php");
 session_start();
+$failled_message = null;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   /* Se utiliza antes de insertar una cadena en una base de datos, ya que elimina 
@@ -19,7 +20,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $sql = "SELECT id_usuario, nombre, correo, contraseña, tipo_usuario FROM users WHERE  correo='$_POST[user]' AND contraseña='$_POST[pass]' AND tipo_usuario=0";
   $resultado = mysqli_query($conn, $sql);
   $rows = $resultado->num_rows;
-  $failled_message = null;
 
   if ($rows > 0) {
     $row = mysqli_fetch_array($resultado);
