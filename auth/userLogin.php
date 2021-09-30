@@ -30,7 +30,7 @@ if (!empty($_POST)) {
       header("Location: ./administrador/index.php");
     }
   } else {
-    echo 'Usuario o contraseña incorrecto';
+    echo '<div class="alert alert-danger>Usuario o contraseña incorrecto</div>';
   }
 }
 
