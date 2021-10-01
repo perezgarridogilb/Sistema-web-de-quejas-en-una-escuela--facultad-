@@ -1,12 +1,7 @@
 <?php
 session_start();
-if (!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 1) {
-    header("Location: ../auth/adminLogin.php");
-}
-
 $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : null;
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -36,11 +31,11 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
             <li class="sidebar-nav-item"><a href="./">Inicio</a></li>
             <?php
             if ($userType != null) {
-                echo '<li class="sidebar-nav-item"><a href="./createReport.php">Crear reportes</a></li>';
-                echo '<li class="sidebar-nav-item"><a href="./listReports.php">Listar reportes</a></li>';
-                echo '<li class="sidebar-nav-item"><a href="./administrador/dashboard.php">Estadísticas</a></li>';
+                echo '<li class="sidebar-nav-item"><a href="./reports/createReport.php">Crear reportes</a></li>';
+                echo '<li class="sidebar-nav-item"><a href="./dashboard.php">Estadísticas</a></li>';
             }
             ?>
+            <li class="sidebar-nav-item"><a href="./reports/listReports.php">Listar reportes</a></li>
             <li class="sidebar-nav-item"><a href="about.php">Acerca de nosotros</a></li>
             <hr>
             <?php

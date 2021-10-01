@@ -24,7 +24,7 @@ if (!isset($_SESSION['id_usuario'])) {
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css" />
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link href="assets/css/styles2.css" rel="stylesheet" />
+    <link href="../assets/css/styles2.css" rel="stylesheet" />
 </head>
 
 <body id="page-top">
@@ -33,15 +33,24 @@ if (!isset($_SESSION['id_usuario'])) {
     <nav id="sidebar-wrapper">
         <ul class="sidebar-nav">
             <li class="sidebar-brand text-white font-weight-bold">Sistema de quejas</li>
-            <li class="sidebar-nav-item"><a href="./index.php">Inicio</a></li>
-            <li class="sidebar-nav-item"><a href="./createReport.php">Crear reportes</a></li>
-            <li class="sidebar-nav-item"><a href="./listReports.php">Listar reportes</a></li>
-            <li class="sidebar-nav-item"><a href="./administrador/dashboard.php">Estadísticas</a></li>
-            <li class="sidebar-nav-item"><a href="about.php">Acerca de nosotros</a></li>
+            <li class="sidebar-nav-item"><a href="../">Inicio</a></li>
+            <?php
+            if ($userType != null) {
+                echo '<li class="sidebar-nav-item"><a href="../reports/createReport.php">Crear reportes</a></li>';
+                echo '<li class="sidebar-nav-item"><a href="../dashboard.php">Estadísticas</a></li>';
+            }
+            ?>
+            <li class="sidebar-nav-item"><a href="../reports/listReports.php">Listar reportes</a></li>
+            <li class="sidebar-nav-item"><a href="../about.php">Acerca de nosotros</a></li>
             <hr>
-            <li class="sidebar-nav-item"><a href="./auth/userLogin.php">Iniciar sesion</a></li>
-            <li class="sidebar-nav-item"><a href="./auth/crearUsuario.php">Crear nueva cuenta</a></li>
-            <li class="sidebar-nav-item"><a href="./auth/userLogin.php">Cerrar sesion</a></li>
+            <?php
+            if ($userType == null) {
+                echo '<li class="sidebar-nav-item"><a href="../auth/userLogin.php">Iniciar sesion</a></li>';
+                echo '<li class="sidebar-nav-item"><a href="../auth/crearUsuario.php">Crear nueva cuenta</a></li>';
+            } else {
+                echo '<li class="sidebar-nav-item"><a href="../auth/userLogin.php">Cerrar sesion</a></li>';
+            }
+            ?>
         </ul>
     </nav>
 
@@ -85,7 +94,7 @@ if (!isset($_SESSION['id_usuario'])) {
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
-    <script src="assets/js/scripts.js"></script>
+    <script src="../assets/js/scripts.js"></script>
 </body>
 
 </html>
