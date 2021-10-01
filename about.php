@@ -1,3 +1,13 @@
+<?php
+session_start();
+if (!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 1) {
+    header("Location: ../auth/adminLogin.php");
+}
+
+$userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : null;
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -24,14 +34,23 @@
         <ul class="sidebar-nav">
             <li class="sidebar-brand text-white font-weight-bold">Sistema de quejas</li>
             <li class="sidebar-nav-item"><a href="./">Inicio</a></li>
-            <li class="sidebar-nav-item"><a href="./createReport.php">Crear reportes</a></li>
-            <li class="sidebar-nav-item"><a href="./listReports.php">Listar reportes</a></li>
-            <li class="sidebar-nav-item"><a href="./administrador/dashboard.php">Estadísticas</a></li>
+            <?php
+            if ($userType != null) {
+                echo '<li class="sidebar-nav-item"><a href="./createReport.php">Crear reportes</a></li>';
+                echo '<li class="sidebar-nav-item"><a href="./listReports.php">Listar reportes</a></li>';
+                echo '<li class="sidebar-nav-item"><a href="./administrador/dashboard.php">Estadísticas</a></li>';
+            }
+            ?>
             <li class="sidebar-nav-item"><a href="about.php">Acerca de nosotros</a></li>
             <hr>
-            <li class="sidebar-nav-item"><a href="./auth/userLogin.php">Iniciar sesion</a></li>
-            <li class="sidebar-nav-item"><a href="./auth/crearUsuario.php">Crear nueva cuenta</a></li>
-            <li class="sidebar-nav-item"><a href="./auth/userLogin.php">Cerrar sesion</a></li>
+            <?php
+            if ($userType == null) {
+                echo '<li class="sidebar-nav-item"><a href="./auth/userLogin.php">Iniciar sesion</a></li>';
+                echo '<li class="sidebar-nav-item"><a href="./auth/crearUsuario.php">Crear nueva cuenta</a></li>';
+            } else {
+                echo '<li class="sidebar-nav-item"><a href="./auth/userLogin.php">Cerrar sesion</a></li>';
+            }
+            ?>
         </ul>
     </nav>
 
