@@ -80,7 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <div class="d-grid">
                                         <button class="btn btn-lg bg-primary text-white btn-login text-uppercase fw-bold mb-2" type="submit">Ingresar</button>
                                         <div class="text-center">
-                                            <a class="small" href=".userLogin.php">¿Eres usuario?</a>
+                                            <a class="small" href="./userLogin.php">¿Eres usuario?</a>
                                         </div>
                                     </div>
                                 </form>
