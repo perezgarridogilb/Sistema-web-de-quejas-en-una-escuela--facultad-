@@ -48,7 +48,7 @@ if (!isset($_SESSION['id_usuario'])) {
                 echo '<li class="sidebar-nav-item"><a href="../auth/userLogin.php">Iniciar sesion</a></li>';
                 echo '<li class="sidebar-nav-item"><a href="../auth/crearUsuario.php">Crear nueva cuenta</a></li>';
             } else {
-                echo '<li class="sidebar-nav-item"><a href="../auth/userLogin.php">Cerrar sesion</a></li>';
+                echo '<li class="sidebar-nav-item"><a href="../auth/salir.php">Cerrar sesion</a></li>';
             }
             ?>
         </ul>
