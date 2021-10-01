@@ -9,7 +9,7 @@ if (!empty($_POST)) {
   if ($conn->query($sql) === TRUE) {
     $_SESSION['id_usuario'] = $row['id_usuario'];
     $_SESSION['tipo_usuario'] = $row['tipo_usuario'];
-    header("Location: ../usuarios/index.php");
+    header("Location: ../index.php");
   } else {
     $correo = $_POST['correo'];
     $failled_message = "Ya existe una cuenta existente relacionada con el correo $correo";

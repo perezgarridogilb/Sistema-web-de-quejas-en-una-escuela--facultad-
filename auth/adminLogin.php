@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $row = mysqli_fetch_array($resultado);
         $_SESSION['id_usuario'] = $row['id_usuario'];
         $_SESSION['tipo_usuario'] = $row['tipo_usuario'];
-        header("Location: ../administrador/index.php");
+        header("Location: ../index.php");
     } else {
         $failled_message = "Usuario y/o contraseña incorrecto";
     }
