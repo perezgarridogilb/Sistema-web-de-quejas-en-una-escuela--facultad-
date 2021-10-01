@@ -1,6 +1,8 @@
 <?php
 include("../conexion.php");
 
+$failled_message = null;
+
 if (!empty($_POST)) {
   /*$contraseña = sha1(mysqli_real_escape_string($conn, $_POST['pass']));*/
   $sql = "INSERT INTO users (nombre, imagen, correo, contraseña, tipo_usuario) VALUES ('$_POST[nombre]', '', '$_POST[correo]', '$_POST[password]', 0)";
@@ -9,6 +11,8 @@ if (!empty($_POST)) {
     $_SESSION['tipo_usuario'] = $row['tipo_usuario'];
     header("Location: ../usuarios/index.php");
   } else {
+    $correo = $_POST['correo'];
+    $failled_message = "Ya existe una cuenta existente relacionada con el correo $correo";
     echo "Error: " . $sql . "<br>" . $sql . $conn->error . "<br>";
   }
 }
@@ -136,6 +140,14 @@ if (!empty($_POST)) {
       <h2>Registro</h2>
       <p>Rellena los campos para crear una nueva cuenta!</p>
 
+
+      <?php
+      if ($failled_message != null) {
+        echo "<div class='alert alert-danger'>";
+        echo $failled_message;
+        echo "</div>";
+      }
+      ?>
       <hr>
       <div class="form-group">
         <div class="col"><input type="text" class="form-control" name="nombre" placeholder="Nombre(s)" required="required"></div>
