@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="row g-0">
             <div class="d-none d-md-flex col-md-4 col-lg-6 bg-secondary justify-content-center align-items-center">
                 <p class='text-center text-white h1'>
-                    Usuarios
+                    Administradores
                 </p>
             </div>
             <div class="col-md-8 col-lg-6">
@@ -74,9 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <div class="d-grid">
                                         <button class="btn btn-lg bg-primary text-white btn-login text-uppercase fw-bold mb-2" type="submit">Ingresar</button>
                                         <div class="text-center">
-                                            <a class="small" href="./passwordRecover.php">¿Olvidaste la contraseña?</a> <span class='text-secondary'>|</span> <a class="small" href="./crearUsuario.php">Crea una cuenta</a>
-                                            <br />
-                                            <a class="small" href="./adminLogin.php">¿Eres administrador?</a>
+                                            <a class="small" href=".userLogin.php">¿Eres usuario?</a>
                                         </div>
                                     </div>
                                 </form>
