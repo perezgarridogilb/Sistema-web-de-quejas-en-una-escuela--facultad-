@@ -36,12 +36,20 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
     <link href="./assets/css/styles2.css" rel="stylesheet" />
 </head>
 
-<body id="page-top">
+<body>
     <!-- Navigation-->
     <a class="menu-toggle rounded" href="#"><i class="fas fa-bars"></i></a>
     <nav id="sidebar-wrapper">
         <ul class="sidebar-nav">
-            <li class="sidebar-brand text-white font-weight-bold">Sistema de quejas</li>
+            <li class="sidebar-brand text-white">
+                Sistema de quejas
+                <?php
+                if ($userType != null) {
+                    $nombre = $_SESSION['nombre'];
+                    echo "<div class='name'>Bienvenido, <span class='fw-bold'>$nombre</span></div>";
+                }
+                ?>
+            </li>
             <li class="sidebar-nav-item"><a href="./">Inicio</a></li>
             <?php
             if ($userType != null) {
