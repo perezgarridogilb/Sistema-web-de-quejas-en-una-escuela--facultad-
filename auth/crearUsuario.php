@@ -33,11 +33,12 @@ if (!empty($_POST)) {
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="stylesheet" href="../assets/css/index.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link href="../assets/css/styles2.css" rel="stylesheet">
+
   <style>
     body {
       color: #fff;
-      background: var(--primary);
+      background: rgb(29, 128, 159);
       font-family: 'Roboto', sans-serif;
     }
 
@@ -100,7 +101,7 @@ if (!empty($_POST)) {
     .signup-form .btn {
       font-size: 16px;
       font-weight: bold;
-      background: var(--primary);
+      background: rgb(29, 128, 159);
       border: none;
       min-width: 140px;
     }
@@ -121,7 +122,7 @@ if (!empty($_POST)) {
     }
 
     .signup-form form a {
-      color: var(--primary);
+      color: rgb(29, 128, 159);
       text-decoration: none;
     }
 
