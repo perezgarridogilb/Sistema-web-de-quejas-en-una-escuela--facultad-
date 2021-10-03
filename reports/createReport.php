@@ -3,6 +3,8 @@ session_start();
 if (!isset($_SESSION['id_usuario'])) {
     header('Location: ../auth/userLogin.php');
 }
+
+$userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : null;
 ?>
 
 <!DOCTYPE html>
