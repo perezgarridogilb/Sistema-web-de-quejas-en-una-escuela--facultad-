@@ -37,7 +37,7 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
             ?>
             <li class="sidebar-nav-item"><a href="./reports/listReports.php">Listar reportes</a></li>
             <li class="sidebar-nav-item"><a href="about.php">Acerca de nosotros</a></li>
-            <hr>
+            <hr class="bg-white">
             <?php
             if ($userType == null) {
                 echo '<li class="sidebar-nav-item"><a href="./auth/userLogin.php">Iniciar sesion</a></li>';

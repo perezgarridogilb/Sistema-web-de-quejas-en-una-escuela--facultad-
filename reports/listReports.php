@@ -27,7 +27,7 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
 
 <body id="page-top">
     <!-- Navigation-->
-    <a class="menu-toggle rounded" href="#"><i class="fas fa-bars"></i></a>
+    <a class="menu-toggle rounded mt-n5" href="#"><i class="fas fa-bars"></i></a>
     <nav id="sidebar-wrapper">
         <ul class="sidebar-nav">
             <li class="sidebar-brand text-white font-weight-bold">Sistema de quejas</li>
@@ -40,7 +40,7 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
             ?>
             <li class="sidebar-nav-item"><a href="../reports/listReports.php">Listar reportes</a></li>
             <li class="sidebar-nav-item"><a href="../about.php">Acerca de nosotros</a></li>
-            <hr>
+            <hr class="bg-white">
             <?php
             if ($userType == null) {
                 echo '<li class="sidebar-nav-item"><a href="../auth/userLogin.php">Iniciar sesion</a></li>';
@@ -53,7 +53,7 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
     </nav>
 
     <div class="container">
-        <h2 class="text-center mt-5">Lista de quejas</h2>
+        <h2 class="text-center">Lista de quejas</h2>
 
         <?php
         if ($userType != null) {
