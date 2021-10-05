@@ -20,7 +20,6 @@ if (!empty($_POST)) {
   } else {
     $correo = $_POST['correo'];
     $failled_message = "Ya existe una cuenta existente relacionada con el correo $correo";
-    echo "Error: " . $sql . "<br>" . $sql . $conn->error . "<br>";
   }
 }
 
