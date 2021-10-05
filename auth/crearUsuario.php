@@ -19,7 +19,7 @@ if (!empty($_POST)) {
     header("Location: ../index.php");
   } else {
     $correo = $_POST['correo'];
-    $failled_message = "Ya existe una cuenta existente relacionada con el correo $correo";
+    $failled_message = "Ya existe una cuenta relacionada con el correo $correo";
   }
 }
 
