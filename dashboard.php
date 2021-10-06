@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['id_usuario'])) {
-    header("Location: ../auth/adminLogin.php");
+    header("Location: ./auth/adminLogin.php");
 }
 
 $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : null;
