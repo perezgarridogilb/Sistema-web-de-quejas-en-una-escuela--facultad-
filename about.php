@@ -58,7 +58,8 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
     </nav>
 
     <div class="container">
-        <h2 class="h2 mt-5">Acerda de nosotros</h2>
+        <h2 class="text-center mt-5 text-primary mb-3">Acerca de nosotros</h2>
+        <hr class="mb-5 bg-primary" />
 
         <p>Somos un sistema de reporte de quejas que permite dar seguimiento a las quejas, mostrar estadísticas y llevar un control de los usuarios registrados</p>
     </div>
