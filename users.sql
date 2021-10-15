@@ -73,3 +73,41 @@ COMMIT;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 
 ALTER TABLE users ADD CONSTRAINT unique_email UNIQUE (correo);
+
+CREATE TABLE `reports` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_user` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `content` text NOT NULL,
+  `created_at` date NOT NULL DEFAULT date_format(current_timestamp(),'%Y-%m-%d'),
+  `modified_at` date NOT NULL DEFAULT date_format(current_timestamp(),'%Y-%m-%d'),
+  PRIMARY KEY (`id`),
+  KEY `fk_id_user` (`id_user`),
+  CONSTRAINT `fk_id_user` FOREIGN KEY (`id_user`) REFERENCES `users` (`id_usuario`),
+  CONSTRAINT `not_empty_title` CHECK (trim(`title`) <> ''),
+  CONSTRAINT `not_empty_content` CHECK (trim(`content`) <> '')
+);
+
+
+CREATE TABLE `responses` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_report` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `content` text NOT NULL,
+  `created_at` date NOT NULL DEFAULT date_format(current_timestamp(),'%Y-%m-%d'),
+  `modified_at` date NOT NULL DEFAULT date_format(current_timestamp(),'%Y-%m-%d'),
+  PRIMARY KEY (`id`),
+  KEY `responses_fk_id_report` (`id_report`),
+  KEY `responses_fk_id_user` (`id_user`),
+  CONSTRAINT `responses_fk_id_report` FOREIGN KEY (`id_report`) REFERENCES `reports` (`id`),
+  CONSTRAINT `responses_fk_id_user` FOREIGN KEY (`id_user`) REFERENCES `users` (`id_usuario`),
+  CONSTRAINT `not_empty_content` CHECK (trim(`content`) <> '')
+);
+
+CREATE TABLE `images` (
+  `id` INT PRIMARY KEY AUTO_INCREMENT,
+  `id_report` INT NOT NULL,
+  image VARCHAR(255) NOT NULL,
+  CONSTRAINT `images_fk_id_report` FOREIGN KEY (`id_report`) REFERENCES `reports` (`id`),
+  CONSTRAINT `not_empty_image` CHECK(trim(`image`) <> '')
+);

@@ -1,9 +1,11 @@
 <?php
-session_start();
-if (!isset($_SESSION['id_usuario'])) {
-    header('Location: ../auth/userLogin.php');
-}
+include("../conexion.php");
+$failled_message = null;
 
+$sql = "SELECT id, title, content, created_at, modified_at, (SELECT count(id) FROM responses as r WHERE r.id_report = id) as counter_responses FROM reports;";
+$resultado = mysqli_query($conn, $sql);
+
+session_start();
 $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : null;
 ?>
 
@@ -65,7 +67,9 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
     </nav>
 
     <div class="container">
-        <h2 class="text-center mt-5">Lista de quejas</h2>
+        <h2 class="text-center mt-5 text-primary mb-3">Lista de quejas</h2>
+        <hr class="mb-5 bg-primary" />
+
 
         <?php
         if ($userType != null) {
@@ -73,39 +77,38 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
         }
         ?>
 
-        <div class="mb-5">
-            <h2>Queja 1</h2>
-            <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta nostrum nulla repellat repudiandae fugiat veritatis hic laborum voluptatum soluta ab, quae id facilis alias, autem, unde quibusdam rerum adipisci consectetur!
-            </p>
-            <a href='#'>Ver más</a>
-        </div>
+        <?php
+        while ($row = $resultado->fetch_array()) {
+            $title = $row['title'];
+            $id = $row['id'];
+            $content = $row['content'];
+            $createdAt = $row['created_at'];
+            $modifiedAt = $row['created_at'];
+            $nResponses = $row['counter_responses'];
+            $status = ($nResponses == 0) ? "Sin resolver" : "Resuelta";
+            $statusColor = ($nResponses == 0) ? "warning" : "success";
+            $statusBgColor = ($nResponses == 0) ? "rgba(255, 193, 7, 0.1)" : "rgba(25, 134, 83, 0.1)";
 
-        <div class="mb-5">
-            <h2>Queja 2</h2>
-            <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta nostrum nulla repellat repudiandae fugiat veritatis hic laborum voluptatum soluta ab, quae id facilis alias, autem, unde quibusdam rerum adipisci consectetur!
-            </p>
-            <a href='#'>Ver más</a>
-        </div>
+            echo '<div class="d-flex mb-5">';
+            echo "<div class='bg-$statusColor' style='width: 8px'; >";
+            echo "</div>";
 
-        <div class="mb-5">
-            <h2>Queja 3</h2>
-            <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta nostrum nulla repellat repudiandae fugiat veritatis hic laborum voluptatum soluta ab, quae id facilis alias, autem, unde quibusdam rerum adipisci consectetur!
-            </p>
-            <a href='#'>Ver más</a>
-        </div>
-
-        <div class="mb-5">
-            <h2>Queja 4</h2>
-            <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta nostrum nulla repellat repudiandae fugiat veritatis hic laborum voluptatum soluta ab, quae id facilis alias, autem, unde quibusdam rerum adipisci consectetur!
-            </p>
-            <a href='#'>Ver más</a>
-        </div>
-
-
+            echo "<div class='p-3 w-100' style='background-color: $statusBgColor';>";
+            echo "<h2 class='text-center'>$title</h2>";
+            echo "<div style='8px' class='d-flex justify-content-between'>";
+            echo "<div><span class='fw-bold'>Estado:</span> $status</div>";
+            echo "<p class='text-end'><span class='fw-bold'>Creado:</span> $createdAt <span>|</span> <span class='fw-bold'>Modificado:</span> $modifiedAt</p>";
+            echo "</div>";
+            echo '<p class="mt-3">';
+            echo $content;
+            echo '</p>';
+            if ($userType != null) {
+                echo "<a href='./detail.php?id=$id'>Ver detalles</a>";
+            }
+            echo "</div>";
+            echo '</div>';
+        }
+        ?>
     </div>
 
     <!-- Footer-->
