@@ -6,6 +6,10 @@ $sql = "SELECT id, title, content, created_at, modified_at, (SELECT count(id) FR
 $resultado = mysqli_query($conn, $sql);
 
 session_start();
+if (!isset($_SESSION['id_usuario'])) {
+    header('Location: ../auth/userLogin.php');
+}
+
 $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : null;
 ?>
 
