@@ -4,6 +4,26 @@ if (!isset($_SESSION['id_usuario'])) {
     header("Location: ./auth/adminLogin.php");
 }
 
+// Total of users
+// $sql = "SELECT count(id) FROM users;";
+// $resultado = mysqli_query($conn, $sql);
+$usersCount = 0;
+
+// Total of users created in the last month
+// $sql = "SELECT count(id) FROM users WHERE created_at > now();";
+// $resultado = mysqli_query($conn, $sql);
+$lastMonthUsersCount = 0;
+
+// Total of reports
+// $sql = "SELECT count(id) FROM reports;";
+// $resultado = mysqli_query($conn, $sql);
+$reportsCount = 0;
+
+// Total of reports in the last month
+// $sql = "SELECT count(id) FROM users WHERE created_at > now();";
+// $resultado = mysqli_query($conn, $sql);
+$lastMonthReportsCount = 0;
+
 $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : null;
 ?>
 
@@ -83,9 +103,11 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid mt-5">
-                    <div class="text-center mb-5">
-                        <h1>Estadísticas</h2>
+                    <div class="text-center mb-3">
+                        <h2 class="text-center mt-5 text-primary">Estadísticas</h2>
                     </div>
+
+                    <hr class="mb-5 bg-primary" />
                     <!-- Content Row -->
                     <div class="row">
                         <div class="col-xl-3 col-md-6 mb-4">
@@ -95,7 +117,9 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                 Número de usuarios</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">123</div>
+                                            <?php
+                                            echo "<div class='h5 mb-0 font-weight-bold text-gray-800'>$usersCount</div>"
+                                            ?>
                                         </div>
                                     </div>
                                 </div>
@@ -109,7 +133,9 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Nuevos usuarios de este mes</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">32</div>
+                                            <?php
+                                            echo "<div class='h5 mb-0 font-weight-bold text-gray-800'>$lastMonthUsersCount</div>"
+                                            ?>
                                         </div>
                                     </div>
                                 </div>
@@ -117,13 +143,15 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
                         </div>
 
                         <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
+                            <div class="card border-left-primary shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Total de reportes</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">32</div>
+                                            <?php
+                                            echo "<div class='h5 mb-0 font-weight-bold text-gray-800'>$reportsCount</div>"
+                                            ?>
                                         </div>
                                     </div>
                                 </div>
@@ -137,7 +165,9 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Reportes de este mes</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">1</div>
+                                            <?php
+                                            echo "<div class='h5 mb-0 font-weight-bold text-gray-800'>$lastMonthReportsCount</div>"
+                                            ?>
                                         </div>
                                     </div>
                                 </div>

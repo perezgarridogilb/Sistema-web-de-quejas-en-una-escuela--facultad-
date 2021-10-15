@@ -8,6 +8,7 @@ if (!isset($_SESSION['id_usuario'])) {
 $reportId = $_GET['id'];
 $sql = "SELECT id, title, content, created_at, modified_at, (SELECT count(id) FROM responses as r WHERE r.id_report = id) as counter_responses FROM reports WHERE id=$reportId;";
 $resultado = mysqli_query($conn, $sql);
+$row = mysqli_fetch_assoc($resultado);
 
 $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : null;
 ?>
@@ -73,12 +74,7 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
         <h2 class="text-center mt-5 text-primary mb-3">Detalle de queja</h2>
         <hr class="mb-5 bg-primary" />
 
-
-        <?php
-        if ($userType != null) {
-            echo "<a class='mb-5 d-block' href='createReport.php'>Crear nueva queja</a>";
-        }
-        ?>
+        <a class="text-decoration-none" href='./listReports.php'>Ver listado de reportes</a>
 
         <?php
         $title = $row['title'];
@@ -90,22 +86,29 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
         $statusColor = ($nResponses == 0) ? "warning" : "success";
         $statusBgColor = ($nResponses == 0) ? "rgba(255, 193, 7, 0.1)" : "rgba(25, 134, 83, 0.1)";
 
-        echo '<div class="d-flex mb-5">';
-        echo "<div class='bg-$statusColor' style='width: 8px'; >";
-        echo "</div>";
-
-        echo "<div class='p-2 w-100' style='background-color: $statusBgColor';>";
         echo "<h2 class='text-center'>$title</h2>";
-        echo "<div style='8px'>";
+        echo "<div style='8px' class='d-flex justify-content-between'>";
+        echo "<div><span class='fw-bold'>Estado:</span> $status</div>";
         echo "<p class='text-end'><span class='fw-bold'>Creado:</span> $createdAt <span>|</span> <span class='fw-bold'>Modificado:</span> $modifiedAt</p>";
         echo "</div>";
         echo '<p class="mt-3">';
         echo $content;
         echo '</p>';
-        echo "<div><span class='fw-bold'>Estado:</span> $status</div>";
-        echo '<a href="#">Ver detalles</a>';
-        echo "</div>";
-        echo '</div>';
+
+        if ($userType == 1) {
+            // Solo moderadores
+            echo "<div class='py-3'><hr/></div>";
+            echo "<h2 class='text-center mt-5'>Agregar respuesta</h2>" .
+                "<form method='POST'>" .
+                '<div class="form-group mb-3">' .
+                '<label class="mb-1 fw-bold">Contenido *</label>' .
+                '<textarea rows="8" name="contenido" placeholder="Redacta la respuesta..." class="form-control" required></textarea>' .
+                '</div>' .
+                "<div class='text-center'>" .
+                '<button type="submit" class="btn btn-primary">Enviar</button>' .
+                '</div>' .
+                '</form>';
+        }
         ?>
     </div>
 

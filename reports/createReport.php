@@ -94,7 +94,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <div class="container">
         <h2 class="text-center mt-5 text-primary mb-3">Crear queja</h2>
-        <hr class="mb-5 bg-primary" />
+        <hr class="mb-3 bg-primary" />
+
+        <div class='mb-3'>
+            <a class="text-decoration-none" href='./listReports.php'>Ver listado de reportes</a>
+        </div>
 
         <form method='POST'>
             <div class="form-group mb-3">
@@ -105,11 +109,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="form-group mb-3">
                 <label class="mb-1 fw-bold">Contenido *</label>
                 <textarea rows="8" name='contenido' placeholder="Redacta tu queja aquí..." class="form-control" required></textarea>
-            </div>
-
-            <div class="form-group mb-5">
-                <label class="mb-1 fw-bold">Archivo (Opcional)</label>
-                <input name='archivo' class="form-control" type='file' required></input>
             </div>
 
             <div class='text-center'>

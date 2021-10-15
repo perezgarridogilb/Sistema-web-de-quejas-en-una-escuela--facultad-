@@ -75,9 +75,7 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
         if ($userType != null) {
             echo "<a class='mb-5 d-block' href='createReport.php'>Crear nueva queja</a>";
         }
-        ?>
-
-        <?php
+        echo "<div >";
         while ($row = $resultado->fetch_array()) {
             $title = $row['title'];
             $id = $row['id'];
@@ -108,6 +106,8 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
             echo "</div>";
             echo '</div>';
         }
+
+        echo "</div>";
         ?>
     </div>
 
