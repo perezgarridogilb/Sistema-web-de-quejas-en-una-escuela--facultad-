@@ -58,39 +58,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     ?>
 
-    <!-- Navigation-->
-    <a class="menu-toggle rounded" href="#"><i class="fas fa-bars"></i></a>
-    <nav id="sidebar-wrapper">
-        <ul class="sidebar-nav">
-            <li class="sidebar-brand text-white">
-                Sistema de quejas
-                <?php
-                if ($userType != null) {
-                    $nombre = $_SESSION['nombre'];
-                    echo "<div class='name'>Bienvenido, <span class='fw-bold'>$nombre</span></div>";
-                }
-                ?>
-            </li>
-            <li class="sidebar-nav-item"><a href="../">Inicio</a></li>
-            <?php
-            if ($userType != null) {
-                echo '<li class="sidebar-nav-item"><a href="../reports/createReport.php">Crear reportes</a></li>';
-                echo '<li class="sidebar-nav-item"><a href="../dashboard.php">Estadísticas</a></li>';
-            }
-            ?>
-            <li class="sidebar-nav-item"><a href="../reports/listReports.php">Listar reportes</a></li>
-            <li class="sidebar-nav-item"><a href="../about.php">Acerca de nosotros</a></li>
-            <hr class="bg-white">
-            <?php
-            if ($userType == null) {
-                echo '<li class="sidebar-nav-item"><a href="../auth/userLogin.php">Iniciar sesion</a></li>';
-                echo '<li class="sidebar-nav-item"><a href="../auth/crearUsuario.php">Crear nueva cuenta</a></li>';
-            } else {
-                echo '<li class="sidebar-nav-item"><a href="../auth/salir.php">Cerrar sesion</a></li>';
-            }
-            ?>
-        </ul>
-    </nav>
+    <?php
+    include('../layout/menu.php');
+    ?>
 
     <div class="container">
         <h2 class="text-center mt-5 text-primary mb-3">Crear queja</h2>
