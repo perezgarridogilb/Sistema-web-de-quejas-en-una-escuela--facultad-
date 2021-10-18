@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (isset($_SESSION['id_usuario'])) {
+    header('Location: ../index.php');
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,33 +12,29 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="../assets/css/index.css" rel="stylesheet">
+    <link href="../assets/css/styles2.css" rel="stylesheet">
 </head>
 
 <?php
 include("../conexion.php");
-session_start();
+$failled_message = null;
 
-if (!empty($_POST)) {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     /* Se utiliza antes de insertar una cadena en una base de datos, ya que elimina 
     cualquier carácter especial que pueda interferir con las operaciones de consulta */
-    $password = sha1(mysqli_real_escape_string($conn, $_POST['pass']));
-    $sql = "SELECT id_usuario, nombre, correo, contraseña, tipo_usuario FROM users WHERE  correo='$_POST[user]' AND contraseña='$_POST[pass]'";
+    $sql = "SELECT id_usuario, nombre, correo, contraseña, tipo_usuario FROM users WHERE  correo='$_POST[user]' AND contraseña='$_POST[pass]' AND tipo_usuario=1";
     $resultado = mysqli_query($conn, $sql);
     $rows = $resultado->num_rows;
+
     if ($rows > 0) {
         $row = mysqli_fetch_array($resultado);
-        $_SESSION['username']= $row['nombre'];
         $_SESSION['id_usuario'] = $row['id_usuario'];
         $_SESSION['tipo_usuario'] = $row['tipo_usuario'];
-        if ($_SESSION['tipo_usuario'] == 1) {
-            echo "Inicie sesión para usuario";
-        } else {
-            header("Location: ../administrador/index.php");
-        }
+        $_SESSION['nombre'] = $row['nombre'];
+        header("Location: ../index.php");
     } else {
-        echo 'Usuario o contraseña incorrecto';
+        $failled_message = "Usuario y/o contraseña incorrecto";
     }
 }
 
@@ -40,7 +43,7 @@ if (!empty($_POST)) {
 <body>
     <div class="container-fluid ps-md-0">
         <div class="row g-0">
-            <div class="d-none d-md-flex col-md-4 col-lg-6 bg-secondary justify-content-center align-items-center">
+            <div class="d-none d-md-flex col-md-4 col-lg-6 bg-black justify-content-center align-items-center">
                 <p class='text-center text-white h1'>
                     Administradores
                 </p>
@@ -50,20 +53,28 @@ if (!empty($_POST)) {
                     <a href='../'>Ir a inicio</a>
                 </div>
 
+
                 <div class="login d-flex align-items-center py-5">
                     <div class="container">
                         <div class="row">
                             <div class="col-md-9 col-lg-8 mx-auto">
-                                <h3 class="login-heading mb-4 text-center">Bienvenido de nuevo!</h3>
+                                <div class="login-heading mb-2">
+                                    <h3 class="text-center mb-2">Bienvenido de nuevo!</h3>
+                                    <?php if ($failled_message != null) {
+                                        echo "<div class='alert alert-danger'>";
+                                        echo $failled_message;
+                                        echo "</div>";
+                                    } ?>
 
+                                </div>
                                 <!-- Sign In Form -->
-                                <form action='adminLogin.php' method='POST'>
+                                <form method='POST'>
                                     <div class="form-floating mb-3">
-                                        <input name='user' type="text" class="form-control" id="floatingInput" placeholder="name@example.com">
+                                        <input name="user" type="email" class="form-control" placeholder="name@example.com" required>
                                         <label for="floatingInput">Correo</label>
                                     </div>
                                     <div class="form-floating mb-3">
-                                        <input name='pass' type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                                        <input name="pass" type="password" class="form-control" placeholder="Password" required>
                                         <label for="floatingPassword">Contraseña</label>
                                     </div>
 

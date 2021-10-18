@@ -1,3 +1,8 @@
+<?php
+session_start();
+$userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : null;
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -25,23 +30,48 @@
   <a class="menu-toggle rounded" href="#"><i class="fas fa-bars"></i></a>
   <nav id="sidebar-wrapper">
     <ul class="sidebar-nav">
-      <li class="sidebar-brand text-white font-weight-bold">Sistema de quejas</li>
+      <li class="sidebar-brand text-white">
+        Sistema de quejas
+        <?php
+        if ($userType != null) {
+          $nombre = $_SESSION['nombre'];
+          echo "<div class='name'>Bienvenido, <span class='fw-bold'>$nombre</span></div>";
+        }
+        ?>
+      </li>
       <li class="sidebar-nav-item"><a href="./">Inicio</a></li>
-      <li class="sidebar-nav-item"><a href="./listReports.php">Listar reportes</a></li>
-      <li class="sidebar-nav-item"><a href="./administrador/dashboard.php">Estadísticas</a></li>
-      <li class="sidebar-nav-item"><a href="about.php">Acerca de nosotros</a></li>
-      <hr>
-      <li class="sidebar-nav-item"><a href="./auth/userLogin.php">Iniciar sesion</a></li>
-      <li class="sidebar-nav-item"><a href="./auth/crearUsuario.php">Crear nueva cuenta</a></li>
-      <li class="sidebar-nav-item"><a href="./auth/userLogin.php">Cerrar sesion</a></li>
+      <?php
+      if ($userType != null) {
+        echo '<li class="sidebar-nav-item"><a href="./reports/createReport.php">Crear reportes</a></li>';
+        echo '<li class="sidebar-nav-item"><a href="./dashboard.php">Estadísticas</a></li>';
+        echo '<li class="sidebar-nav-item"><a href="./usuarios/detail.php">Detalles</a></li>';
+      }
+      ?>
+      <li class="sidebar-nav-item"><a href="./reports/listReports.php">Listar reportes</a></li>
+      <li class="sidebar-nav-item"><a href="./about.php">Acerca de nosotros</a></li>
+      <hr class="bg-white">
+      <?php
+      if ($userType == null) {
+        echo '<li class="sidebar-nav-item"><a href="./auth/userLogin.php">Iniciar sesion</a></li>';
+        echo '<li class="sidebar-nav-item"><a href="./auth/crearUsuario.php">Crear nueva cuenta</a></li>';
+      } else {
+        echo '<li class="sidebar-nav-item"><a href="./auth/salir.php">Cerrar sesion</a></li>';
+      }
+      ?>
     </ul>
   </nav>
   <!-- Header-->
   <header class="masthead d-flex align-items-center">
     <div class="container px-4 px-lg-5 text-center">
       <h1 class="mb-1">Sistema de quejas</h1>
-      <h3 class="mb-5"><em>Bienvenido </em></h3>
-      <a class="btn btn-primary btn-xl" href="./auth/crearUsuario.php">Crear una cuenta</a>
+      <h3 class="mb-5"><em>Bienvenido, somos un sistema de seguimiento de quejas escolares que resuelve dudas, recolecta estadísticas y da retroalimentación.</em></h3>
+      <?php
+      if ($userType == null) {
+        echo '<a class="btn btn-primary btn-xl" href="./auth/crearUsuario.php">Crear una cuenta</a>';
+      } else {
+        echo '<a class="btn btn-primary btn-xl" href="./reports/createReport.php">Crear una queja</a>';
+      }
+      ?>
     </div>
   </header>
   <!-- Services-->

@@ -1,6 +1,6 @@
 <?php
 	
-	$conn = new mysqli("localhost","root","root","sistemaalumnos");
+	$conn = new mysqli("localhost","root","","sistemaalumnos");
 	
 	if($conn->connect_errno)
 	{
