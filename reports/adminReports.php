@@ -53,12 +53,13 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
 
       <?php
       include("../conexion.php");
-      $result = mysqli_query($conn, "SELECT * FROM reports");
+      $result = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT nombre FROM users as d WHERE d.id_usuario=r.id_user) as user FROM reports as r");
       ?>
       <table class='table table-hover'>
          <thead class='thead-dark'>
             <tr>
                <td class='fw-bold'>ID</td>
+               <td class='fw-bold'>Usuario</td>
                <td class='fw-bold'>Titulo</td>
                <td class='fw-bold'>Contenido</td>
                <td class='fw-bold'>Operaciones</td>
@@ -71,8 +72,9 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
             while ($row = mysqli_fetch_array($result)) {
                $title = $row["title"];
                $content = $row["content"];
+               $user = $row["user"];
                $id = $row["id"];
-               printf("<tr><td>%d</td><td>%s</td><td>%s</td>
+               printf("<tr><td>%d</td><td>%s</td><td>%s</td><td>%s</td>
                   <td class='d-flex align-items-center'>
                      <a class='text-decoration-none' onclick=\"return confirmSubmit()\" href=\"deleteReport.php?id=%s\">
                         <i class='bi bi-trash-fill text-danger' style='font-size: 1.25rem;'></i>
@@ -82,7 +84,7 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
                         <i class='bi bi-pencil-fill' style='font-size: 1.25rem;'></i>
                      </a>
                   </td>
-               </tr>", $id, $title, $content, $id, $id);
+               </tr>", $id, $user, $title, $content, $id, $id);
             }
 
             mysqli_free_result($result);
