@@ -66,11 +66,13 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
         echo $content;
         echo '</p>';
 
-        echo "<h2>Imagenes</h2>";
+        echo "<h4>Imagenes</h4>";
+        echo "<div class='row'>";
         while ($imageRow = mysqli_fetch_array($imageRows)) {
             $image = $imageRow['image'];
-            echo "<img src='../medias/$image'/>";
+            echo "<img class='img-fluid col-6 rounded' src='../medias/$image'/>";
         }
+        echo "</div>";
 
         if ($userType == 1) {
             // Solo moderadores
