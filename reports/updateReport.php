@@ -61,7 +61,7 @@ $content = $row["content"];
          <div class="mb-3">
             <label class="form-label">Contenido</label>
             <?php
-            echo "<textarea rows='8' class='form-control' type='text' name='content' value='$content' ></textarea>";
+            echo "<textarea rows='8' class='form-control' type='text' name='content'>$content</textarea>";
             ?>
          </div>
 
