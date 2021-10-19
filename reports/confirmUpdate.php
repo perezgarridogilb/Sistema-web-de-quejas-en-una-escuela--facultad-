@@ -1,6 +1,10 @@
 <?php
 include("../conexion.php");
 
+if ($_SESSION['tipo_usuario'] != 1) {
+    header("Location: ../");
+}
+
 //Creamos la sentencia SQL y la ejecutamos
 $title = $_POST['title'];
 $content = $_POST['content'];

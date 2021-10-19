@@ -1,6 +1,11 @@
 <?php
 session_start();
 include("../conexion.php");
+
+if ($_SESSION['tipo_usuario'] != 1) {
+   header("Location: ../");
+}
+
 $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : null;
 $id = $_GET['id'];
 $result = mysqli_query($conn, "SELECT * FROM reports WHERE id=$id");
@@ -8,6 +13,8 @@ $row = mysqli_fetch_array($result);
 $title = $row["title"];
 $content = $row["content"];
 ?>
+
+
 <!DOCTYPE html>
 
 <html>

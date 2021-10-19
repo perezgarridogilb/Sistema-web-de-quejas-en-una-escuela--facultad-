@@ -1,9 +1,13 @@
 <?php
 session_start();
 include("../conexion.php");
-// if (!isset($_SESSION['id_usuario'])) {
-//    header("Location: ../auth/adminLogin.php");
-// }
+if (!isset($_SESSION['id_usuario'])) {
+   header("Location: ../auth/adminLogin.php");
+}
+
+if ($_SESSION['tipo_usuario'] != 1) {
+   header("Location: ../");
+}
 
 $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : null;
 ?>
@@ -20,7 +24,7 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
 
    <script LANGUAGE="JavaScript">
       function confirmSubmit() {
-         var eli = confirm("Est� seguro de eliminar este registro?");
+         var eli = confirm("Está seguro de eliminar este registro?");
          if (eli) return true;
          else return false;
       }
