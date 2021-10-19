@@ -10,22 +10,6 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
 $message = null;
 $messageType = null;
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $title = $_POST['titulo'];
-    $content = $_POST['contenido'];
-    $usuario = $_SESSION['id_usuario'];
-
-    $sql = "INSERT INTO reports(id,  id_user, title, content) VALUES (null, $usuario, '$title', '$content');";
-    $result = mysqli_query($conn, $sql);
-    if ($result == true) {
-        $message = 'Creacion exitosa';
-        $messageType = 'success';
-    } else {
-        $message = 'Creacion fallida';
-        $messageType = 'danger';
-    }
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -88,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class='mb-3'>
             <a class="text-decoration-none" href='./listReports.php'>Ver listado de reportes</a>
         </div>
-        <form enctype="multipart/form-data" method='POST'>
+        <form id='report-form' enctype="multipart/form-data" method='POST'>
             <div class="form-group mb-3">
                 <label class="mb-1 fw-bold">Título *</label>
                 <input name='titulo' type="text" class="form-control" placeholder="Ingresa un título" required>
@@ -100,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
 
             <div class="form-group mb-3">
-                <label class="mb-1 fw-bold">Imagenes *</label>
+                <label class="mb-1 fw-bold">Imagenes</label>
             </div>
 
             <div id="dropzone" class="dropzone p-5 mb-5 ">
@@ -137,17 +121,50 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <script>
         Dropzone.autoDiscover = false;
-        console.log();
+
         let myDropzone = new Dropzone(
             document.querySelector("div#dropzone"), {
-                url: "post.php",
+                url: "./createReportAjax.php",
                 method: "post",
                 // The configuration we've talked about above
                 autoProcessQueue: false,
                 uploadMultiple: true,
                 parallelUploads: 100,
                 maxFiles: 100,
-                // The setting up of the dropzone
+                init: function() {
+                    dzClosure = this;
+                    const titleInput = document.querySelector('input[name="titulo"]');
+                    const contentInput = document.querySelector('textarea[name="contenido"]');
+
+                    document.querySelector('#report-form').addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        dzClosure.processQueue();
+                    });
+
+                    // My project only has 1 file hence not sendingmultiple
+                    // dzClosure.on('sending', function(data, xhr, formData) {
+                    //     formData.append("titulo", titleInput.value);
+                    //     formData.append("contenido", contentInput.value);
+                    // });
+
+                    dzClosure.on('sendingmultiple', function(data, xhr, formData) {
+                        formData.append("titulo", titleInput.value);
+                        formData.append("contenido", contentInput.value);
+                    });
+
+                    dzClosure.on('successmultiple', function(files, response) {
+                        titleInput.value = '';
+                        contentInput.value = '';
+                        dzClosure.removeAllFiles();
+                        alert('Envio Exitoso');
+                    });
+
+                    dzClosure.on('errormultiple', function(files, response) {
+                        alert('Envio Fallido');
+                    });
+
+                },
             });
     </script>
 </body>
