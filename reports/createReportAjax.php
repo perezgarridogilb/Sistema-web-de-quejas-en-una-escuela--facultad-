@@ -33,9 +33,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 move_uploaded_file($tempFile, $targetFile);
             }
         }
-
-        $sql = "INSERT INTO reports(id,  id_user, title, content) VALUES (null, $usuario, '$title', '$content')";
-        $result = mysqli_query($conn, $sql);
     }
 
     $sql = "INSERT INTO reports(id,  id_user, title, content) VALUES (null, $usuario, '$title', '$content')";
