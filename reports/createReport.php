@@ -131,6 +131,7 @@ $messageType = null;
                 uploadMultiple: true,
                 parallelUploads: 100,
                 maxFiles: 100,
+                acceptedFiles: 'image/*',
                 init: function() {
                     dzClosure = this;
                     const titleInput = document.querySelector('input[name="titulo"]');
