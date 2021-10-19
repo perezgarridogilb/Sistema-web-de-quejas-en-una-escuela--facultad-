@@ -140,14 +140,23 @@ $messageType = null;
                     document.querySelector('#report-form').addEventListener('submit', function(e) {
                         e.preventDefault();
                         e.stopPropagation();
-                        dzClosure.processQueue();
+
+                        if (dzClosure.getQueuedFiles().length === 0) {
+                            var blob = new Blob();
+                            blob.upload = {
+                                'chunked': false
+                            };
+                            dzClosure.uploadFile(blob);
+                        } else {
+                            dzClosure.processQueue();
+                        }
                     });
 
                     // My project only has 1 file hence not sendingmultiple
-                    // dzClosure.on('sending', function(data, xhr, formData) {
-                    //     formData.append("titulo", titleInput.value);
-                    //     formData.append("contenido", contentInput.value);
-                    // });
+                    dzClosure.on('sending', function(data, xhr, formData) {
+                        formData.append("titulo", titleInput.value);
+                        formData.append("contenido", contentInput.value);
+                    });
 
                     dzClosure.on('sendingmultiple', function(data, xhr, formData) {
                         formData.append("titulo", titleInput.value);

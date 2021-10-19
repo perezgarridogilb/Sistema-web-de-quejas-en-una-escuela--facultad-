@@ -9,7 +9,8 @@ $reportId = $_GET['id'];
 $sql = "SELECT id, title, content, created_at, modified_at, (SELECT count(id) FROM responses as r WHERE r.id_report = id) as counter_responses FROM reports WHERE id=$reportId;";
 $resultado = mysqli_query($conn, $sql);
 $row = mysqli_fetch_assoc($resultado);
-
+$sql = "SELECT id, id_report, image FROM images WHERE id_report=$reportId;";
+$imageRows = mysqli_query($conn, $sql);
 $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : null;
 ?>
 
@@ -64,6 +65,12 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
         echo '<p class="mt-3">';
         echo $content;
         echo '</p>';
+
+        echo "<h2>Imagenes</h2>";
+        while ($imageRow = mysqli_fetch_array($imageRows)) {
+            $image = $imageRow['image'];
+            echo "<img src='../medias/$image'/>";
+        }
 
         if ($userType == 1) {
             // Solo moderadores

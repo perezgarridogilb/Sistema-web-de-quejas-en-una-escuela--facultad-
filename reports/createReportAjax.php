@@ -21,15 +21,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (!empty($_FILES)) {
         $totalFiles = count($_FILES['file']['tmp_name']);
         $fileNames = array();
-
         for ($i = 0; $i < $totalFiles; $i++) {
             $tempFile = $_FILES['file']['tmp_name'][$i];
-            $tokens = explode($ds, $tempFile);
-            $finalName = $tokens[count($tokens) - 1];
-            $targetPath = dirname(__FILE__) . $ds . $storeFolder . $ds;
-            $targetFile = $targetPath . $finalName;
-            array_push($fileNames, $finalName);
-            move_uploaded_file($tempFile, $targetFile);
+            $originalName = $_FILES['file']['name'][$i];
+            if ($originalName != 'blob') {
+                $tokens = explode($ds, $tempFile);
+                $finalName = $tokens[count($tokens) - 1];
+                $targetPath = dirname(__FILE__) . $ds . $storeFolder . $ds;
+                $targetFile = $targetPath . $finalName;
+                array_push($fileNames, $finalName);
+                move_uploaded_file($tempFile, $targetFile);
+            }
         }
 
         $sql = "INSERT INTO reports(id,  id_user, title, content) VALUES (null, $usuario, '$title', '$content')";
