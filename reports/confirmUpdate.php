@@ -2,10 +2,10 @@
 include("../conexion.php");
 
 //Creamos la sentencia SQL y la ejecutamos
-$title = $_REQUEST['titulo'];
-$content = $_REQUEST['contenido'];
-$id = $_REQUEST['id'];
+$title = $_POST['title'];
+$content = $_POST['content'];
+$id = $_POST['id'];
 
-mysqli_query($conn, $sSQL);
 $sSQL = "UPDATE reports SET title='$title', content='$content' WHERE id='$id'";
-header("Location: borrarnew.php");
+mysqli_query($conn, $sSQL);
+header("Location: updateReport.php?id=$id&updated=1");

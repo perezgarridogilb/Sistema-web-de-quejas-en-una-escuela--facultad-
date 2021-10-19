@@ -48,7 +48,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="../assets/css/styles2.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/basic.min.css" integrity="sha512-MeagJSJBgWB9n+Sggsr/vKMRFJWs+OUphiDV7TJiYu+TNQD9RtVJaPDYP8hA/PAjwRnkdvU+NsTncYTKlltgiw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.css" integrity="sha512-jU/7UFiaW5UBGODEopEqnbIAHOI8fO6T99m7Tsmqs2gkdujByJfkCbbfPSN4Wlqlb9TGnsuC0YgUgWkRBK7B9A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
+
+<style>
+    .dropzone {
+        background: white;
+        border-radius: 5px;
+        border: 2px dashed rgb(0, 135, 247);
+        border-image: none;
+        margin-left: auto;
+        margin-right: auto;
+        color: #aaa;
+    }
+
+    div#dropzone:hover {
+        cursor: pointer;
+        background-color: rgb(0, 135, 247, 0.1);
+    }
+</style>
 
 <body id="page-top">
     <?php
@@ -69,8 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class='mb-3'>
             <a class="text-decoration-none" href='./listReports.php'>Ver listado de reportes</a>
         </div>
-
-        <form method='POST'>
+        <form enctype="multipart/form-data" method='POST'>
             <div class="form-group mb-3">
                 <label class="mb-1 fw-bold">Título *</label>
                 <input name='titulo' type="text" class="form-control" placeholder="Ingresa un título" required>
@@ -79,6 +97,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="form-group mb-3">
                 <label class="mb-1 fw-bold">Contenido *</label>
                 <textarea rows="8" name='contenido' placeholder="Redacta tu queja aquí..." class="form-control" required></textarea>
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="mb-1 fw-bold">Imagenes *</label>
+            </div>
+
+            <div id="dropzone" class="dropzone p-5 mb-5 ">
+                <div class="dz-message h4">Suelta las imagenes aquí</div>
             </div>
 
             <div class='text-center'>
@@ -107,6 +133,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
     <script src="../assets/js/scripts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js" integrity="sha512-oQq8uth41D+gIH/NJvSJvVB85MFk1eWpMK6glnkg6I7EdMqC1XVkW7RxLheXwmFdG03qScCM7gKS/Cx3FYt7Tg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+        Dropzone.autoDiscover = false;
+        console.log();
+        let myDropzone = new Dropzone(
+            document.querySelector("div#dropzone"), {
+                url: "post.php",
+                method: "post",
+                // The configuration we've talked about above
+                autoProcessQueue: false,
+                uploadMultiple: true,
+                parallelUploads: 100,
+                maxFiles: 100,
+                // The setting up of the dropzone
+            });
+    </script>
 </body>
 
 </html>

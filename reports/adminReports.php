@@ -15,7 +15,7 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
    <meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.6.0/font/bootstrap-icons.min.css" integrity="sha512-7w04XesEFaoeeKX0oxkwayDboZB/+AKNF5IUE50fCUDUywLvDN4gv2513TLQS+RDenAeHEK3O40jZZVrkpnWWw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
    <title>Ejemplo de Eliminaci�n</title>
 
    <script LANGUAGE="JavaScript">
@@ -38,10 +38,13 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
 <body id='page-top'>
    <?php
    include('../layout/menu.php');
+   if (isset($_GET['deleted'])) {
+      echo "<div class='alert alert-primary'>Eliminación exitosa</div>";
+   }
    ?>
 
    <div class="container">
-      <h2 class="text-center mt-5 text-primary mb-3">Eliminacion/Actualizacion de reportes</h2>
+      <h2 class="text-center mt-5 text-primary mb-3">Administrar reportes</h2>
       <hr class="mb-5 bg-primary" />
 
       <?php
@@ -66,10 +69,15 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
                $content = $row["content"];
                $id = $row["id"];
                printf("<tr><td>%d</td><td>%s</td><td>%s</td>
-               <td class='text-left'>
-               <a class='text-decoration-none' onclick=\"return confirmSubmit()\" href=\"borrar2new.php?id=%s\"><img src='eliminar.bmp' width='14' height='14'><span>  Eliminar</a> |
-               <a class='text-decoration-none' href=\"actualizanew.php?id=%s\"><img src='actualiza.jpg' width='25' height='25'>  Actualizar</a>
-               </td>
+                  <td class='d-flex align-items-center'>
+                     <a class='text-decoration-none' onclick=\"return confirmSubmit()\" href=\"deleteReport.php?id=%s\">
+                        <i class='bi bi-trash-fill text-danger' style='font-size: 1.25rem;'></i>
+                     </a>
+                     <span style='width: .5rem;'></span>
+                     <a class='text-decoration-none' href=\"updateReport.php?id=%s\">
+                        <i class='bi bi-pencil-fill' style='font-size: 1.25rem;'></i>
+                     </a>
+                  </td>
                </tr>", $id, $title, $content, $id, $id);
             }
 

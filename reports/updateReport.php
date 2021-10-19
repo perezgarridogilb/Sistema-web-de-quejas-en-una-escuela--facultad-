@@ -1,19 +1,8 @@
 <?php
 session_start();
 include("../conexion.php");
-// if (!isset($_SESSION['id_usuario'])) {
-//    header("Location: ../auth/adminLogin.php");
-// }
-
 $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : null;
 $id = $_GET['id'];
-//echo "<br> id Pelicula = $id";
-// echo '<FORM METHOD="POST" ACTION="actualiza2new.php">';
-
-//Creamos la sentencia SQL y la ejecutamos
-//$sSQL="Select titulo,director, actor From pelicula where id_pelicula='$id'";
-//$result=mysql_query($sSQL);
-
 $result = mysqli_query($conn, "SELECT * FROM reports WHERE id=$id");
 $row = mysqli_fetch_array($result);
 $title = $row["title"];
@@ -43,33 +32,38 @@ $content = $row["content"];
    <?php
    include('../layout/menu.php');
    ?>
+   <?php
+   if (isset($_GET['updated'])) {
+      echo "<div class='alert alert-primary'>Actualización exitosa</div>";
+   }
+   ?>
 
    <div class="container">
       <h2 class="text-center mt-5 text-primary mb-3">Actualizar un registro</h2>
 
       <hr class="mb-3 bg-primary" />
-      <a class="d-block mb-3 text-decoration-none" href="./borrarnew.php">Regresar a listado de quejas</a>
+      <a class="d-block mb-3 text-decoration-none" href="./adminReports.php">Regresar a listado de quejas</a>
+      <form method="POST" action="confirmUpdate.php">
+         <div class="mb-3">
+            <label class="form-label">Titulo</label>
+            <?php
+            echo "<input class='form-control' type='text' name='title' value='$title'>";
+            ?>
+         </div>
 
-      <div class="mb-3">
-         <label class="form-label">Titulo</label>
+         <div class="mb-3">
+            <label class="form-label">Contenido</label>
+            <?php
+            echo "<input class='form-control' type='text' name='content' value='$content'>";
+            ?>
+         </div>
+
          <?php
-         echo "<input class='form-control' type='text' name='titulo' value='$title'>";
+         echo "<input type='hidden' name='id' value='$id'>";
          ?>
-      </div>
 
-      <div class="mb-3">
-         <label class="form-label">Director</label>
-         <?php
-         echo "<input class='form-control' type='text' name='director' value='$content'>";
-         ?>
-      </div>
-
-      <?php
-      echo "<input type='hidden' name='id' value='$id'>";
-      ?>
-
-      <input class="btn btn-primary" type="submit" value="Actualizar">
-      </FORM>
+         <input class="btn btn-primary" type="submit" value="Actualizar">
+      </form>
    </div>
    <a class="scroll-to-top rounded" href="#page-top"><i class="fas fa-angle-up"></i></a>
    <script src="../assets/js/scripts.js"></script>
