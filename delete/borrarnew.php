@@ -1,15 +1,34 @@
+<?php
+session_start();
+include("../conexion.php");
+if (!isset($_SESSION['id_usuario'])) {
+   header("Location: ../auth/adminLogin.php");
+}
+
+if ($_SESSION['tipo_usuario'] != 1) {
+   header("Location: ../");
+}
+
+$userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : null;
+?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-   <meta charset="utf-8" />
-   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-   <meta name="description" content="" />
-   <meta name="author" content="" />
-   <title>Bienvenido al sistema de quejas</title>
-   <!-- Favicon-->
-   <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-   <!-- Font Awesome icons (free version)-->
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.6.0/font/bootstrap-icons.min.css" integrity="sha512-7w04XesEFaoeeKX0oxkwayDboZB/+AKNF5IUE50fCUDUywLvDN4gv2513TLQS+RDenAeHEK3O40jZZVrkpnWWw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+   <title>Ejemplo de Eliminaci�n</title>
+
+   <script LANGUAGE="JavaScript">
+      function confirmSubmit() {
+         var eli = confirm("¿Est\u00E1 seguro de eliminar este registro?");
+         if (eli) return true;
+         else return false;
+      }
+   </script>
    <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
    <!-- Simple line icons-->
    <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css" rel="stylesheet" />
@@ -40,72 +59,56 @@
 
    <BODY>
       <div class="container">
-         <h2 class="text-center mt-5">Detalle de los Registros en la tabla Usuarios</h2>
-         <br>
-      <form>
+         <h2 class="text-center mt-5 text-primary mb-3">Administrar usuarios</h2>
+         <hr class="mb-5 bg-primary" />
 
-         <body>
+         <form>
 
-            <?php
-            include("../conexion.php");
+            <body>
 
-            $result = mysqli_query($conn, "select * from users");
-            ?>
-            <br>
-            <table class="table">
-  <thead class="thead-light">
-                  <TD scope="#196E87" align="center"><B>ID</B></TD>
-                  <TD scope="#196E87" align="center"><B>Nombre</B></TD>
-                  <TD scope="#196E87" align="center"><B>Correo</B></TD>
-                  <TD scope="#196E87" align="center"><B>Eliminar</B></TD>
-                  <TD scope="#196E87" align="center"><B>Actualizar</B></TD>
+               <?php
+               include("../conexion.php");
+
+               $result = mysqli_query($conn, "select * from users");
+               ?>
+               <br>
+               <table class='table table-hover'>
+                  <thead class='thead-dark'>
+                     <td class='fw-bold' align="center"><B>ID</B></TD>
+                     <td class='fw-bold' align="center"><B>Nombre</B></TD>
+                     <td class='fw-bold' align="center"><B>Correo</B></TD>
+                     <td class='fw-bold' align="center"><B>Contraseña</B></TD>
+                     <td class='fw-bold'>Operaciones</td>
                   </thead>
                   <tbody>
-               </TR>
-               <?php
+                     </TR>
+                     <?php
 
-               while ($row = mysqli_fetch_array($result)) {
-                  $ti = $row["nombre"];
-                  $di = $row["correo"];
-                  $id = $row["id_usuario"];
-                  printf("<tr><td align='center'>%d</td><td align='center'>%s</td><td align='center'>%s</td>
-       <td align='center'>
-       <a onclick=\"return confirmSubmit()\"href=\"borrar2new.php?id_usuario=%s\"><img src='https://bit.ly/3n8mVtw' width='25' height='25' border='0'></a>
-     
-        </td>
-      <td align='center'>
-      <a href=\"actualizanew.php?id_usuario=%s\"><img src='https://bit.ly/3pfKjIo' width='25' height='25' border='0'></a>
-      </td>
-      </tr>", $id, $ti, $di, $id, $id);
-               }
+                     while ($row = mysqli_fetch_array($result)) {
+                        $nombre = $row["nombre"];
+                        $correo = $row["correo"];
+                        $contraseña = sha1($row["contraseña"]);
+                        $id_usuario = $row["id_usuario"];
+                        printf("<tr><td align='center'>%d</td><td align='center'>%s</td><td align='center'>%s</td><td align='center'>%s</td>
+                              <td class='d-flex align-items-center'>
+                              <a onclick=\"return confirmSubmit()\"href=\"borrar2new.php?id_usuario=%s\">
+                              <i class='bi bi-trash-fill text-danger' style='font-size: 1.25rem;'></i>
+                              </a>     
+                              </a>
+                              <span style='width: .5rem;'></span>
+                              <a href=\"actualizanew.php?id_usuario=%s\"><i class='bi bi-pencil-fill' style='font-size: 1.25rem;'></i>
+                              </a>
+                              </td>
+                              </tr>", $id_usuario, $nombre, $correo, $contraseña, $id_usuario, $id_usuario);
+                     }
 
-               mysqli_free_result($result);
-               mysqli_close($conn);
-               ?>
-                <tbody>
-            </table>
-         </body>
-      </form>
-   </div>
-    <!-- Footer-->
-    <footer class="footer text-center">
-        <div class="container px-4 px-lg-5">
-            <ul class="list-inline mb-5">
-                <li class="list-inline-item">
-                    <a class="social-link rounded-circle text-white mr-3" href="#!"><i class="icon-social-facebook"></i></a>
-                </li>
-                <li class="list-inline-item">
-                    <a class="social-link rounded-circle text-white mr-3" href="#!"><i class="icon-social-twitter"></i></a>
-                </li>
-            </ul>
-            <p class="text-muted small mb-0">Copyright &copy; Your Website 2021</p>
-        </div>
-    </footer>
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top"><i class="fas fa-angle-up"></i></a>
-    <!-- Bootstrap core JS-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Core theme JS-->
-    <script src="assets/js/scripts.js"></script>
+                     mysqli_free_result($result);
+                     mysqli_close($conn);
+                     ?>
+                  <tbody>
+               </table>
+            </body>
+         </form>
+      </div>
 
 </html>

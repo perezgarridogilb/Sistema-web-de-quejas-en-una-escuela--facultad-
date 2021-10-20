@@ -19,28 +19,21 @@
    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
    <link href="../assets/css/styles2.css" rel="stylesheet" />
 </head>
-
 <body id="page-top">
-   <!-- Navigation-->
-   <a class="menu-toggle rounded" href="#"><i class="fas fa-bars"></i></a>
-   <nav id="sidebar-wrapper">
-      <ul class="sidebar-nav">
-         <li class="sidebar-brand text-white font-weight-bold">Sistema de quejas</li>
-         <li class="sidebar-nav-item"><a href="./index.php">Inicio</a></li>
-         <li class="sidebar-nav-item"><a href="./createReport.php">Crear reportes</a></li>
-         <li class="sidebar-nav-item"><a href="./listReports.php">Listar reportes</a></li>
-         <li class="sidebar-nav-item"><a href="./administrador/dashboard.php">Estadísticas</a></li>
-         <li class="sidebar-nav-item"><a href="about.php">Acerca de nosotros</a></li>
-         <hr>
-         <li class="sidebar-nav-item"><a href="./auth/userLogin.php">Iniciar sesion</a></li>
-         <li class="sidebar-nav-item"><a href="./auth/crearUsuario.php">Crear nueva cuenta</a></li>
-         <li class="sidebar-nav-item"><a href="./auth/userLogin.php">Cerrar sesion</a></li>
-      </ul>
-   </nav>
+   <?php
+   include('../layout/menu.php');
+   ?>
+   <?php
+   if (isset($_GET['updated'])) {
+      echo "<div class='alert alert-primary'>Actualización exitosa</div>";
+   }
+   ?>
 
-   <BODY>
-      <div class="container">
-         <h2 class="text-center mt-5">Actualizar un registro</h2>
+   <div class="container">
+      <h2 class="text-center mt-5 text-primary mb-3">Actualizar un registro</h2>
+
+      <hr class="mb-3 bg-primary" />
+      <a class="d-block mb-3 text-decoration-none" href="./adminReports.php">Regresar a listado de usuarios</a>
          <form>
             <br>
             <?php
@@ -74,25 +67,5 @@
          <br>
          
    </BODY>
-   <!-- Footer-->
-   <footer class="footer text-center">
-      <div class="container px-4 px-lg-5">
-         <ul class="list-inline mb-5">
-            <li class="list-inline-item">
-               <a class="social-link rounded-circle text-white mr-3" href="#!"><i class="icon-social-facebook"></i></a>
-            </li>
-            <li class="list-inline-item">
-               <a class="social-link rounded-circle text-white mr-3" href="#!"><i class="icon-social-twitter"></i></a>
-            </li>
-         </ul>
-         <p class="text-muted small mb-0">Copyright &copy; Your Website 2021</p>
-      </div>
-   </footer>
-   <!-- Scroll to Top Button-->
-   <a class="scroll-to-top rounded" href="#page-top"><i class="fas fa-angle-up"></i></a>
-   <!-- Bootstrap core JS-->
-   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
-   <!-- Core theme JS-->
-   <script src="assets/js/scripts.js"></script>
-
+   
 </html>
