@@ -1,4 +1,9 @@
 <?php
+if (!isset($_SESSION['id_usuario'])) {
+    header("Location: ../auth/adminLogin.php");
+}
+$userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : null;
+
 $rootProjectPath = "/Otono2021/Sistema-web-de-quejas-en-una-escuela-facultad";
 ?>
 
@@ -33,6 +38,7 @@ $rootProjectPath = "/Otono2021/Sistema-web-de-quejas-en-una-escuela-facultad";
             echo "<li class='sidebar-nav-item'><a href='$rootProjectPath/auth/userLogin.php'>Iniciar sesion</a></li>";
             echo "<li class='sidebar-nav-item'><a href='$rootProjectPath/auth/crearUsuario.php'>Crear nueva cuenta</a></li>";
         } else {
+            echo "<li class='sidebar-nav-item'><a href='$rootProjectPath/auth/changePassword.php'>Cambiar contraseña</a></li>";
             echo "<li class='sidebar-nav-item'><a href='$rootProjectPath/auth/salir.php'>Cerrar sesion</a></li>";
         }
         ?>
