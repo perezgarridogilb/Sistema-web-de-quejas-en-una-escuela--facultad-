@@ -6,6 +6,6 @@ if ($_SESSION['tipo_usuario'] != 1) {
 }
 
 $id = $_GET['id'];
-mysqli_query($conn, "DELETE FROM images WHERE id_report = $id");
-mysqli_query($conn, "DELETE FROM reports WHERE id = $id");
+// mysqli_query($conn, "DELETE FROM images WHERE id_report = $id");
+mysqli_query($conn, "UPDATE reports SET deleted_at=now() WHERE id = $id");
 header("Location: ./adminReports.php?deleted=1");

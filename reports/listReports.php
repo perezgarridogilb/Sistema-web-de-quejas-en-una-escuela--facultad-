@@ -3,7 +3,7 @@ include("../conexion.php");
 session_start();
 $failled_message = null;
 
-$sql = "SELECT id, title, content, created_at, modified_at, (SELECT count(id) FROM responses as r WHERE r.id_report = id) as counter_responses FROM reports ORDER BY id DESC;";
+$sql = "SELECT id, title, content, created_at, modified_at, (SELECT count(id) FROM responses as r WHERE r.id_report = id) as counter_responses FROM reports WHERE deleted_at IS NULL ORDER BY id DESC;";
 $resultado = mysqli_query($conn, $sql);
 
 $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : null;

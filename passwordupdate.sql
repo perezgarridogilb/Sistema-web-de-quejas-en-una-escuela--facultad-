@@ -46,3 +46,7 @@ DELIMITER //
       select error;
     END //
 DELIMITER ;
+
+-- Add deleted_at field
+
+ALTER TABLE reports ADD deleted_at DATETIME;
