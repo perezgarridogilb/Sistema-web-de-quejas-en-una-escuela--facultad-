@@ -12,6 +12,9 @@ $result = mysqli_query($conn, "SELECT * FROM reports WHERE id=$id");
 $row = mysqli_fetch_array($result);
 $title = $row["title"];
 $content = $row["content"];
+
+$sql = "SELECT id, id_report, image FROM images WHERE id_report=$id;";
+$imageRows = mysqli_query($conn, $sql);
 ?>
 
 
@@ -67,6 +70,16 @@ $content = $row["content"];
 
          <?php
          echo "<input type='hidden' name='id' value='$id'>";
+         ?>
+
+         <?php
+         echo "<h4>Imagenes</h4>";
+         echo "<div class='row'>";
+         while ($imageRow = mysqli_fetch_array($imageRows)) {
+            $image = $imageRow['image'];
+            echo "<img class='img-fluid col-6 rounded' src='../medias/$image'/>";
+         }
+         echo "</div>";
          ?>
 
          <input class="btn btn-primary" type="submit" value="Actualizar">
