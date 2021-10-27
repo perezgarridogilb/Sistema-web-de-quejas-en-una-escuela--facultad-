@@ -39,6 +39,28 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
    <link href="../assets/css/styles2.css" rel="stylesheet" />
 </head>
 
+<style>
+   .image-container {
+      position: relative;
+   }
+
+   .hidden-image {
+      position: absolute;
+      display: none;
+      z-index: 99;
+      max-width: 500px;
+   }
+
+   .show-icon:hover {
+      color: green;
+      cursor: pointer;
+   }
+
+   .show-icon:hover+.hidden-image {
+      display: block;
+   }
+</style>
+
 <body id='page-top'>
    <?php
    include('../layout/menu.php');
@@ -53,7 +75,7 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
 
       <?php
       include("../conexion.php");
-      $result = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT count(id) FROM responses as r WHERE r.id_report = id) as counter_responses, (SELECT nombre FROM users as d WHERE d.id_usuario=r.id_user) as user FROM reports as r");
+      $result = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT image FROM images WHERE id_report = r.id LIMIT 1) as image, (SELECT count(id) FROM responses as r WHERE r.id_report = id) as counter_responses, (SELECT nombre FROM users as d WHERE d.id_usuario=r.id_user) as user FROM reports as r");
       ?>
       <table class='table table-hover'>
          <thead class='thead-dark'>
@@ -63,6 +85,7 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
                <td class='fw-bold'>Usuario</td>
                <td class='fw-bold'>Titulo</td>
                <td class='fw-bold'>Contenido</td>
+               <td class='fw-bold'>Imagen</td>
                <td class='fw-bold'>Operaciones</td>
             </tr>
          </thead>
@@ -75,12 +98,19 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
                $content = $row["content"];
                $user = $row["user"];
                $id = $row["id"];
+               $image = $row['image'];
                $nResponses = $row['counter_responses'];
                $status = ($nResponses == 0) ? "Sin resolver" : "Resuelta";
                $statusColor = ($nResponses == 0) ? "warning" : "success";
                $statusBgColor = ($nResponses == 0) ? "rgba(255, 193, 7, 0.1)" : "rgba(25, 134, 83, 0.1)";
 
                printf("<tr ><td>%d</td><td><div style='background-color: $statusBgColor; width: 25px; height: 25px;' class='d-flex  align-items-center justify-content-center'></div></td><td>%s</td><td>%s</td><td>%s</td>
+               <td class='image-container'>", $id, $user, $title, $content,);
+               if ($image != null) {
+                  echo "<i class='show-icon bi bi-image-fill'></i>";
+                  echo "<img class='hidden-image rounded img-fluid' src='../medias/$image'/>";
+               }
+               printf("</td>
                   <td class='d-flex align-items-center'>
                      <a class='text-decoration-none' onclick=\"return confirmSubmit()\" href=\"deleteReport.php?id=%s\">
                         <i class='bi bi-trash-fill text-danger' style='font-size: 1.25rem;'></i>
@@ -90,7 +120,7 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
                         <i class='bi bi-pencil-fill' style='font-size: 1.25rem;'></i>
                      </a>
                   </td>
-               </tr>", $id, $user, $title, $content, $id, $id);
+               </tr>", $id, $id);
             }
 
             mysqli_free_result($result);
