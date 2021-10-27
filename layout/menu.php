@@ -1,7 +1,4 @@
 <?php
-if (!isset($_SESSION['id_usuario'])) {
-    header("Location: ../auth/adminLogin.php");
-}
 $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : null;
 
 $rootProjectPath = "/Otono2021/Sistema-web-de-quejas-en-una-escuela-facultad";
