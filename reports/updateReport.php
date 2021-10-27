@@ -2,11 +2,11 @@
 session_start();
 include("../conexion.php");
 
-if ($_SESSION['tipo_usuario'] != 1) {
+if ($_SESSION['usertype'] != 1) {
    header("Location: ../");
 }
 
-$userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : null;
+$userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
 $id = $_GET['id'];
 $result = mysqli_query($conn, "SELECT * FROM reports WHERE id=$id");
 $row = mysqli_fetch_array($result);

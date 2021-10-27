@@ -28,19 +28,19 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `users` (
-  `id_usuario` int(11) PRIMARY KEY AUTO_INCREMENT,
-  `nombre` varchar(64) NOT NULL,
+  `id_user` int(11) PRIMARY KEY AUTO_INCREMENT,
+  `name` varchar(64) NOT NULL,
   `imagen` varchar(64) NOT NULL,
-  `correo` varchar(64) NOT NULL UNIQUE,
-  `contraseña` varchar(64) NOT NULL,
-  `tipo_usuario` int(1) NOT NULL
+  `mail` varchar(64) NOT NULL UNIQUE,
+  `password` varchar(64) NOT NULL,
+  `usertype` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `users`
 --
 
-INSERT INTO `users` (`id_usuario`, `nombre`, `imagen`, `correo`, `contraseña`, `tipo_usuario`) VALUES
+INSERT INTO `users` (`id_user`, `name`, `imagen`, `mail`, `password`, `usertype`) VALUES
 (10, 'Gilberto Pérez Garrido', 'https://', 'betho6990@gmail.com', 'abc', 0),
 (21, 'Israel Solís Ahuactzin', 'https://bit.ly/3zx63Rm', 'israel.flash@hotmail.com', 'abc', 1),
 (22, 'Luis Alberto Zacarías Martínez', 'https://bit.ly/3nYuJAk', 'secarmesi@gmail.com', 'abc', 1),
@@ -52,7 +52,7 @@ INSERT INTO `users` (`id_usuario`, `nombre`, `imagen`, `correo`, `contraseña`, 
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 
-ALTER TABLE users ADD CONSTRAINT unique_email UNIQUE (correo);
+ALTER TABLE users ADD CONSTRAINT unique_email UNIQUE (mail);
 
 CREATE TABLE `reports` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -63,7 +63,7 @@ CREATE TABLE `reports` (
   `modified_at` date NOT NULL DEFAULT date_format(current_timestamp(),'%Y-%m-%d'),
   PRIMARY KEY (`id`),
   KEY `fk_id_user` (`id_user`),
-  CONSTRAINT `fk_id_user` FOREIGN KEY (`id_user`) REFERENCES `users` (`id_usuario`),
+  CONSTRAINT `fk_id_user` FOREIGN KEY (`id_user`) REFERENCES `users` (`id_user`),
   CONSTRAINT `not_empty_title` CHECK (trim(`title`) <> ''),
   CONSTRAINT `not_empty_content` CHECK (trim(`content`) <> '')
 );
@@ -80,7 +80,7 @@ CREATE TABLE `responses` (
   KEY `responses_fk_id_report` (`id_report`),
   KEY `responses_fk_id_user` (`id_user`),
   CONSTRAINT `responses_fk_id_report` FOREIGN KEY (`id_report`) REFERENCES `reports` (`id`),
-  CONSTRAINT `responses_fk_id_user` FOREIGN KEY (`id_user`) REFERENCES `users` (`id_usuario`),
+  CONSTRAINT `responses_fk_id_user` FOREIGN KEY (`id_user`) REFERENCES `users` (`id_user`),
   CONSTRAINT `not_empty_content` CHECK (trim(`content`) <> '')
 );
 

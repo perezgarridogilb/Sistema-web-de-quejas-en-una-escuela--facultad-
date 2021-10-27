@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (isset($_SESSION['id_usuario'])) {
+if (isset($_SESSION['id_user'])) {
   header('Location: ../index.php');
 }
 ?>
@@ -11,15 +11,15 @@ include("../conexion.php");
 $failled_message = null;
 
 if (!empty($_POST)) {
-  /*$contraseña = sha1(mysqli_real_escape_string($conn, $_POST['pass']));*/
-  $sql = "INSERT INTO users (nombre, imagen, correo, contraseña, tipo_usuario) VALUES ('$_POST[nombre]', '', '$_POST[correo]', '$_POST[password]', 0)";
+  /*$password = sha1(mysqli_real_escape_string($conn, $_POST['pass']));*/
+  $sql = "INSERT INTO users (name, imagen, mail, password, usertype) VALUES ('$_POST[name]', '', '$_POST[mail]', '$_POST[password]', 0)";
   if ($conn->query($sql) === TRUE) {
-    $_SESSION['id_usuario'] = $row['id_usuario'];
-    $_SESSION['tipo_usuario'] = $row['tipo_usuario'];
+    $_SESSION['id_user'] = $row['id_user'];
+    $_SESSION['usertype'] = $row['usertype'];
     header("Location: ../index.php");
   } else {
-    $correo = $_POST['correo'];
-    $failled_message = "Ya existe una cuenta relacionada con el correo $correo";
+    $mail = $_POST['mail'];
+    $failled_message = "Ya existe una cuenta relacionada con el mail $mail";
   }
 }
 
@@ -157,14 +157,14 @@ if (!empty($_POST)) {
       ?>
       <hr>
       <div class="form-group">
-        <div class="col"><input type="text" class="form-control" name="nombre" placeholder="Nombre(s)" required="required"></div>
+        <div class="col"><input type="text" class="form-control" name="name" placeholder="name(s)" required="required"></div>
       </div>
 
       <div class="form-group">
-        <input type="email" class="form-control" name="correo" placeholder="Correo" required="required">
+        <input type="email" class="form-control" name="mail" placeholder="mail" required="required">
       </div>
       <div class="form-group">
-        <input type="password" class="form-control" name="password" placeholder="Contraseña" required="required">
+        <input type="password" class="form-control" name="password" placeholder="password" required="required">
       </div>
       <div class="form-group">
         <button type="submit" class="btn btn-lg text-white">Registrar</button>

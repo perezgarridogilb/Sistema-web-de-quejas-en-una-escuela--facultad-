@@ -178,7 +178,7 @@ ALTER TABLE `responses`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id_user`),
-  ADD UNIQUE KEY `correo` (`mail`),
+  ADD UNIQUE KEY `mail` (`mail`),
   ADD UNIQUE KEY `unique_email` (`mail`);
 
 --
