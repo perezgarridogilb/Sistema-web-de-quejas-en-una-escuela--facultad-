@@ -1,11 +1,7 @@
 <?php
-	
-	$conn = new mysqli("localhost","root","","sistemaalumnos");
-	
-	if($conn->connect_errno)
-	{
-		echo "No hay conexión: (" . $conn->connect_errno . ") " . $conn->connect_error;
-		
-	}
-	
-	?>
+
+$conn = new mysqli("localhost", "root", "", "sistemaalumnos");
+
+if ($conn->connect_errno) {
+	echo "No hay conexión: (" . $conn->connect_errno . ") " . $conn->connect_error;
+}
