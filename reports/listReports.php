@@ -1,11 +1,24 @@
 <?php
 include("../conexion.php");
+<<<<<<< HEAD
 session_start();
 $failled_message = null;
 
 $sql = "SELECT id, title, content, created_at, modified_at, (SELECT count(id) FROM responses as r WHERE r.id_report = id) as counter_responses FROM reports WHERE deleted_at IS NULL ORDER BY id DESC;";
 $resultado = mysqli_query($conn, $sql);
 
+=======
+$failled_message = null;
+
+$sql = "SELECT id, title, content, created_at, modified_at, (SELECT count(id) FROM responses as r WHERE r.id_report = id) as counter_responses FROM reports;";
+$resultado = mysqli_query($conn, $sql);
+
+session_start();
+if (!isset($_SESSION['id_usuario'])) {
+    header('Location: ../auth/userLogin.php');
+}
+
+>>>>>>> rama
 $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : null;
 ?>
 
@@ -32,17 +45,60 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
 </head>
 
 <body id="page-top">
+<<<<<<< HEAD
     <?php
     include('../layout/menu.php');
     ?>
+=======
+    <!-- Navigation-->
+    <a class="menu-toggle rounded" href="#"><i class="fas fa-bars"></i></a>
+    <nav id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+            <li class="sidebar-brand text-white">
+                Sistema de quejas
+                <?php
+                if ($userType != null) {
+                    $nombre = $_SESSION['nombre'];
+                    echo "<div class='name'>Bienvenido, <span class='fw-bold'>$nombre</span></div>";
+                }
+                ?>
+            </li>
+            <li class="sidebar-nav-item"><a href="../">Inicio</a></li>
+            <?php
+            if ($userType != null) {
+                echo '<li class="sidebar-nav-item"><a href="../reports/createReport.php">Crear reportes</a></li>';
+                echo '<li class="sidebar-nav-item"><a href="../dashboard.php">Estadísticas</a></li>';
+            }
+            ?>
+            <li class="sidebar-nav-item"><a href="../reports/listReports.php">Listar reportes</a></li>
+            <li class="sidebar-nav-item"><a href="../about.php">Acerca de nosotros</a></li>
+            <hr class="bg-white">
+            <?php
+            if ($userType == null) {
+                echo '<li class="sidebar-nav-item"><a href="../auth/userLogin.php">Iniciar sesion</a></li>';
+                echo '<li class="sidebar-nav-item"><a href="../auth/crearUsuario.php">Crear nueva cuenta</a></li>';
+            } else {
+                echo '<li class="sidebar-nav-item"><a href="../auth/salir.php">Cerrar sesion</a></li>';
+            }
+            ?>
+        </ul>
+    </nav>
+>>>>>>> rama
 
     <div class="container">
         <h2 class="text-center mt-5 text-primary mb-3">Lista de quejas</h2>
         <hr class="mb-5 bg-primary" />
 
+<<<<<<< HEAD
         <?php
         if ($userType != null) {
             echo "<a class='mb-5 d-block text-decoration-none' href='createReport.php'>Crear nueva queja</a>";
+=======
+
+        <?php
+        if ($userType != null) {
+            echo "<a class='mb-5 d-block' href='createReport.php'>Crear nueva queja</a>";
+>>>>>>> rama
         }
         echo "<div >";
         while ($row = $resultado->fetch_array()) {

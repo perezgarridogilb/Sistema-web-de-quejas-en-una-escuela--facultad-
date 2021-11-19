@@ -9,8 +9,12 @@ $reportId = $_GET['id'];
 $sql = "SELECT id, title, content, created_at, modified_at, (SELECT count(id) FROM responses as r WHERE r.id_report = id) as counter_responses FROM reports WHERE id=$reportId;";
 $resultado = mysqli_query($conn, $sql);
 $row = mysqli_fetch_assoc($resultado);
+<<<<<<< HEAD
 $sql = "SELECT id, id_report, image FROM images WHERE id_report=$reportId;";
 $imageRows = mysqli_query($conn, $sql);
+=======
+
+>>>>>>> rama
 $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : null;
 ?>
 
@@ -37,9 +41,45 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
 </head>
 
 <body id="page-top">
+<<<<<<< HEAD
     <?php
     include('../layout/menu.php');
     ?>
+=======
+    <!-- Navigation-->
+    <a class="menu-toggle rounded" href="#"><i class="fas fa-bars"></i></a>
+    <nav id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+            <li class="sidebar-brand text-white">
+                Sistema de quejas
+                <?php
+                if ($userType != null) {
+                    $nombre = $_SESSION['nombre'];
+                    echo "<div class='name'>Bienvenido, <span class='fw-bold'>$nombre</span></div>";
+                }
+                ?>
+            </li>
+            <li class="sidebar-nav-item"><a href="../">Inicio</a></li>
+            <?php
+            if ($userType != null) {
+                echo '<li class="sidebar-nav-item"><a href="../reports/createReport.php">Crear reportes</a></li>';
+                echo '<li class="sidebar-nav-item"><a href="../dashboard.php">Estadísticas</a></li>';
+            }
+            ?>
+            <li class="sidebar-nav-item"><a href="../reports/listReports.php">Listar reportes</a></li>
+            <li class="sidebar-nav-item"><a href="../about.php">Acerca de nosotros</a></li>
+            <hr class="bg-white">
+            <?php
+            if ($userType == null) {
+                echo '<li class="sidebar-nav-item"><a href="../auth/userLogin.php">Iniciar sesion</a></li>';
+                echo '<li class="sidebar-nav-item"><a href="../auth/crearUsuario.php">Crear nueva cuenta</a></li>';
+            } else {
+                echo '<li class="sidebar-nav-item"><a href="../auth/salir.php">Cerrar sesion</a></li>';
+            }
+            ?>
+        </ul>
+    </nav>
+>>>>>>> rama
 
     <div class="container">
         <h2 class="text-center mt-5 text-primary mb-3">Detalle de queja</h2>
@@ -66,6 +106,7 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
         echo $content;
         echo '</p>';
 
+<<<<<<< HEAD
         echo "<h4>Imagenes</h4>";
         echo "<div class='row'>";
         while ($imageRow = mysqli_fetch_array($imageRows)) {
@@ -74,6 +115,8 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
         }
         echo "</div>";
 
+=======
+>>>>>>> rama
         if ($userType == 1) {
             // Solo moderadores
             echo "<div class='py-3'><hr/></div>";
