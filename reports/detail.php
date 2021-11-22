@@ -6,9 +6,15 @@ if (!isset($_SESSION['id_user'])) {
 }
 
 $reportId = $_GET['id'];
-$sql = "SELECT id, title, content, created_at, modified_at, (SELECT count(id) FROM responses as r WHERE r.id_report = id) as counter_responses FROM reports WHERE id=$reportId;";
+$sql = "SELECT id, title, id_user, content, created_at, modified_at, (SELECT count(id) FROM responses as r WHERE r.id_report = id) as counter_responses FROM reports WHERE id=$reportId;";
 $resultado = mysqli_query($conn, $sql);
 $row = mysqli_fetch_assoc($resultado);
+
+if ($_SESSION['id_user'] == $row['id_user'] && $row['counter_responses'] < 1) {
+    $onReturnUrl = urlencode("./listReports.php?id=$reportId");
+    header("Location: ./updateReport.php?id=$reportId&from=$onReturnUrl");
+}
+
 $sql = "SELECT id, id_report, image FROM images WHERE id_report=$reportId;";
 $imageRows = mysqli_query($conn, $sql);
 $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
