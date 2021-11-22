@@ -3,8 +3,7 @@ include("../funcs/conexion.php");
 session_start();
 $failled_message = null;
 
-$sql = "SELECT id, title, content, created_at, modified_at, (SELECT count(id) FROM responses as r WHERE r.id_report = id) as counter_responses FROM reports WHERE deleted_at IS NULL ORDER BY id DESC;";
-$resultado = mysqli_query($conn, $sql);
+$liveResults = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT image FROM images WHERE id_report = r.id LIMIT 1) as image, (SELECT count(id) FROM responses as r WHERE r.id_report = id) as counter_responses, (SELECT name FROM users as d WHERE d.id_user=r.id_user) as user FROM reports as r WHERE deleted_at IS NULL");
 
 $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
 ?>
@@ -29,6 +28,31 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="../assets/css/styles2.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.6.0/font/bootstrap-icons.min.css" integrity="sha512-7w04XesEFaoeeKX0oxkwayDboZB/+AKNF5IUE50fCUDUywLvDN4gv2513TLQS+RDenAeHEK3O40jZZVrkpnWWw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        .image-container {
+            position: relative;
+        }
+
+        .hidden-image {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            display: none;
+            z-index: 99;
+            max-width: 500px;
+        }
+
+        .show-icon:hover {
+            color: green;
+            cursor: pointer;
+        }
+
+        .show-icon:hover+.hidden-image {
+            display: block;
+        }
+    </style>
 </head>
 
 <body id="page-top">
@@ -44,40 +68,46 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
         if ($userType != null) {
             echo "<a class='mb-5 d-block text-decoration-none' href='createReport.php'>Crear nueva queja</a>";
         }
-        echo "<div >";
-        while ($row = $resultado->fetch_array()) {
-            $title = $row['title'];
-            $id = $row['id'];
-            $content = $row['content'];
-            $createdAt = $row['created_at'];
-            $modifiedAt = $row['created_at'];
-            $nResponses = $row['counter_responses'];
-            $status = ($nResponses == 0) ? "Sin resolver" : "Resuelta";
-            $statusColor = ($nResponses == 0) ? "warning" : "success";
-            $statusBgColor = ($nResponses == 0) ? "rgba(255, 193, 7, 0.1)" : "rgba(25, 134, 83, 0.1)";
 
-            echo '<div class="d-flex mb-5">';
-            echo "<div class='bg-$statusColor' style='width: 8px'; >";
-            echo "</div>";
-
-            echo "<div class='p-3 w-100' style='background-color: $statusBgColor';>";
-            echo "<h2 class='text-center'>$title</h2>";
-            echo "<div style='8px' class='d-flex justify-content-between'>";
-            echo "<div><span class='fw-bold'>Estado:</span> $status</div>";
-            echo "<p class='text-end'><span class='fw-bold'>Creado:</span> $createdAt <span>|</span> <span class='fw-bold'>Modificado:</span> $modifiedAt</p>";
-            echo "</div>";
-            echo '<p class="mt-3">';
-            echo $content;
-            echo '</p>';
-            if ($userType != null) {
-                echo "<a href='./detail.php?id=$id'>Ver detalles</a>";
-            }
-            echo "</div>";
-            echo '</div>';
-        }
-
-        echo "</div>";
         ?>
+
+        <table class='table table-hover'>
+            <thead class='thead-dark'>
+                <tr>
+                    <td class='fw-bold'>Estado</td>
+                    <td class='fw-bold'>Usuario</td>
+                    <td class='fw-bold'>Titulo</td>
+                    <td class='fw-bold'>Contenido</td>
+                    <td class='fw-bold'>Imagen</td>
+                </tr>
+            </thead>
+
+            <tbody>
+                <?php
+                while ($row = mysqli_fetch_array($liveResults)) {
+                    $title = $row["title"];
+                    $content = $row["content"];
+                    $user = $row["user"];
+                    $id = $row["id"];
+                    $image = $row['image'];
+                    $nResponses = $row['counter_responses'];
+                    $status = ($nResponses == 0) ? "Sin resolver" : "Resuelta";
+                    $statusColor = ($nResponses == 0) ? "warning" : "success";
+                    $statusBgColor = ($nResponses == 0) ? "red" : "blue";
+
+                    printf("<tr style='cursor: pointer' onclick='window.location = \"detail.php?id=$id\"'><td><div style='background-color: $statusBgColor; width: 25px; height: 25px;' class='d-flex  align-items-center justify-content-center'></div></td><td>%s</td><td>%s</td><td>%s</td>
+                  <td class='image-container'>",  $user, $title, $content,);
+                    if ($image != null) {
+                        echo "<i class='show-icon bi bi-image-fill'></i>";
+                        echo "<img class='hidden-image rounded img-fluid' src='../medias/$image'/>";
+                    }
+                }
+                echo "</tr>";
+                mysqli_free_result($liveResults);
+                mysqli_close($conn);
+                ?>
+            </tbody>
+        </table>
     </div>
 
     <!-- Footer-->
