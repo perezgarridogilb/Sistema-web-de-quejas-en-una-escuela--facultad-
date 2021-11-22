@@ -11,7 +11,7 @@ $resultado = mysqli_query($conn, $sql);
 $row = mysqli_fetch_assoc($resultado);
 $sql = "SELECT id, id_report, image FROM images WHERE id_report=$reportId;";
 $imageRows = mysqli_query($conn, $sql);
-
+$userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
 ?>
 
 <!DOCTYPE html>

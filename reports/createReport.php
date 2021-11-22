@@ -25,7 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $messageType = 'danger';
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -71,6 +70,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 </head>
 
+<style>
+    .dropzone {
+        background: white;
+        border-radius: 5px;
+        border: 2px dashed rgb(0, 135, 247);
+        border-image: none;
+        margin-left: auto;
+        margin-right: auto;
+        color: #aaa;
+    }
+
+    div#dropzone:hover {
+        cursor: pointer;
+        background-color: rgb(0, 135, 247, 0.1);
+    }
+</style>
+
 <body id="page-top">
     <?php
 
@@ -91,7 +107,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <a class="text-decoration-none" href='./listReports.php'>Ver listado de reportes</a>
         </div>
         <form id='report-form' enctype="multipart/form-data" method='POST'>
-
             <form method='POST'>
                 <div class="form-group mb-3">
                     <label class="mb-1 fw-bold">Título *</label>
@@ -115,6 +130,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <button type="submit" class="btn btn-primary">Enviar</button>
                 </div>
             </form>
+
+            <div class="form-group mb-3">
+                <label class="mb-1 fw-bold">Título *</label>
+                <input name='titulo' type="text" class="form-control" placeholder="Ingresa un título" required>
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="mb-1 fw-bold">Contenido *</label>
+                <textarea rows="8" name='contenido' placeholder="Redacta tu queja aquí..." class="form-control" required></textarea>
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="mb-1 fw-bold">Imagenes</label>
+            </div>
+
+            <div id="dropzone" class="dropzone p-5 mb-5 ">
+                <div class="dz-message h4">Suelta las imagenes aquí</div>
+            </div>
+
+            <div class='text-center'>
+                <button type="submit" class="btn btn-primary">Enviar</button>
+            </div>
+        </form>
     </div>
 
     <!-- Footer-->
@@ -139,6 +177,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <script src="../assets/js/scripts.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js" integrity="sha512-oQq8uth41D+gIH/NJvSJvVB85MFk1eWpMK6glnkg6I7EdMqC1XVkW7RxLheXwmFdG03qScCM7gKS/Cx3FYt7Tg==" crossorigin="anonymous" referrerpolicy="no-referrer">
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js" integrity="sha512-oQq8uth41D+gIH/NJvSJvVB85MFk1eWpMK6glnkg6I7EdMqC1XVkW7RxLheXwmFdG03qScCM7gKS/Cx3FYt7Tg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
         Dropzone.autoDiscover = false;

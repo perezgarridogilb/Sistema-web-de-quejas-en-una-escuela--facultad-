@@ -1,13 +1,13 @@
 <?php
-
 $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
+$userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
+
 $rootProjectPath = "/Otono2021/Sistema-web-de-quejas-en-una-escuela-facultad";
 ?>
 
 <!-- Navigation-->
 
 <a class="menu-toggle rounded" href="#"><i class="fas fa-bars"></i></a>
-
 <nav id="sidebar-wrapper">
     <ul class="sidebar-nav">
         <li class="sidebar-brand text-white">

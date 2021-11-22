@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?php
 <<<<<<< HEAD
 
@@ -21,4 +22,11 @@ if ($conn->connect_errno) {
 	}
 	
 	?>
+>>>>>>> rama
+=======
+$conn = new mysqli("localhost", "root", "", "sistemaalumnos");
+
+if ($conn->connect_errno) {
+echo "No hay conexión: (" . $conn->connect_errno . ") " . $conn->connect_error;
+}
 >>>>>>> rama

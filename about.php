@@ -25,7 +25,8 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
 <body>
     <?php
     include('./layout/menu.php');
-    ?> <div class="container">
+    ?>
+    <div class="container">
         <h2 class="text-center mt-5 text-primary mb-3">Acerca de nosotros</h2>
         <hr class="mb-5 bg-primary" />
 

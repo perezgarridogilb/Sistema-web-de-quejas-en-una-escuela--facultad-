@@ -10,16 +10,19 @@
    include("../conexion.php");
 
    //Creamos la sentencia SQL y la ejecutamos
-   $ti = $_REQUEST['titulo'];
-   $di = $_REQUEST['director'];
-   $ac = $_REQUEST['actor'];
+   $name = $_REQUEST['name'];
+   $mail = $_REQUEST['mail'];
+   $usertype = $_REQUEST['usertype'];
    $id = $_REQUEST['id'];
-   echo "$ti<br>";
-   echo "$di<br>";
-   echo "$ac<br>";
+   echo "$name<br>";
+   echo "$mail<br>";
+   echo "$usertype<br>";
    echo "$id<br>";
-   $SQL = "UPDATE users SET name='$ti',mail='$di',usertype='$ac' WHERE id_user ='$id'";
-   mysqli_query($conn, $SQL);
+   $sql = "UPDATE users SET name='$name', mail='$mail', usertype=$usertype WHERE id_user =$id";
+   if ($conn->query($sql) === TRUE) {
+   } else {
+      echo "Error: " . $sql . "<br>" . $sql . $conn->error . "<br>";
+   }
    header("Location: borrarnew.php");
    ?>
 

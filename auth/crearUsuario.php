@@ -1,31 +1,88 @@
 <?php
 session_start();
 if (isset($_SESSION['id_user'])) {
+
   header('Location: ../index.php');
 }
 
-include("../conexion.php");
-$failled_message = null;
+require '../funcs/conexion.php';
+require '../funcs/funcs.php';
+
+$errors = array();
 
 if (!empty($_POST)) {
-  /*$password = sha1(mysqli_real_escape_string($conn, $_POST['pass']));*/
-  $sql = "INSERT INTO users (name, imagen, mail, password, usertype) VALUES ('$_POST[name]', '', '$_POST[mail]', '$_POST[password]', 0)";
-  $resultado = mysqli_query($conn, $sql);
+  $nombre = $mysqli->real_escape_string($_POST['nombre']);
+  $password = $mysqli->real_escape_string($_POST['password']);
+  $con_password = $mysqli->real_escape_string($_POST['con_password']);
+  $email = $mysqli->real_escape_string($_POST['email']);
+  $captcha = $mysqli->real_escape_string($_POST['g-recaptcha-response']);
 
-  if ($resultado != null) {
-    $_SESSION['id_user'] = mysqli_insert_id($conn);
-    $_SESSION['usertype'] = 0;
-    $_SESSION['name'] = $_POST['name'];
-    header("Location: ../index.php");
-  } else {
-    $mail = $_POST['mail'];
-    $failled_message = "Ya existe una cuenta relacionada con el mail $mail";
+  $activo = 0;
+  $tipo_usuario = 0;
+  $secret = '6LdXFEQdAAAAAONwDP7xK-QqWFD1s50psF_RQBbC';
+
+  if (!$captcha) {
+    $errors[] = "Porfavor verifica el captcha";
+  }
+
+  if (isNull($nombre, $password, $con_password, $email)) {
+    $errors[] = "Debe llenar todos los campos";
+  }
+
+  if (!isEmail($email)) {
+    $errors[] = "Dirección de correo inválida";
+  }
+
+  if (!validaPassword($password, $con_password)) {
+    $errors[] = "Las contraseñas no coinciden";
+  }
+
+  if (emailExiste($email)) {
+    $errors[] = "El correo electronico $email ya existe";
+  }
+  if (count($errors) == 0) {
+    $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=$secret&response=$captcha");
+
+    $arr = json_decode($response, TRUE);
+
+    if ($arr['success']) {
+
+      $pass_hash = hashPassword($password);
+      $token = generateToken();
+
+      $registro = registraUsuario($nombre, $email, $password, $tipo_usuario, $activo, $token);
+
+      if ($registro > 0) {
+
+        $url = 'http://' . $_SERVER["SERVER_NAME"] . ':' . $_SERVER['SERVER_PORT'] .
+          '/Otono2021/Sistema-web-de-quejas-en-una-escuela-facultad/auth/activar.php?id=' . $registro . '&val=' . $token;
+
+        $asunto = 'Activar cuenta - Sistema de Usuarios';
+        $cuerpo = "Estimado $nombre: <br /><br />Para continuar con
+			el proceso de registro es indispensable de click en la 
+			siguiente liga <a href='$url'>Activar cuenta</a>";
+
+        if (enviarEmail($email, $nombre, $asunto, $cuerpo)) {
+
+          echo 'Para terminar el proceso de registro siga las instrucciones que le enviamos al correo electronico: ' . $email;
+          echo "<br><a href='userLogin.php'>Iniciar sesion</a>";
+          exit;
+        } else {
+          $errors[] = "Error al enviar correo electronico";
+        }
+      } else {
+        $errors[] = "Error al registrar";
+      }
+    } else {
+      $errors[] = 'Error al comprobar Captcha';
+    }
   }
 }
 
 ?>
-<!DOCTYPE html>
-<html lang="en">
+
+<!doctype html>
+<html lang="es">
 
 <head>
   <meta charset="utf-8">
@@ -33,6 +90,7 @@ if (!empty($_POST)) {
   <link rel="stylesheet" href="../assets/css/index.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700">
   <link href="../assets/css/styles2.css" rel="stylesheet">
+  <script src="https://www.google.com/recaptcha/api.js"></script>
 
   <style>
     body {
@@ -139,7 +197,7 @@ if (!empty($_POST)) {
 
 <body>
   <div class="signup-form">
-    <form method="post">
+    <<<<<<< HEAD <form method="post">
       <div class='p-2'>
         <a href='../'>Ir a inicio</a>
       </div>
@@ -169,9 +227,53 @@ if (!empty($_POST)) {
       <div class="form-group">
         <button type="submit" class="btn btn-lg text-white">Registrar</button>
       </div>
-    </form>
+      </form>
 
-    <div class="hint-text">¿Ya tienes una cuenta? <a href="userLogin.php">Ingresa aquí</a></div>
+      <div class="hint-text">¿Ya tienes una cuenta? <a href="userLogin.php">Ingresa aquí</a></div>
+      =======
+      <div class="panel-body">
+        <form class="form-horizontal" role="form" action="<?php $_SERVER['PHP_SELF'] ?>" method="POST" autocomplete="off">
+          <div class='p-2'>
+            <a href='../'>Ir a inicio</a>
+          </div>
+          <div class="panel-heading">
+            <div class="panel-title">
+              <h2>Reg&iacute;strate</h2>
+            </div>
+            <p>Rellena los campos para crear una nueva cuenta!</p>
+          </div>
+          <hr>
+          <div class="form-group">
+            <div class="col"><input type="text" class="form-control" name="nombre" placeholder="Nombre(s)" required="required"></div>
+          </div>
+
+          <div class="form-group">
+            <input type="email" class="form-control" name="email" placeholder="Correo" value="<?php if (isset($email)) echo $email; ?>" required>
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control" name="password" placeholder="Contraseña" required="required">
+          </div>
+
+          <div class="form-group">
+            <input type="password" class="form-control" name="con_password" placeholder="Confirmar contraseña" required="required">
+          </div>
+
+          <div class="form-group">
+            <label for="captcha" class="col-md-3 control-label"></label>
+            <div class="g-recaptcha col-md-9" data-sitekey="6LdXFEQdAAAAAD8NRTVVju55NG6cIBLTZ3UlE7DT"></div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-md-offset-3 col-md-9">
+              <button id="btn-signup" type="submit" class="btn btn-info text-white"><i class="icon-hand-right"></i>Registrar</button>
+            </div>
+          </div>
+
+        </form>
+        <?php echo resultBlock($errors); ?>
+        <div class="hint-text">¿Ya tienes una cuenta? <a href="userLogin.php">Ingresa aquí</a></div>
+      </div>
+      >>>>>>> rama
   </div>
 </body>
 

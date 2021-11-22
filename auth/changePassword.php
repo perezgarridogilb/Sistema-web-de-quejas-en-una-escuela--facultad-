@@ -4,7 +4,6 @@ include("../conexion.php");
 if (!isset($_SESSION['id_user'])) {
     header("Location: ../auth/userLogin.php");
 }
-
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -67,11 +66,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <form method="POST">
                                     <div class="form-group mb-3">
                                         <label class="form-label fw-bold">Contraseña actual *</label>
+                                        <label class="form-label">Contraseña actual</label>
                                         <input name="password" type="password" class="form-control" required>
                                     </div>
 
                                     <div class="form-group">
                                         <label class="form-label fw-bold">Nueva contraseña *</label>
+                                        <label class="form-label">Nueva contraseña</label>
                                         <input name="new_password" type="password" class="form-control" required>
                                     </div>
 

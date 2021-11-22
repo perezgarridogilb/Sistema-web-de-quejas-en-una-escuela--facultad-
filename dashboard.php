@@ -62,7 +62,6 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
     <?php
     include('./layout/menu.php');
     ?>
-
     <!-- Page Wrapper -->
     <div id="wrapper">
 

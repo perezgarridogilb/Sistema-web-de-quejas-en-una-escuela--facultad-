@@ -12,5 +12,4 @@
    echo "El id usuario es : $id";
    mysqli_query($conn, "DELETE FROM users WHERE id_user = '$id'");
    header("Location: borrarnew.php");
-   ?>
-</body>
+   ?> </body>
