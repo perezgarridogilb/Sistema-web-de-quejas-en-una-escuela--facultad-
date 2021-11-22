@@ -2,21 +2,21 @@
 session_start();
 include("../funcs/conexion.php");
 
-if ($_SESSION['usertype'] != 1) {
-   header("Location: ../");
-}
-
-$userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
 $id = $_GET['id'];
 $result = mysqli_query($conn, "SELECT * FROM reports WHERE id=$id");
 $row = mysqli_fetch_array($result);
+
+// if ($_SESSION['usertype'] != 1 && $_SESSION['id_user'] != $row['id_user']) {
+//    header("Location: ../");
+// }
+
+$userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
 $title = $row["title"];
 $content = $row["content"];
 
 $sql = "SELECT id, id_report, image FROM images WHERE id_report=$id;";
 $imageRows = mysqli_query($conn, $sql);
 ?>
-
 
 <!DOCTYPE html>
 
@@ -52,19 +52,22 @@ $imageRows = mysqli_query($conn, $sql);
       <h2 class="text-center mt-5 text-primary mb-3">Actualizar un registro</h2>
 
       <hr class="mb-3 bg-primary" />
-      <a class="d-block mb-3 text-decoration-none" href="./adminReports.php">Regresar a listado de quejas</a>
+      <?php
+      $from = $_GET['from'];
+      echo "<a class='d-block mb-3 text-decoration-none' href='$from'>Regresar</a>";
+      ?>
       <form method="POST" action="confirmUpdate.php">
          <div class="mb-3">
-            <label class="form-label">Titulo</label>
+            <label class="mb-1 fw-bold">Título *</label>
             <?php
-            echo "<input class='form-control' type='text' name='title' value='$title'>";
+            echo "<input class='form-control' type='text' name='title' value='$title' required>";
             ?>
          </div>
 
          <div class="mb-3">
-            <label class="form-label">Contenido</label>
+            <label class="mb-1 fw-bold">Contenido *</label>
             <?php
-            echo "<textarea rows='8' class='form-control' type='text' name='content'>$content</textarea>";
+            echo "<textarea rows='8' class='form-control' type='text' name='content' required>$content</textarea>";
             ?>
          </div>
 
@@ -72,17 +75,18 @@ $imageRows = mysqli_query($conn, $sql);
          echo "<input type='hidden' name='id' value='$id'>";
          ?>
 
+         <input class="btn btn-primary mb-3" type="submit" value="Actualizar">
+
          <?php
          echo "<h4>Imagenes</h4>";
          echo "<div class='row'>";
          while ($imageRow = mysqli_fetch_array($imageRows)) {
             $image = $imageRow['image'];
-            echo "<img class='img-fluid col-6 rounded' src='../medias/$image'/>";
+            echo "<img  class='img-fluid col-6 rounded p-3' src='../medias/$image'/>";
          }
          echo "</div>";
          ?>
 
-         <input class="btn btn-primary" type="submit" value="Actualizar">
       </form>
    </div>
    <a class="scroll-to-top rounded" href="#page-top"><i class="fas fa-angle-up"></i></a>

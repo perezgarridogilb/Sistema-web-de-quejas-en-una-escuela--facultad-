@@ -1,6 +1,5 @@
 <?php
 $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
-$userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
 
 $rootProjectPath = "/Otono2021/Sistema-web-de-quejas-en-una-escuela-facultad";
 ?>
@@ -14,14 +13,15 @@ $rootProjectPath = "/Otono2021/Sistema-web-de-quejas-en-una-escuela-facultad";
             Sistema de quejas
             <?php
             if (!is_null($userType)) {
+                $userMode = ($userType == 1) ? "Administrador" : "Usuario";
                 $nombre = $_SESSION['name'];
-                echo "<div class='nombre'>Bienvenido, <span class='fw-bold'>$nombre</span></div>";
+                echo "<div class='nombre'>Bienvenido, <span class='fw-bold'>$nombre ($userMode)</span></div>";
             }
             ?>
         </li>
         <?php
         echo "<li class='sidebar-nav-item'><a href='$rootProjectPath/'>Inicio</a></li>";
-        if (!is_null($userType)) {
+        if ($userType == 0) {
             echo "<li class='sidebar-nav-item'><a href='$rootProjectPath/reports/createReport.php'>Crear reportes</a></li>";
         }
         echo "<li class='sidebar-nav-item'><a href='$rootProjectPath/reports/listReports.php'>Listar reportes</a></li>";
