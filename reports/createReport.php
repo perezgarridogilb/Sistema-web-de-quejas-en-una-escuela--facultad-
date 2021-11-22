@@ -107,30 +107,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <a class="text-decoration-none" href='./listReports.php'>Ver listado de reportes</a>
         </div>
         <form id='report-form' enctype="multipart/form-data" method='POST'>
-            <form method='POST'>
-                <div class="form-group mb-3">
-                    <label class="mb-1 fw-bold">Título *</label>
-                    <input name='titulo' type="text" class="form-control" placeholder="Ingresa un título" required>
-                </div>
-
-                <div class="form-group mb-3">
-                    <label class="mb-1 fw-bold">Contenido *</label>
-                    <textarea rows="8" name='contenido' placeholder="Redacta tu queja aquí..." class="form-control" required></textarea>
-                </div>
-
-                <div class="form-group mb-3">
-                    <label class="mb-1 fw-bold">Imagenes</label>
-                </div>
-
-                <div id="dropzone" class="dropzone p-5 mb-5 ">
-                    <div class="dz-message h4">Suelta las imagenes aquí</div>
-                </div>
-
-                <div class='text-center'>
-                    <button type="submit" class="btn btn-primary">Enviar</button>
-                </div>
-            </form>
-
             <div class="form-group mb-3">
                 <label class="mb-1 fw-bold">Título *</label>
                 <input name='titulo' type="text" class="form-control" placeholder="Ingresa un título" required>
