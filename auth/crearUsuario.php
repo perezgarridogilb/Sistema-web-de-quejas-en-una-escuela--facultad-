@@ -197,83 +197,49 @@ if (!empty($_POST)) {
 
 <body>
   <div class="signup-form">
-    <<<<<<< HEAD <form method="post">
-      <div class='p-2'>
-        <a href='../'>Ir a inicio</a>
-      </div>
 
-      <h2>Registro</h2>
-      <p>Rellena los campos para crear una nueva cuenta!</p>
+    <div class="panel-body">
+      <form class="form-horizontal" role="form" action="<?php $_SERVER['PHP_SELF'] ?>" method="POST" autocomplete="off">
+        <div class='p-2'>
+          <a href='../'>Ir a inicio</a>
+        </div>
+        <div class="panel-heading">
+          <div class="panel-title">
+            <h2>Reg&iacute;strate</h2>
+          </div>
+          <p>Rellena los campos para crear una nueva cuenta!</p>
+        </div>
+        <hr>
+        <div class="form-group">
+          <div class="col"><input type="text" class="form-control" name="nombre" placeholder="Nombre(s)" required="required"></div>
+        </div>
 
+        <div class="form-group">
+          <input type="email" class="form-control" name="email" placeholder="Correo" value="<?php if (isset($email)) echo $email; ?>" required>
+        </div>
+        <div class="form-group">
+          <input type="password" class="form-control" name="password" placeholder="Contraseña" required="required">
+        </div>
 
-      <?php
-      if ($failled_message != null) {
-        echo "<div class='alert alert-danger'>";
-        echo $failled_message;
-        echo "</div>";
-      }
-      ?>
-      <hr>
-      <div class="form-group">
-        <div class="col"><input type="text" class="form-control" name="name" placeholder="Nombre(s)" required="required"></div>
-      </div>
+        <div class="form-group">
+          <input type="password" class="form-control" name="con_password" placeholder="Confirmar contraseña" required="required">
+        </div>
 
-      <div class="form-group">
-        <input type="email" class="form-control" name="mail" placeholder="Correo eléctronico" required="required">
-      </div>
-      <div class="form-group">
-        <input type="password" class="form-control" name="password" placeholder="Contraseña" required="required">
-      </div>
-      <div class="form-group">
-        <button type="submit" class="btn btn-lg text-white">Registrar</button>
-      </div>
+        <div class="form-group">
+          <label for="captcha" class="col-md-3 control-label"></label>
+          <div class="g-recaptcha col-md-9" data-sitekey="6LdXFEQdAAAAAD8NRTVVju55NG6cIBLTZ3UlE7DT"></div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-offset-3 col-md-9">
+            <button id="btn-signup" type="submit" class="btn btn-info text-white"><i class="icon-hand-right"></i>Registrar</button>
+          </div>
+        </div>
+
       </form>
-
+      <?php echo resultBlock($errors); ?>
       <div class="hint-text">¿Ya tienes una cuenta? <a href="userLogin.php">Ingresa aquí</a></div>
-      =======
-      <div class="panel-body">
-        <form class="form-horizontal" role="form" action="<?php $_SERVER['PHP_SELF'] ?>" method="POST" autocomplete="off">
-          <div class='p-2'>
-            <a href='../'>Ir a inicio</a>
-          </div>
-          <div class="panel-heading">
-            <div class="panel-title">
-              <h2>Reg&iacute;strate</h2>
-            </div>
-            <p>Rellena los campos para crear una nueva cuenta!</p>
-          </div>
-          <hr>
-          <div class="form-group">
-            <div class="col"><input type="text" class="form-control" name="nombre" placeholder="Nombre(s)" required="required"></div>
-          </div>
-
-          <div class="form-group">
-            <input type="email" class="form-control" name="email" placeholder="Correo" value="<?php if (isset($email)) echo $email; ?>" required>
-          </div>
-          <div class="form-group">
-            <input type="password" class="form-control" name="password" placeholder="Contraseña" required="required">
-          </div>
-
-          <div class="form-group">
-            <input type="password" class="form-control" name="con_password" placeholder="Confirmar contraseña" required="required">
-          </div>
-
-          <div class="form-group">
-            <label for="captcha" class="col-md-3 control-label"></label>
-            <div class="g-recaptcha col-md-9" data-sitekey="6LdXFEQdAAAAAD8NRTVVju55NG6cIBLTZ3UlE7DT"></div>
-          </div>
-
-          <div class="form-group">
-            <div class="col-md-offset-3 col-md-9">
-              <button id="btn-signup" type="submit" class="btn btn-info text-white"><i class="icon-hand-right"></i>Registrar</button>
-            </div>
-          </div>
-
-        </form>
-        <?php echo resultBlock($errors); ?>
-        <div class="hint-text">¿Ya tienes una cuenta? <a href="userLogin.php">Ingresa aquí</a></div>
-      </div>
-      >>>>>>> rama
+    </div>
   </div>
 </body>
 
