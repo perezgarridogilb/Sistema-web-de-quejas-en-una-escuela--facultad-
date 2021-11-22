@@ -75,12 +75,11 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
 
       <?php
       include("../conexion.php");
-      $liveResults = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT image FROM images WHERE id_report = r.id LIMIT 1) as image, (SELECT count(id) FROM responses as r WHERE r.id_report = id) as counter_responses, (SELECT name FROM users as d WHERE d.id_user=r.id_user) as user FROM reports as r WHERE deleted_at IS NULL");
-      $deletedResults = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT image FROM images WHERE id_report = r.id LIMIT 1) as image, (SELECT count(id) FROM responses as r WHERE r.id_report = id) as counter_responses, (SELECT name FROM users as d WHERE d.id_user=r.id_user) as user FROM reports as r WHERE deleted_at IS NOT NULL");
+      $liveResults = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT image FROM images WHERE id_report = r.id LIMIT 1) as image, (SELECT count(id) FROM responses as r WHERE r.id_report = id) as counter_responses, (SELECT nombre FROM users as d WHERE d.id_usuario=r.id_user) as user FROM reports as r WHERE deleted_at IS NULL");
+      $deletedResults = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT image FROM images WHERE id_report = r.id LIMIT 1) as image, (SELECT count(id) FROM responses as r WHERE r.id_report = id) as counter_responses, (SELECT nombre FROM users as d WHERE d.id_usuario=r.id_user) as user FROM reports as r WHERE deleted_at IS NOT NULL");
       ?>
 
       <h4 class="mt-5 mb-3">Reportes</h4>
-
       <table class='table table-hover'>
          <thead class='thead-dark'>
             <tr>
@@ -108,22 +107,24 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
                $statusBgColor = ($nResponses == 0) ? "rgba(255, 193, 7, 0.1)" : "rgba(25, 134, 83, 0.1)";
 
                printf("<tr ><td>%d</td><td><div style='background-color: $statusBgColor; width: 25px; height: 25px;' class='d-flex  align-items-center justify-content-center'></div></td><td>%s</td><td>%s</td><td>%s</td>
-               <td class='image-container'>", $id, $user, $title, $content,);
+                  <td class='image-container'>", $id, $user, $title, $content,);
                if ($image != null) {
                   echo "<i class='show-icon bi bi-image-fill'></i>";
                   echo "<img class='hidden-image rounded img-fluid' src='../medias/$image'/>";
                }
                printf("</td>
-                  <td class='d-flex align-items-center'>
-                     <a class='text-decoration-none' onclick=\"return confirmSubmit()\" href=\"deleteReport.php?id=%s\">
-                        <i class='bi bi-trash-fill text-danger' style='font-size: 1.25rem;'></i>
-                     </a>
-                     <span style='width: .5rem;'></span>
-                     <a class='text-decoration-none' href=\"updateReport.php?id=%s\">
-                        <i class='bi bi-pencil-fill' style='font-size: 1.25rem;'></i>
-                     </a>
-                  </td>
-               </tr>", $id, $id);
+                     <td>
+                     <div class='d-flex align-items-center '>
+                        <a class='text-decoration-none' onclick=\"return confirmSubmit()\" href=\"deleteReport.php?id=%s\">
+                           <i class='bi bi-trash-fill text-danger' style='font-size: 1.25rem;'></i>
+                        </a>
+                        <span style='width: .5rem;'></span>
+                        <a class='text-decoration-none' href=\"updateReport.php?id=%s\">
+                           <i class='bi bi-pencil-fill' style='font-size: 1.25rem;'></i>
+                        </a>
+                     </div>
+                     </td>
+                  </tr>", $id, $id);
             }
 
             mysqli_free_result($liveResults);

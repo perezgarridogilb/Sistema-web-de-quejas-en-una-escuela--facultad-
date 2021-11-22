@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 27-10-2021 a las 08:22:44
+-- Tiempo de generación: 22-11-2021 a las 02:46:49
 -- Versión del servidor: 10.4.14-MariaDB
 -- Versión de PHP: 7.4.11
 
@@ -61,8 +61,11 @@ CREATE TABLE `previuskeys` (
 --
 
 INSERT INTO `previuskeys` (`id_password`, `id_user`, `name`, `password`) VALUES
-(1, 23, 'Marcos David García Marquez', 'abd'),
-(4, 23, 'Marcos David García Marquez', 'abe');
+(25, 29, 'user1', 'abd'),
+(26, 29, 'user1', 'abd'),
+(27, 29, 'user1', 'abd'),
+(28, 29, 'user1', 'abc'),
+(29, 29, 'user1', 'abc');
 
 -- --------------------------------------------------------
 
@@ -113,22 +116,27 @@ CREATE TABLE `responses` (
 CREATE TABLE `users` (
   `id_user` int(11) NOT NULL,
   `name` varchar(64) NOT NULL,
-  `image` varchar(64) NOT NULL,
+  `image` varchar(64) DEFAULT NULL,
   `mail` varchar(64) NOT NULL,
   `password` varchar(64) NOT NULL,
-  `usertype` int(1) NOT NULL
+  `usertype` int(1) NOT NULL,
+  `activate` int(11) NOT NULL DEFAULT 0,
+  `token` varchar(40) NOT NULL,
+  `token_password` varchar(100) DEFAULT NULL,
+  `password_request` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `users`
 --
 
-INSERT INTO `users` (`id_user`, `name`, `image`, `mail`, `password`, `usertype`) VALUES
-(10, 'Gilberto Pérez Garrido', 'https://', 'betho6990@gmail.com', 'abc', 0),
-(21, 'Israel Solís Ahuactzin', 'https://bit.ly/3zx63Rm', 'israel.flash@hotmail.com', 'abc', 1),
-(22, 'Luis Alberto Zacarías Martínez', 'https://bit.ly/3nYuJAk', 'secarmesi@gmail.com', 'abc', 1),
-(23, 'Marcos David García Marquez', 'https://bit.ly/3u3DNVn', 'abs14@outlook.es', 'abd', 1),
-(25, 'Francisco Rodríguez Baeza', 'https://bit.ly/3nYBMcf', 'secarmesi1@gmail.com', 'abc', 1);
+INSERT INTO `users` (`id_user`, `name`, `image`, `mail`, `password`, `usertype`, `activate`, `token`, `token_password`, `password_request`) VALUES
+(10, 'Gilberto Pérez Garrido', 'https://', 'betho6990@gmail.com', 'abc', 0, 1, '', '', 0),
+(21, 'Israel Solís Ahuactzin', 'https://bit.ly/3zx63Rm', 'israel.flash@hotmail.com', 'abc', 1, 1, '', NULL, 0),
+(22, 'Luis Alberto Zacarías Martínez', 'https://bit.ly/3nYuJAk', 'secarmesi@gmail.com', 'abc', 1, 1, '', NULL, 0),
+(23, 'Marcos David García Marquez', 'https://bit.ly/3u3DNVn', 'abs14@outlook.es', 'abd', 1, 1, '', NULL, 0),
+(25, 'Francisco Rodríguez Baeza', 'https://bit.ly/3nYBMcf', 'secarmesi14@gmail.com', 'abc', 1, 1, '', NULL, 0),
+(29, 'user1', NULL, 'gilberto.perezgarrido@viep.com.mx', 'abd', 0, 1, '98e0a272e1d5636344d4d489f29b6765', '', 0);
 
 --
 -- Disparadores `users`
@@ -155,8 +163,7 @@ ALTER TABLE `images`
 -- Indices de la tabla `previuskeys`
 --
 ALTER TABLE `previuskeys`
-  ADD PRIMARY KEY (`id_password`),
-  ADD UNIQUE KEY `unique_password` (`password`);
+  ADD PRIMARY KEY (`id_password`);
 
 --
 -- Indices de la tabla `reports`
@@ -178,7 +185,7 @@ ALTER TABLE `responses`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id_user`),
-  ADD UNIQUE KEY `mail` (`mail`),
+  ADD UNIQUE KEY `correo` (`mail`),
   ADD UNIQUE KEY `unique_email` (`mail`);
 
 --
@@ -195,7 +202,7 @@ ALTER TABLE `images`
 -- AUTO_INCREMENT de la tabla `previuskeys`
 --
 ALTER TABLE `previuskeys`
-  MODIFY `id_password` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_password` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT de la tabla `reports`
@@ -213,7 +220,7 @@ ALTER TABLE `responses`
 -- AUTO_INCREMENT de la tabla `users`
 --
 ALTER TABLE `users`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- Restricciones para tablas volcadas

@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['name'] = $row['name'];
         header("Location: ../index.php");
     } else {
-        $failled_message = "Usuario y/o password incorrecto";
+        $failled_message = "Usuario y/o contraseña incorrecto";
     }
 }
 
@@ -71,11 +71,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <form method='POST'>
                                     <div class="form-floating mb-3">
                                         <input name="user" type="email" class="form-control" placeholder="name@example.com" required>
-                                        <label for="floatingInput">mail</label>
+                                        <label for="floatingInput">Correo</label>
                                     </div>
                                     <div class="form-floating mb-3">
                                         <input name="pass" type="password" class="form-control" placeholder="Password" required>
-                                        <label for="floatingPassword">password</label>
+                                        <label for="floatingPassword">Contraseña</label>
                                     </div>
 
                                     <div class="d-grid">

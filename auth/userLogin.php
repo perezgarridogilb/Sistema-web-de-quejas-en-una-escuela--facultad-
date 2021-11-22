@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $_SESSION['name'] = $row['name'];
     header("Location: ../index.php");
   } else {
-    $failled_message = "Usuario y/o password incorrecto";
+    $failled_message = "Usuario y/o contraseña incorrecto";
   }
 }
 
@@ -71,17 +71,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <form method='POST'>
                   <div class="form-floating mb-3">
                     <input name="user" type="email" class="form-control" placeholder="name@example.com" required>
-                    <label for="floatingInput">mail</label>
+                    <label for="floatingInput">Correo</label>
                   </div>
                   <div class="form-floating mb-3">
                     <input name="pass" type="password" class="form-control" placeholder="Password" required>
-                    <label for="floatingPassword">password</label>
+                    <label for="floatingPassword">Contraseña</label>
                   </div>
 
                   <div class="d-grid">
                     <button class="btn btn-lg bg-primary text-white btn-login text-uppercase fw-bold mb-2" type="submit">Ingresar</button>
                     <div class="text-center">
-                      <a class="small" href="./passwordRecover.php">¿Olvidaste la password?</a> <span class='text-secondary'>|</span> <a class="small" href="./crearUsuario.php">Crea una cuenta</a>
+                      <a class="small" href="./passwordRecover.php">¿Olvidaste la contraseña?</a> <span class='text-secondary'>|</span> <a class="small" href="./crearUsuario.php">Crea una cuenta</a>
                       <br />
                       <a class="small" href="./adminLogin.php">¿Eres administrador?</a>
                     </div>
