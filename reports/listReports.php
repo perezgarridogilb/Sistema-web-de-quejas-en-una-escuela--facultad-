@@ -65,8 +65,8 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
         <hr class="mb-5 bg-primary" />
 
         <?php
-        if ($userType != null) {
-            echo "<a class='mb-5 d-block text-decoration-none' href='createReport.php'>Crear nueva queja</a>";
+        if ($userType == 0) {
+            echo "<a class='mb-5 d-inline-block text-decoration-none' href='createReport.php'>Crear nueva queja</a>";
         }
 
         ?>
@@ -84,9 +84,23 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
 
             <tbody>
                 <?php
+
+                function truncate($text)
+                {
+
+                    //specify number fo characters to shorten by
+                    $chars = 25;
+
+                    $text = $text . " ";
+                    $text = substr($text, 0, $chars);
+                    $text = substr($text, 0, strrpos($text, ' '));
+                    $text = $text . "...";
+                    return $text;
+                }
+
                 while ($row = mysqli_fetch_array($liveResults)) {
                     $title = $row["title"];
-                    $content = $row["content"];
+                    $content = truncate($row["content"]);
                     $user = $row["user"];
                     $id = $row["id"];
                     $image = $row['image'];

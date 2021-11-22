@@ -46,6 +46,8 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
 
    .hidden-image {
       position: absolute;
+      top: 2rem;
+      left: 2rem;
       display: none;
       z-index: 99;
       max-width: 500px;
@@ -95,16 +97,30 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
 
          <tbody>
             <?php
+
+            function truncate($text)
+            {
+
+               //specify number fo characters to shorten by
+               $chars = 25;
+
+               $text = $text . " ";
+               $text = substr($text, 0, $chars);
+               $text = substr($text, 0, strrpos($text, ' '));
+               $text = $text . "...";
+               return $text;
+            }
+
             while ($row = mysqli_fetch_array($liveResults)) {
                $title = $row["title"];
-               $content = $row["content"];
+               $content = truncate($row["content"]);
                $user = $row["user"];
                $id = $row["id"];
                $image = $row['image'];
                $nResponses = $row['counter_responses'];
                $status = ($nResponses == 0) ? "Sin resolver" : "Resuelta";
                $statusColor = ($nResponses == 0) ? "warning" : "success";
-               $statusBgColor = ($nResponses == 0) ? "rgba(255, 193, 7, 0.1)" : "rgba(25, 134, 83, 0.1)";
+               $statusBgColor = ($nResponses == 0) ? "red" : "blue";
 
                printf("<tr ><td>%d</td><td><div style='background-color: $statusBgColor; width: 25px; height: 25px;' class='d-flex  align-items-center justify-content-center'></div></td><td>%s</td><td>%s</td><td>%s</td>
                   <td class='image-container'>", $id, $user, $title, $content,);
@@ -119,7 +135,7 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
                            <i class='bi bi-trash-fill text-danger' style='font-size: 1.25rem;'></i>
                         </a>
                         <span style='width: .5rem;'></span>
-                        <a class='text-decoration-none' href=\"updateReport.php?id=%s\">
+                        <a class='text-decoration-none' href=\"updateReport.php?id=%s&from=./adminReports.php\">
                            <i class='bi bi-pencil-fill' style='font-size: 1.25rem;'></i>
                         </a>
                      </div>
@@ -159,7 +175,7 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
                $nResponses = $row['counter_responses'];
                $status = ($nResponses == 0) ? "Sin resolver" : "Resuelta";
                $statusColor = ($nResponses == 0) ? "warning" : "success";
-               $statusBgColor = ($nResponses == 0) ? "rgba(255, 193, 7, 0.1)" : "rgba(25, 134, 83, 0.1)";
+               $statusBgColor = ($nResponses == 0) ? "red" : "blue";
 
                printf("<tr ><td>%d</td><td><div style='background-color: $statusBgColor; width: 25px; height: 25px;' class='d-flex  align-items-center justify-content-center'></div></td><td>%s</td><td>%s</td><td>%s</td>
                <td class='image-container'>", $id, $user, $title, $content,);
