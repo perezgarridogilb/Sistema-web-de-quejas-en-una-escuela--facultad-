@@ -74,7 +74,7 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
                 <!-- Begin Page Content -->
                 <div class="container-fluid mt-5">
                     <div class="text-center mb-3">
-                        <h2 class="text-center mt-5 text-primary">Estadísticas</h2>
+                        <h2 class="text-center mt-5 text-primary">Panel de control</h2>
                     </div>
 
                     <hr class="mb-5 bg-primary" />
