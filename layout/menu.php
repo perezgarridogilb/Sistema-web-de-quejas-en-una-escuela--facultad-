@@ -23,10 +23,10 @@ $rootProjectPath = "/Otono2021/Sistema-web-de-quejas-en-una-escuela-facultad";
         echo "<li class='sidebar-nav-item'><a href='$rootProjectPath/'>Inicio</a></li>";
         if (!is_null($userType)) {
             echo "<li class='sidebar-nav-item'><a href='$rootProjectPath/reports/createReport.php'>Crear reportes</a></li>";
-            echo "<li class='sidebar-nav-item'><a href='$rootProjectPath/dashboard.php'>Estadísticas</a></li>";
         }
         echo "<li class='sidebar-nav-item'><a href='$rootProjectPath/reports/listReports.php'>Listar reportes</a></li>";
         if ($userType == 1) {
+            echo "<li class='sidebar-nav-item'><a href='$rootProjectPath/dashboard.php'>Estadísticas</a></li>";
             echo "<li class='sidebar-nav-item'><a href='$rootProjectPath/reports/adminReports.php'>Administrar reportes</a></li>";
         }
         echo "<li class='sidebar-nav-item'><a href='$rootProjectPath/about.php'>Acerca de nosotros</a></li>";
