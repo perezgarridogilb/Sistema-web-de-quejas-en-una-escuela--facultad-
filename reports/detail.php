@@ -44,33 +44,41 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
         <h2 class="text-center mt-5 text-primary mb-3">Detalle de queja</h2>
         <hr class="mb-5 bg-primary" />
 
-        <a class="text-decoration-none" href='./listReports.php'>Ver listado de reportes</a>
+        <a class="text-decoration-none mb-3 d-block" href='./listReports.php'>Ver listado de quejas</a>
 
         <?php
         $title = $row['title'];
         $content = $row['content'];
         $createdAt = $row['created_at'];
-        $modifiedAt = $row['created_at'];
+        $modifiedAt = $row['modified_at'];
         $nResponses = $row['counter_responses'];
         $status = ($nResponses == 0) ? "Sin resolver" : "Resuelta";
         $statusColor = ($nResponses == 0) ? "warning" : "success";
         $statusBgColor = ($nResponses == 0) ? "rgba(255, 193, 7, 0.1)" : "rgba(25, 134, 83, 0.1)";
+        $notImages = true;
 
-        echo "<h2 class='text-center'>$title</h2>";
-        echo "<div style='8px' class='d-flex justify-content-between'>";
-        echo "<div><span class='fw-bold'>Estado:</span> $status</div>";
-        echo "<p class='text-end'><span class='fw-bold'>Creado:</span> $createdAt <span>|</span> <span class='fw-bold'>Modificado:</span> $modifiedAt</p>";
-        echo "</div>";
+        echo "<div class='p-5 rounded bg-light'>";
+        echo "<h2 class='h3'>$title</h2>";
+        echo "<span class='fw-bold'>Creado:</span> $createdAt <span>|</span> <span class='fw-bold'>Modificado:</span> $modifiedAt <br>";
+        echo "<span class='mt-n1 fw-bold'>Estado:</span> $status <br>";
+        echo "<hr class='bg-dark'>";
         echo '<p class="mt-3">';
         echo $content;
         echo '</p>';
+        echo "</div>";
 
-        echo "<h4>Imagenes</h4>";
+        echo "<div class='my-4' />";
+        echo "<h4 class='text-center'>Imagenes</h4>";
         echo "<div class='row'>";
         while ($imageRow = mysqli_fetch_array($imageRows)) {
+            $notImages = false;
             $image = $imageRow['image'];
-            echo "<img class='img-fluid col-6 rounded' src='../medias/$image'/>";
+            echo "<img  class='img-fluid col-6 rounded p-3' src='../medias/$image'/>";
         }
+        if ($notImages) {
+            echo "<div class='text-center p-5 mb-4 bg-light rounded-3'> No hay imagenes disponibles</div>";
+        }
+        echo "</div>";
         echo "</div>";
 
         if ($userType == 1) {
