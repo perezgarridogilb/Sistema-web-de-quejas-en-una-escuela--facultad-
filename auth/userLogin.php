@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (isset($_SESSION['id_usuario'])) {
+if (isset($_SESSION['id_user'])) {
   header('Location: ../index.php');
 }
 ?>
@@ -23,15 +23,15 @@ $failled_message = null;
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   /* Se utiliza antes de insertar una cadena en una base de datos, ya que elimina 
     cualquier carácter especial que pueda interferir con las operaciones de consulta */
-  $sql = "SELECT id_usuario, nombre, correo, contraseña, tipo_usuario FROM users WHERE  correo='$_POST[user]' AND contraseña='$_POST[pass]' AND tipo_usuario=0";
+  $sql = "SELECT id_user, name, mail, password, usertype FROM users WHERE  mail='$_POST[user]' AND password='$_POST[pass]' AND usertype=0";
   $resultado = mysqli_query($conn, $sql);
   $rows = $resultado->num_rows;
 
   if ($rows > 0) {
     $row = mysqli_fetch_array($resultado);
-    $_SESSION['id_usuario'] = $row['id_usuario'];
-    $_SESSION['tipo_usuario'] = $row['tipo_usuario'];
-    $_SESSION['nombre'] = $row['nombre'];
+    $_SESSION['id_user'] = $row['id_user'];
+    $_SESSION['usertype'] = $row['usertype'];
+    $_SESSION['name'] = $row['name'];
     header("Location: ../index.php");
   } else {
     $failled_message = "Usuario y/o contraseña incorrecto";
