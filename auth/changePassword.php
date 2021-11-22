@@ -1,16 +1,17 @@
 <?php
 session_start();
 include("../conexion.php");
-if (!isset($_SESSION['id_usuario'])) {
+if (!isset($_SESSION['id_user'])) {
     header("Location: ../auth/userLogin.php");
 }
+
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = $_POST['password'];
     $new_password = $_POST['new_password'];
-    $id_usuario = $_SESSION['id_usuario'];
-    $query = mysqli_query($conn, "CALL update_password($id_usuario, '$password', '$new_password', @error)");
+    $id_user = $_SESSION['id_user'];
+    $query = mysqli_query($conn, "CALL update_password($id_user, '$password', '$new_password', @error)");
     $row = mysqli_fetch_assoc($query);
     $error = $row['error'];
 
@@ -65,12 +66,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                                 <form method="POST">
                                     <div class="form-group mb-3">
-                                        <label class="form-label">Contraseña actual</label>
+                                        <label class="form-label fw-bold">Contraseña actual *</label>
                                         <input name="password" type="password" class="form-control" required>
                                     </div>
 
                                     <div class="form-group">
-                                        <label class="form-label">Nueva contraseña</label>
+                                        <label class="form-label fw-bold">Nueva contraseña *</label>
                                         <input name="new_password" type="password" class="form-control" required>
                                     </div>
 

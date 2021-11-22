@@ -1,30 +1,32 @@
 <?php
 session_start();
-if (!isset($_SESSION['id_usuario'])) {
+include('./conexion.php');
+
+if (!isset($_SESSION['id_user'])) {
     header("Location: ./auth/adminLogin.php");
 }
 
 // Total of users
-// $sql = "SELECT count(id) FROM users;";
-// $resultado = mysqli_query($conn, $sql);
-$usersCount = 0;
+$sql = "SELECT count(id_user) AS total FROM users";
+$resultado = mysqli_query($conn, $sql);
+$usersCount = mysqli_fetch_assoc($resultado)["total"];
 
 // Total of users created in the last month
-// $sql = "SELECT count(id) FROM users WHERE created_at > now();";
-// $resultado = mysqli_query($conn, $sql);
-$lastMonthUsersCount = 0;
+$sql = "SELECT count(id_user) as total FROM users";
+$resultado = mysqli_query($conn, $sql);
+$lastMonthUsersCount = mysqli_fetch_assoc($resultado)["total"];
 
 // Total of reports
-// $sql = "SELECT count(id) FROM reports;";
-// $resultado = mysqli_query($conn, $sql);
-$reportsCount = 0;
+$sql = "SELECT count(id) as total FROM reports";
+$resultado = mysqli_query($conn, $sql);
+$reportsCount = mysqli_fetch_assoc($resultado)["total"];
 
 // Total of reports in the last month
-// $sql = "SELECT count(id) FROM users WHERE created_at > now();";
-// $resultado = mysqli_query($conn, $sql);
-$lastMonthReportsCount = 0;
+$sql = "SELECT count(id) as total FROM reports WHERE MONTH(created_at)=MONTH(NOW()) and YEAR(created_at) = YEAR(NOW())";
+$resultado = mysqli_query($conn, $sql);
+$lastMonthReportsCount = mysqli_fetch_assoc($resultado)["total"];
 
-$userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : null;
+$userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
 ?>
 
 <!DOCTYPE html>
@@ -57,49 +59,10 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
 </head>
 
 <body>
-<<<<<<< HEAD
     <?php
     include('./layout/menu.php');
     ?>
-=======
-    <!-- Navigation-->
-    <a class="menu-toggle rounded" href="#"><i class="fas fa-bars"></i></a>
-    <nav id="sidebar-wrapper">
-        <ul class="sidebar-nav">
-            <li class="sidebar-brand text-white">
-                Sistema de quejas
-                <?php
-                if ($userType != null) {
-                    $nombre = $_SESSION['nombre'];
-                    echo "<div class='name'>Bienvenido, <span class='fw-bold'>$nombre</span></div>";
-                }
-                ?>
-            </li>
-            <li class="sidebar-nav-item"><a href="./">Inicio</a></li>
-            <?php
-            if ($userType != null) {
-                echo '<li class="sidebar-nav-item"><a href="./reports/createReport.php">Crear reportes</a></li>';
-                echo '<li class="sidebar-nav-item"><a href="./dashboard.php">Estadísticas</a></li>';
-                echo '<li class="sidebar-nav-item"><a href="./usuarios/detail.php">Detalles</a></li>';
-            }
-            ?>
-            <li class="sidebar-nav-item"><a href="./reports/listReports.php">Listar reportes</a></li>
-            <li class="sidebar-nav-item"><a href="about.php">Acerca de nosotros</a></li>
-            <hr class="bg-white">
-            <?php
-            if ($userType == null) {
-                echo '<li class="sidebar-nav-item"><a href="./auth/userLogin.php">Iniciar sesion</a></li>';
-                echo '<li class="sidebar-nav-item"><a href="./auth/crearUsuario.php">Crear nueva cuenta</a></li>';
-                echo '<li class="sidebar-nav-item"><a href="./usuarios/detail.php">Detalles</a></li>';
-            } else {
-                echo '<li class="sidebar-nav-item"><a href="./auth/salir.php">Cerrar sesion</a></li>';
-            }
-            ?>
-        </ul>
-    </nav>
 
-
->>>>>>> rama
     <!-- Page Wrapper -->
     <div id="wrapper">
 
@@ -192,18 +155,8 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
                                 <!-- Card Header - Dropdown -->
                                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                     <h6 class="m-0 font-weight-bold text-primary">Resumen de reportes</h6>
-                                    <div class="dropdown no-arrow">
-                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-                                            <div class="dropdown-header">Dropdown Header:</div>
-                                            <a class="dropdown-item" href="#">Action</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Something else here</a>
-                                        </div>
-                                    </div>
+
+
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body">

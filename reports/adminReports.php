@@ -1,15 +1,15 @@
 <?php
 session_start();
 include("../conexion.php");
-if (!isset($_SESSION['id_usuario'])) {
+if (!isset($_SESSION['id_user'])) {
    header("Location: ../auth/adminLogin.php");
 }
 
-if ($_SESSION['tipo_usuario'] != 1) {
+if ($_SESSION['usertype'] != 1) {
    header("Location: ../");
 }
 
-$userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : null;
+$userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
 ?>
 
 <!DOCTYPE html>
@@ -75,8 +75,8 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
 
       <?php
       include("../conexion.php");
-      $liveResults = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT image FROM images WHERE id_report = r.id LIMIT 1) as image, (SELECT count(id) FROM responses as r WHERE r.id_report = id) as counter_responses, (SELECT nombre FROM users as d WHERE d.id_usuario=r.id_user) as user FROM reports as r WHERE deleted_at IS NULL");
-      $deletedResults = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT image FROM images WHERE id_report = r.id LIMIT 1) as image, (SELECT count(id) FROM responses as r WHERE r.id_report = id) as counter_responses, (SELECT nombre FROM users as d WHERE d.id_usuario=r.id_user) as user FROM reports as r WHERE deleted_at IS NOT NULL");
+      $liveResults = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT image FROM images WHERE id_report = r.id LIMIT 1) as image, (SELECT count(id) FROM responses as r WHERE r.id_report = id) as counter_responses, (SELECT name FROM users as d WHERE d.id_user=r.id_user) as user FROM reports as r WHERE deleted_at IS NULL");
+      $deletedResults = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT image FROM images WHERE id_report = r.id LIMIT 1) as image, (SELECT count(id) FROM responses as r WHERE r.id_report = id) as counter_responses, (SELECT name FROM users as d WHERE d.id_user=r.id_user) as user FROM reports as r WHERE deleted_at IS NOT NULL");
       ?>
 
       <h4 class="mt-5 mb-3">Reportes</h4>

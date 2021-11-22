@@ -42,70 +42,70 @@
       <div class="container">
          <h2 class="text-center mt-5">Detalle de los Registros en la tabla Usuarios</h2>
          <br>
-      <form>
+         <form>
 
-         <body>
+            <body>
 
-            <?php
-            include("../conexion.php");
+               <?php
+               include("../conexion.php");
 
-            $result = mysqli_query($conn, "select * from users");
-            ?>
-            <br>
-            <table class="table">
-  <thead class="thead-light">
-                  <TD scope="#196E87" align="center"><B>ID</B></TD>
-                  <TD scope="#196E87" align="center"><B>Nombre</B></TD>
-                  <TD scope="#196E87" align="center"><B>Correo</B></TD>
-                  <TD scope="#196E87" align="center"><B>Eliminar</B></TD>
-                  <TD scope="#196E87" align="center"><B>Actualizar</B></TD>
+               $result = mysqli_query($conn, "select * from users");
+               ?>
+               <br>
+               <table class="table">
+                  <thead class="thead-light">
+                     <TD scope="#196E87" align="center"><B>ID</B></TD>
+                     <TD scope="#196E87" align="center"><B>name</B></TD>
+                     <TD scope="#196E87" align="center"><B>mail</B></TD>
+                     <TD scope="#196E87" align="center"><B>Eliminar</B></TD>
+                     <TD scope="#196E87" align="center"><B>Actualizar</B></TD>
                   </thead>
                   <tbody>
-               </TR>
-               <?php
+                     </TR>
+                     <?php
 
-               while ($row = mysqli_fetch_array($result)) {
-                  $ti = $row["nombre"];
-                  $di = $row["correo"];
-                  $id = $row["id_usuario"];
-                  printf("<tr><td align='center'>%d</td><td align='center'>%s</td><td align='center'>%s</td>
+                     while ($row = mysqli_fetch_array($result)) {
+                        $ti = $row["name"];
+                        $di = $row["mail"];
+                        $id = $row["id_user"];
+                        printf("<tr><td align='center'>%d</td><td align='center'>%s</td><td align='center'>%s</td>
        <td align='center'>
-       <a onclick=\"return confirmSubmit()\"href=\"borrar2new.php?id_usuario=%s\"><img src='https://bit.ly/3n8mVtw' width='25' height='25' border='0'></a>
+       <a onclick=\"return confirmSubmit()\"href=\"borrar2new.php?id_user=%s\"><img src='https://bit.ly/3n8mVtw' width='25' height='25' border='0'></a>
      
         </td>
       <td align='center'>
-      <a href=\"actualizanew.php?id_usuario=%s\"><img src='https://bit.ly/3pfKjIo' width='25' height='25' border='0'></a>
+      <a href=\"actualizanew.php?id_user=%s\"><img src='https://bit.ly/3pfKjIo' width='25' height='25' border='0'></a>
       </td>
       </tr>", $id, $ti, $di, $id, $id);
-               }
+                     }
 
-               mysqli_free_result($result);
-               mysqli_close($conn);
-               ?>
-                <tbody>
-            </table>
-         </body>
-      </form>
-   </div>
-    <!-- Footer-->
-    <footer class="footer text-center">
-        <div class="container px-4 px-lg-5">
+                     mysqli_free_result($result);
+                     mysqli_close($conn);
+                     ?>
+                  <tbody>
+               </table>
+            </body>
+         </form>
+      </div>
+      <!-- Footer-->
+      <footer class="footer text-center">
+         <div class="container px-4 px-lg-5">
             <ul class="list-inline mb-5">
-                <li class="list-inline-item">
-                    <a class="social-link rounded-circle text-white mr-3" href="#!"><i class="icon-social-facebook"></i></a>
-                </li>
-                <li class="list-inline-item">
-                    <a class="social-link rounded-circle text-white mr-3" href="#!"><i class="icon-social-twitter"></i></a>
-                </li>
+               <li class="list-inline-item">
+                  <a class="social-link rounded-circle text-white mr-3" href="#!"><i class="icon-social-facebook"></i></a>
+               </li>
+               <li class="list-inline-item">
+                  <a class="social-link rounded-circle text-white mr-3" href="#!"><i class="icon-social-twitter"></i></a>
+               </li>
             </ul>
             <p class="text-muted small mb-0">Copyright &copy; Your Website 2021</p>
-        </div>
-    </footer>
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top"><i class="fas fa-angle-up"></i></a>
-    <!-- Bootstrap core JS-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Core theme JS-->
-    <script src="assets/js/scripts.js"></script>
+         </div>
+      </footer>
+      <!-- Scroll to Top Button-->
+      <a class="scroll-to-top rounded" href="#page-top"><i class="fas fa-angle-up"></i></a>
+      <!-- Bootstrap core JS-->
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+      <!-- Core theme JS-->
+      <script src="assets/js/scripts.js"></script>
 
 </html>

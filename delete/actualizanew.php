@@ -45,7 +45,7 @@
             <br>
             <?php
             include("../conexion.php");
-            $id = $_GET['id_usuario'];
+            $id = $_GET['id_user'];
             /* echo "<br> id usuario = $id"; */
             echo '<FORM METHOD="POST" ACTION="actualiza2new.php">';
 
@@ -53,15 +53,15 @@
             //$sSQL="Select titulo,director, actor From pelicula where id_pelicula='$id'";
             //$result=mysql_query($sSQL);
 
-            $result = mysqli_query($conn, "select nombre,correo,tipo_usuario from users where id_usuario='$id'");
+            $result = mysqli_query($conn, "select name,mail,usertype from users where id_user='$id'");
             $row = mysqli_fetch_array($result);
-            $ti = $row["nombre"];
-            $di = $row["correo"];
-            $ac = $row["tipo_usuario"];
+            $ti = $row["name"];
+            $di = $row["mail"];
+            $ac = $row["usertype"];
 
 
-            echo "<form><div class='form-group mb-5'> <label for='exampleInputEmail1'>Nombre: </label> <INPUT TYPE='text' class='form-control' NAME='titulo' value='$ti' SIZE='50'><br>";
-            echo "<label for='exampleInputEmail1'>Correo: </label><INPUT TYPE='text' class='form-control' NAME='director' value='$di' SIZE='50'><br>";
+            echo "<form><div class='form-group mb-5'> <label for='exampleInputEmail1'>name: </label> <INPUT TYPE='text' class='form-control' NAME='titulo' value='$ti' SIZE='50'><br>";
+            echo "<label for='exampleInputEmail1'>mail: </label><INPUT TYPE='text' class='form-control' NAME='director' value='$di' SIZE='50'><br>";
             echo "<label for='exampleInputEmail1'>Tipo usuario: </label><INPUT TYPE='text' class='form-control' NAME='actor' value='$ac' SIZE='50'><br></div>";
             echo "<input type='hidden' name='id' value='$id'> ";
 
@@ -72,7 +72,7 @@
             </div>
          </form>
          <br>
-         
+
    </BODY>
    <!-- Footer-->
    <footer class="footer text-center">

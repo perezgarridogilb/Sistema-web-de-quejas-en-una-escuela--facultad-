@@ -2,20 +2,18 @@
 include("../conexion.php");
 
 session_start();
-if (!isset($_SESSION['id_usuario'])) {
+if (!isset($_SESSION['id_user'])) {
     header('Location: ../auth/userLogin.php');
 }
 
-$userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : null;
+$userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
 $message = null;
 $messageType = null;
 
-<<<<<<< HEAD
-=======
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $title = $_POST['titulo'];
     $content = $_POST['contenido'];
-    $usuario = $_SESSION['id_usuario'];
+    $usuario = $_SESSION['id_user'];
 
     $sql = "INSERT INTO reports(id,  id_user, title, content) VALUES (null, $usuario, '$title', '$content');";
     $result = mysqli_query($conn, $sql);
@@ -28,7 +26,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
->>>>>>> rama
 ?>
 
 <!DOCTYPE html>
@@ -51,7 +48,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="../assets/css/styles2.css" rel="stylesheet" />
-<<<<<<< HEAD
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/basic.min.css" integrity="sha512-MeagJSJBgWB9n+Sggsr/vKMRFJWs+OUphiDV7TJiYu+TNQD9RtVJaPDYP8hA/PAjwRnkdvU+NsTncYTKlltgiw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.css" integrity="sha512-jU/7UFiaW5UBGODEopEqnbIAHOI8fO6T99m7Tsmqs2gkdujByJfkCbbfPSN4Wlqlb9TGnsuC0YgUgWkRBK7B9A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
@@ -73,10 +69,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 </style>
 
-=======
 </head>
 
->>>>>>> rama
 <body id="page-top">
     <?php
 
@@ -85,45 +79,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     ?>
 
-<<<<<<< HEAD
     <?php
     include('../layout/menu.php');
     ?>
-=======
-    <!-- Navigation-->
-    <a class="menu-toggle rounded" href="#"><i class="fas fa-bars"></i></a>
-    <nav id="sidebar-wrapper">
-        <ul class="sidebar-nav">
-            <li class="sidebar-brand text-white">
-                Sistema de quejas
-                <?php
-                if ($userType != null) {
-                    $nombre = $_SESSION['nombre'];
-                    echo "<div class='name'>Bienvenido, <span class='fw-bold'>$nombre</span></div>";
-                }
-                ?>
-            </li>
-            <li class="sidebar-nav-item"><a href="../">Inicio</a></li>
-            <?php
-            if ($userType != null) {
-                echo '<li class="sidebar-nav-item"><a href="../reports/createReport.php">Crear reportes</a></li>';
-                echo '<li class="sidebar-nav-item"><a href="../dashboard.php">Estadísticas</a></li>';
-            }
-            ?>
-            <li class="sidebar-nav-item"><a href="../reports/listReports.php">Listar reportes</a></li>
-            <li class="sidebar-nav-item"><a href="../about.php">Acerca de nosotros</a></li>
-            <hr class="bg-white">
-            <?php
-            if ($userType == null) {
-                echo '<li class="sidebar-nav-item"><a href="../auth/userLogin.php">Iniciar sesion</a></li>';
-                echo '<li class="sidebar-nav-item"><a href="../auth/crearUsuario.php">Crear nueva cuenta</a></li>';
-            } else {
-                echo '<li class="sidebar-nav-item"><a href="../auth/salir.php">Cerrar sesion</a></li>';
-            }
-            ?>
-        </ul>
-    </nav>
->>>>>>> rama
 
     <div class="container">
         <h2 class="text-center mt-5 text-primary mb-3">Crear queja</h2>
@@ -132,37 +90,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class='mb-3'>
             <a class="text-decoration-none" href='./listReports.php'>Ver listado de reportes</a>
         </div>
-<<<<<<< HEAD
         <form id='report-form' enctype="multipart/form-data" method='POST'>
-=======
 
-        <form method='POST'>
->>>>>>> rama
-            <div class="form-group mb-3">
-                <label class="mb-1 fw-bold">Título *</label>
-                <input name='titulo' type="text" class="form-control" placeholder="Ingresa un título" required>
-            </div>
+            <form method='POST'>
+                <div class="form-group mb-3">
+                    <label class="mb-1 fw-bold">Título *</label>
+                    <input name='titulo' type="text" class="form-control" placeholder="Ingresa un título" required>
+                </div>
 
-            <div class="form-group mb-3">
-                <label class="mb-1 fw-bold">Contenido *</label>
-                <textarea rows="8" name='contenido' placeholder="Redacta tu queja aquí..." class="form-control" required></textarea>
-            </div>
+                <div class="form-group mb-3">
+                    <label class="mb-1 fw-bold">Contenido *</label>
+                    <textarea rows="8" name='contenido' placeholder="Redacta tu queja aquí..." class="form-control" required></textarea>
+                </div>
 
-<<<<<<< HEAD
-            <div class="form-group mb-3">
-                <label class="mb-1 fw-bold">Imagenes</label>
-            </div>
+                <div class="form-group mb-3">
+                    <label class="mb-1 fw-bold">Imagenes</label>
+                </div>
 
-            <div id="dropzone" class="dropzone p-5 mb-5 ">
-                <div class="dz-message h4">Suelta las imagenes aquí</div>
-            </div>
+                <div id="dropzone" class="dropzone p-5 mb-5 ">
+                    <div class="dz-message h4">Suelta las imagenes aquí</div>
+                </div>
 
-=======
->>>>>>> rama
-            <div class='text-center'>
-                <button type="submit" class="btn btn-primary">Enviar</button>
-            </div>
-        </form>
+                <div class='text-center'>
+                    <button type="submit" class="btn btn-primary">Enviar</button>
+                </div>
+            </form>
     </div>
 
     <!-- Footer-->
@@ -185,8 +137,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
     <script src="../assets/js/scripts.js"></script>
-<<<<<<< HEAD
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js" integrity="sha512-oQq8uth41D+gIH/NJvSJvVB85MFk1eWpMK6glnkg6I7EdMqC1XVkW7RxLheXwmFdG03qScCM7gKS/Cx3FYt7Tg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js" integrity="sha512-oQq8uth41D+gIH/NJvSJvVB85MFk1eWpMK6glnkg6I7EdMqC1XVkW7RxLheXwmFdG03qScCM7gKS/Cx3FYt7Tg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    </script>
 
     <script>
         Dropzone.autoDiscover = false;
@@ -246,8 +198,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 },
             });
     </script>
-=======
->>>>>>> rama
 </body>
 
 </html>
