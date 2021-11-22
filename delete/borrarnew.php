@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("../conexion.php");
+include("../funcs/conexion.php");
 if (!isset($_SESSION['id_user'])) {
    header("Location: ../auth/adminLogin.php");
 }
@@ -65,7 +65,7 @@ if ($_SESSION['usertype'] != 1) {
             <body>
 
                <?php
-               include("../conexion.php");
+               include("../funcs/conexion.php");
 
                $result = mysqli_query($conn, "select * from users");
                ?>

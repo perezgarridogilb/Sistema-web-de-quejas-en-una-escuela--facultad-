@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("../conexion.php");
+include("../funcs/conexion.php");
 if (!isset($_SESSION['id_user'])) {
    header("Location: ../auth/adminLogin.php");
 }
@@ -74,7 +74,7 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
       <hr class="mb-5 bg-primary" />
 
       <?php
-      include("../conexion.php");
+      include("../funcs/conexion.php");
       $liveResults = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT image FROM images WHERE id_report = r.id LIMIT 1) as image, (SELECT count(id) FROM responses as r WHERE r.id_report = id) as counter_responses, (SELECT name FROM users as d WHERE d.id_user=r.id_user) as user FROM reports as r WHERE deleted_at IS NULL");
       $deletedResults = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT image FROM images WHERE id_report = r.id LIMIT 1) as image, (SELECT count(id) FROM responses as r WHERE r.id_report = id) as counter_responses, (SELECT name FROM users as d WHERE d.id_user=r.id_user) as user FROM reports as r WHERE deleted_at IS NOT NULL");
       ?>

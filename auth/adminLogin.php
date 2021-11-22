@@ -17,7 +17,7 @@ if (isset($_SESSION['id_user'])) {
 </head>
 
 <?php
-include("../conexion.php");
+include("../funcs/conexion.php");
 $failled_message = null;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

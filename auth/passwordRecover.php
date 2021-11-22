@@ -2,7 +2,7 @@
 session_start();
 if (isset($_SESSION['id_user'])) {
     header('Location: ../index.php');
-    include("../conexion.php");
+    include("../funcs/conexion.php");
 }
 
 require '../funcs/conexion.php';

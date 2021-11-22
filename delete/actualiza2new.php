@@ -7,7 +7,7 @@
 <BODY>
 
    <?php
-   include("../conexion.php");
+   include("../funcs/conexion.php");
 
    //Creamos la sentencia SQL y la ejecutamos
    $name = $_REQUEST['name'];

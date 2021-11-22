@@ -1,5 +1,5 @@
 <?php
-include("../conexion.php");
+include("../funcs/conexion.php");
 
 if ($_SESSION['usertype'] != 1) {
     header("Location: ../");

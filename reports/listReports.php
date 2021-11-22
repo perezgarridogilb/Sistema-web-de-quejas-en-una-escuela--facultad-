@@ -1,5 +1,5 @@
 <?php
-include("../conexion.php");
+include("../funcs/conexion.php");
 session_start();
 $failled_message = null;
 
