@@ -41,7 +41,7 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
             left: 2rem;
             display: none;
             z-index: 99;
-            max-width: 500px;
+            max-width: 150px;
         }
 
         .show-icon:hover {

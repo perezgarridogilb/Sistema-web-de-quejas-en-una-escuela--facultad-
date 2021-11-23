@@ -70,7 +70,7 @@ $liveResults = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT ima
             left: 2rem;
             display: none;
             z-index: 99;
-            max-width: 500px;
+            max-width: 150px;
         }
 
         .show-icon:hover {
