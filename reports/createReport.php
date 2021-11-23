@@ -70,23 +70,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 </head>
 
-<style>
-    .dropzone {
-        background: white;
-        border-radius: 5px;
-        border: 2px dashed rgb(0, 135, 247);
-        border-image: none;
-        margin-left: auto;
-        margin-right: auto;
-        color: #aaa;
-    }
-
-    div#dropzone:hover {
-        cursor: pointer;
-        background-color: rgb(0, 135, 247, 0.1);
-    }
-</style>
-
 <body id="page-top">
     <?php
 
@@ -168,6 +151,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 parallelUploads: 100,
                 maxFiles: 100,
                 acceptedFiles: 'image/*',
+                addRemoveLinks: true,
                 init: function() {
                     dzClosure = this;
                     const titleInput = document.querySelector('input[name="titulo"]');
