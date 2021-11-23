@@ -1,7 +1,6 @@
 <?php
 $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
-
-$rootProjectPath = "/Otono2021/Sistema-web-de-quejas-en-una-escuela-facultad";
+include(__DIR__ . '/../funcs/path.php');
 ?>
 
 <!-- Navigation-->
