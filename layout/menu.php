@@ -21,7 +21,7 @@ $rootProjectPath = "/Otono2021/Sistema-web-de-quejas-en-una-escuela-facultad";
         </li>
         <?php
         echo "<li class='sidebar-nav-item'><a href='$rootProjectPath/'>Inicio</a></li>";
-        if ($userType == 0) {
+        if (!is_null($userType) && $userType == 0) {
             echo "<li class='sidebar-nav-item'><a href='$rootProjectPath/reports/createReport.php'>Crear reportes</a></li>";
         }
         echo "<li class='sidebar-nav-item'><a href='$rootProjectPath/reports/listReports.php'>Listar reportes</a></li>";

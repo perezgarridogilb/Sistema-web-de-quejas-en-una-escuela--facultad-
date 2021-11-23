@@ -65,7 +65,7 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
         <hr class="mb-5 bg-primary" />
 
         <?php
-        if ($userType == 0) {
+        if (!is_null($userType)  && $userType == 0) {
             echo "<a class='mb-5 d-inline-block text-decoration-none' href='createReport.php'>Crear nueva queja</a>";
         }
 
