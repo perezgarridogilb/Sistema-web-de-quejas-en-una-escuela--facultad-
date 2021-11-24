@@ -145,7 +145,7 @@ $reportsWithLikes = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELEC
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Total de reportes</div>
+                                                Total de quejas</div>
                                             <?php
                                             echo "<div class='h5 mb-0 font-weight-bold text-gray-800'>$reportsCount</div>"
                                             ?>
@@ -161,7 +161,7 @@ $reportsWithLikes = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELEC
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Reportes de este mes</div>
+                                                Nuevas quejas de este mes</div>
                                             <?php
                                             echo "<div class='h5 mb-0 font-weight-bold text-gray-800'>$lastMonthReportsCount</div>"
                                             ?>
@@ -172,7 +172,7 @@ $reportsWithLikes = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELEC
                         </div>
                     </div>
 
-                    <a class="mb-5 d-inline-block" href='./reports/adminReports.php'>Administrar reportes</a>
+                    <a class="mb-5 d-inline-block" href='./reports/adminReports.php'>Administrar quejas</a>
 
                     <div class="row">
 
@@ -181,7 +181,7 @@ $reportsWithLikes = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELEC
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Dropdown -->
                                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Reportes más populares</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Quejas más populares</h6>
                                 </div>
 
                                 <!-- Card Body -->
@@ -247,7 +247,7 @@ $reportsWithLikes = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELEC
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Dropdown -->
                                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Últimos reportes sin respuesta</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Últimas quejas sin responder</h6>
                                 </div>
 
                                 <!-- Card Body -->
