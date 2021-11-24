@@ -28,7 +28,8 @@ $lastMonthReportsCount = mysqli_fetch_assoc($resultado)["total"];
 
 $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
 
-$liveResults = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT image FROM images WHERE id_report = r.id LIMIT 1) as image, (SELECT count(id) FROM responses as r WHERE r.id_report = id) as counter_responses, (SELECT name FROM users as d WHERE d.id_user=r.id_user) as user FROM reports as r WHERE deleted_at IS NULL AND (SELECT count(id) FROM responses as r WHERE r.id_report = id) = 0 ORDER BY created_at");
+$liveResults = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT image FROM images WHERE id_report = r.id LIMIT 1) as image, (SELECT count(id) FROM responses as r WHERE r.id_report = id) as counter_responses, (SELECT name FROM users as d WHERE d.id_user=r.id_user) as user FROM reports as r WHERE deleted_at IS NULL AND (SELECT count(id) FROM responses as r WHERE r.id_report = id) = 0 ORDER BY created_at LIMIT 8");
+$reportsWithLikes = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT image FROM images WHERE id_report = r.id LIMIT 1) as image, (SELECT count(id) FROM responses as r WHERE r.id_report = id) as counter_responses, (SELECT count(l.id) as counter FROM likes as l WHERE l.id_report=r.id) as counter_likes, (SELECT name FROM users as d WHERE d.id_user=r.id_user) as user FROM reports as r WHERE deleted_at IS NULL AND (SELECT count(id) FROM responses as r WHERE r.id_report = id) = 0 ORDER BY counter_likes DESC LIMIT 8");
 ?>
 
 <!DOCTYPE html>
@@ -174,12 +175,13 @@ $liveResults = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT ima
                     <a class="mb-5 d-inline-block" href='./reports/adminReports.php'>Administrar reportes</a>
 
                     <div class="row">
-                        <!-- Area Chart -->
-                        <div class="col-xl-12 col-lg-12">
+
+                        <!-- Reports area -->
+                        <div class="col-md-12 col-lg-6">
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Dropdown -->
                                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Últimos reportes sin respuesta</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Reportes más populares</h6>
                                 </div>
 
                                 <!-- Card Body -->
@@ -187,6 +189,7 @@ $liveResults = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT ima
                                     <table class='table table-hover'>
                                         <thead class='thead-dark'>
                                             <tr>
+                                                <td class='fw-bold'>Rating</td>
                                                 <td class='fw-bold'>Estado</td>
                                                 <td class='fw-bold'>Usuario</td>
                                                 <td class='fw-bold'>Titulo</td>
@@ -210,6 +213,58 @@ $liveResults = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT ima
                                                 $text = $text . "...";
                                                 return $text;
                                             }
+
+                                            while ($row = mysqli_fetch_array($reportsWithLikes)) {
+                                                $title = $row["title"];
+                                                $rating = $row['counter_likes'];
+                                                $content = truncate($row["content"]);
+                                                $user = $row["user"];
+                                                $id = $row["id"];
+                                                $image = $row['image'];
+                                                $nResponses = $row['counter_responses'];
+                                                $status = ($nResponses == 0) ? "Sin resolver" : "Resuelta";
+                                                $statusColor = ($nResponses == 0) ? "warning" : "success";
+                                                $statusBgColor = ($nResponses == 0) ? "red" : "blue";
+
+                                                printf("<tr style='cursor: pointer' onclick='window.location = \"./reports/detail.php?id=$id\"'><td>%d</td><td><div style='background-color: $statusBgColor; width: 25px; height: 25px;' class='d-flex  align-items-center justify-content-center'></div></td><td>%s</td><td>%s</td><td>%s</td>
+                  <td class='image-container'>",  $rating, $user, $title, $content,);
+                                                if ($image != null) {
+                                                    echo "<i class='show-icon bi bi-image-fill'></i>";
+                                                    echo "<img class='hidden-image rounded img-fluid' src='./medias/$image'/>";
+                                                }
+                                            }
+                                            echo "</tr>";
+                                            mysqli_free_result($reportsWithLikes);
+                                            ?>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Reports area -->
+                        <div class="col-md-12 col-lg-6">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Últimos reportes sin respuesta</h6>
+                                </div>
+
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <table class='table table-hover'>
+                                        <thead class='thead-dark'>
+                                            <tr>
+                                                <td class='fw-bold'>Estado</td>
+                                                <td class='fw-bold'>Usuario</td>
+                                                <td class='fw-bold'>Titulo</td>
+                                                <td class='fw-bold'>Contenido</td>
+                                                <td class='fw-bold'>Imagen</td>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            <?php
 
                                             while ($row = mysqli_fetch_array($liveResults)) {
                                                 $title = $row["title"];
@@ -239,7 +294,6 @@ $liveResults = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT ima
                                 </div>
                             </div>
                         </div>
-
                     </div>
                     <!-- End of Main Content -->
                 </div>
