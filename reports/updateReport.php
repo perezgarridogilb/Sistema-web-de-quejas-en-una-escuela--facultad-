@@ -107,6 +107,7 @@ $imageRows = mysqli_query($conn, $sql);
    </div>
    <a class="scroll-to-top rounded" href="#page-top"><i class="fas fa-angle-up"></i></a>
    <script src="../assets/js/scripts.js"></script>
+   <script src="../assets/js/badWords.js"></script>
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js" integrity="sha512-oQq8uth41D+gIH/NJvSJvVB85MFk1eWpMK6glnkg6I7EdMqC1XVkW7RxLheXwmFdG03qScCM7gKS/Cx3FYt7Tg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
@@ -138,6 +139,19 @@ $imageRows = mysqli_query($conn, $sql);
                   e.preventDefault();
                   e.stopPropagation();
 
+                  if (containsBadWords(titleInput.value) || containsBadWords(contentInput.value)) {
+                     Toastify({
+                        text: "El contenido de la queja es inadecuado. Por favor, verifica su contenido.",
+                        duration: 3000,
+                        backgroundColor: "#B91646",
+                        gravity: "bottom",
+                        position: "right",
+                     }).showToast();
+
+                     return;
+                  }
+
+
                   if (dzClosure.getQueuedFiles().length === 0) {
                      var blob = new Blob();
                      blob.upload = {
@@ -166,8 +180,7 @@ $imageRows = mysqli_query($conn, $sql);
                   Toastify({
                      text: "Actualización exitosa!",
                      duration: 3000,
-                     destination: "https://github.com/apvarun/toastify-js",
-                     className: "info",
+                     backgroundColor: "#396EB0",
                      gravity: "bottom",
                      position: "right",
                   }).showToast();
@@ -177,8 +190,7 @@ $imageRows = mysqli_query($conn, $sql);
                   Toastify({
                      text: "Actualización fallida!",
                      duration: 3000,
-                     destination: "https://github.com/apvarun/toastify-js",
-                     className: "error",
+                     backgroundColor: "#B91646",
                      gravity: "bottom",
                      position: "right",
                   }).showToast();

@@ -49,6 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link href="../assets/css/styles2.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/basic.min.css" integrity="sha512-MeagJSJBgWB9n+Sggsr/vKMRFJWs+OUphiDV7TJiYu+TNQD9RtVJaPDYP8hA/PAjwRnkdvU+NsTncYTKlltgiw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.css" integrity="sha512-jU/7UFiaW5UBGODEopEqnbIAHOI8fO6T99m7Tsmqs2gkdujByJfkCbbfPSN4Wlqlb9TGnsuC0YgUgWkRBK7B9A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 
 <style>
@@ -134,9 +135,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
     <script src="../assets/js/scripts.js"></script>
+    <script src="../assets/js/badWords.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js" integrity="sha512-oQq8uth41D+gIH/NJvSJvVB85MFk1eWpMK6glnkg6I7EdMqC1XVkW7RxLheXwmFdG03qScCM7gKS/Cx3FYt7Tg==" crossorigin="anonymous" referrerpolicy="no-referrer">
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js" integrity="sha512-oQq8uth41D+gIH/NJvSJvVB85MFk1eWpMK6glnkg6I7EdMqC1XVkW7RxLheXwmFdG03qScCM7gKS/Cx3FYt7Tg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
     <script>
         Dropzone.autoDiscover = false;
@@ -160,6 +163,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     document.querySelector('#report-form').addEventListener('submit', function(e) {
                         e.preventDefault();
                         e.stopPropagation();
+
+                        if (containsBadWords(titleInput.value) || containsBadWords(contentInput.value)) {
+                            Toastify({
+                                text: "El contenido de la queja es inadecuado. Por favor verifica su contenido.",
+                                duration: 3000,
+                                backgroundColor: "#B91646",
+                                gravity: "bottom",
+                                position: "right",
+                            }).showToast();
+
+                            return;
+                        }
 
                         if (dzClosure.getQueuedFiles().length === 0) {
                             var blob = new Blob();
@@ -187,13 +202,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         titleInput.value = '';
                         contentInput.value = '';
                         dzClosure.removeAllFiles();
-                        alert('Envio Exitoso');
+                        Toastify({
+                            text: "Creación exitosa!",
+                            duration: 3000,
+                            backgroundColor: "#396EB0",
+                            gravity: "bottom",
+                            position: "right",
+                        }).showToast();
                     });
 
                     dzClosure.on('errormultiple', function(files, response) {
-                        alert('Envio Fallido');
+                        Toastify({
+                            text: "Actualización fallida!",
+                            duration: 3000,
+                            backgroundColor: "#B91646",
+                            gravity: "bottom",
+                            position: "right",
+                        }).showToast();
                     });
-
                 },
             });
     </script>
