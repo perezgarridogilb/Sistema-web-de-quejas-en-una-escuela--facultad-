@@ -58,6 +58,15 @@ CREATE TABLE `images` (
   CONSTRAINT `not_empty_image` CHECK(trim(`image`) <> '')
 ); 
 
+
+CREATE TABLE `likes` (
+  `id` INT PRIMARY KEY AUTO_INCREMENT,
+  `id_report` INT NOT NULL,
+  `id_user` INT NOT NULL,
+  CONSTRAINT `likes_fk_id_report` FOREIGN KEY (`id_report`) REFERENCES `reports` (`id`),
+  CONSTRAINT `likes_fk_id_user` FOREIGN KEY (`id_user`) REFERENCES `users` (`id_user`)
+);
+
 -- Procedimiento almacenado para eliminar el reporte
 
 CREATE PROCEDURE delete_report(id_report INTEGER)
