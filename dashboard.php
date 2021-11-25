@@ -224,7 +224,6 @@ $reportsWithLikes = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELEC
                                                 $id = $row["id"];
                                                 $image = $row['image'];
                                                 $nResponses = $row['counter_responses'];
-                                                $status = ($nResponses == 0) ? "Sin resolver" : "Resuelta";
                                                 $statusClass = ($nResponses == 0) ? "status-box--pending" : "status-box--completed";
 
                                                 printf("<tr style='cursor: pointer' onclick='window.location = \"./reports/detail.php?id=$id\"'><td>%d</td><td><div class='d-flex status-box $statusClass align-items-center justify-content-center'></div></td><td>%s</td><td>%s</td><td>%s</td>
@@ -256,7 +255,6 @@ $reportsWithLikes = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELEC
                                     <table class='table table-hover'>
                                         <thead class='thead-dark'>
                                             <tr>
-                                                <td class='fw-bold'>Estado</td>
                                                 <td class='fw-bold'>Usuario</td>
                                                 <td class='fw-bold'>Titulo</td>
                                                 <td class='fw-bold'>Contenido</td>
@@ -274,10 +272,8 @@ $reportsWithLikes = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELEC
                                                 $id = $row["id"];
                                                 $image = $row['image'];
                                                 $nResponses = $row['counter_responses'];
-                                                $status = ($nResponses == 0) ? "Sin resolver" : "Resuelta";
-                                                $statusClass = ($nResponses == 0) ? "status-box--pending" : "status-box--completed";
 
-                                                printf("<tr style='cursor: pointer' onclick='window.location = \"./reports/detail.php?id=$id\"'><td><div class='d-flex status-box $statusClass align-items-center justify-content-center'></div></td><td>%s</td><td>%s</td><td>%s</td>
+                                                printf("<tr style='cursor: pointer' onclick='window.location = \"./reports/detail.php?id=$id\"'><td>%s</td><td>%s</td><td>%s</td>
                   <td class='image-container'>",  $user, $title, $content,);
                                                 if ($image != null) {
                                                     echo "<i class='show-icon bi bi-image-fill'></i>";
