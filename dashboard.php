@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('./funcs/conexion.php');
+include('./funcs/text.php');
 
 if (!isset($_SESSION['id_user'])) {
     header("Location: ./auth/adminLogin.php");
@@ -202,20 +203,6 @@ $reportsWithLikes = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELEC
 
                                         <tbody>
                                             <?php
-
-                                            function truncate($text)
-                                            {
-
-                                                //specify number fo characters to shorten by
-                                                $chars = 25;
-
-                                                $text = $text . " ";
-                                                $text = substr($text, 0, $chars);
-                                                $text = substr($text, 0, strrpos($text, ' '));
-                                                $text = $text . "...";
-                                                return $text;
-                                            }
-
                                             while ($row = mysqli_fetch_array($reportsWithLikes)) {
                                                 $title = $row["title"];
                                                 $rating = $row['counter_likes'];

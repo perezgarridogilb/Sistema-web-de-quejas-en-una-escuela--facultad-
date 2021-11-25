@@ -67,6 +67,7 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
 <body id='page-top'>
    <?php
    include('../layout/menu.php');
+   include('../funcs/text.php');
    if (isset($_GET['deleted'])) {
       echo "<div class='alert alert-primary'>Eliminación exitosa</div>";
    }
@@ -98,20 +99,6 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
 
          <tbody>
             <?php
-
-            function truncate($text)
-            {
-
-               //specify number fo characters to shorten by
-               $chars = 25;
-
-               $text = $text . " ";
-               $text = substr($text, 0, $chars);
-               $text = substr($text, 0, strrpos($text, ' '));
-               $text = $text . "...";
-               return $text;
-            }
-
             while ($row = mysqli_fetch_array($liveResults)) {
                $title = $row["title"];
                $content = truncate($row["content"]);
@@ -168,7 +155,7 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
             <?php
             while ($row = mysqli_fetch_array($deletedResults)) {
                $title = $row["title"];
-               $content = $row["content"];
+               $content = truncate($row["content"]);
                $user = $row["user"];
                $id = $row["id"];
                $image = $row['image'];

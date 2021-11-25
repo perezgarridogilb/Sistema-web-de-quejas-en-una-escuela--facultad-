@@ -84,19 +84,7 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
 
             <tbody>
                 <?php
-
-                function truncate($text)
-                {
-
-                    //specify number fo characters to shorten by
-                    $chars = 25;
-
-                    $text = $text . " ";
-                    $text = substr($text, 0, $chars);
-                    $text = substr($text, 0, strrpos($text, ' '));
-                    $text = $text . "...";
-                    return $text;
-                }
+                include('../funcs/text.php');
 
                 while ($row = mysqli_fetch_array($liveResults)) {
                     $title = $row["title"];
