@@ -73,7 +73,7 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
    ?>
 
    <div class="container">
-      <h2 class="text-center mt-5 text-primary mb-3">Administrar reportes</h2>
+      <h2 class="text-center mt-5 text-primary mb-3">Administrar quejas</h2>
       <hr class="mb-5 bg-primary" />
 
       <?php
@@ -82,7 +82,7 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
       $deletedResults = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT image FROM images WHERE id_report = r.id LIMIT 1) as image, (SELECT count(id) FROM responses as r WHERE r.id_report = id) as counter_responses, (SELECT name FROM users as d WHERE d.id_user=r.id_user) as user FROM reports as r WHERE deleted_at IS NOT NULL ORDER BY created_at");
       ?>
 
-      <h4 class="mt-5 mb-3">Reportes</h4>
+      <h4 class="mt-5 mb-3">Quejas</h4>
       <table class='table table-hover'>
          <thead class='thead-dark'>
             <tr>
@@ -149,7 +149,7 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
          </tbody>
       </table>
 
-      <h4 class="mt-5 mb-3">Reportes eliminados</h4>
+      <h4 class="mt-5 mb-3">Quejas eliminadas</h4>
 
       <table class='table table-hover'>
          <thead class='thead-dark'>
