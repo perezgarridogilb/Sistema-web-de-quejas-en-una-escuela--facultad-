@@ -161,8 +161,7 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
                $image = $row['image'];
                $nResponses = $row['counter_responses'];
                $status = ($nResponses == 0) ? "Sin resolver" : "Resuelta";
-               $statusColor = ($nResponses == 0) ? "warning" : "success";
-               $statusBgColor = ($nResponses == 0) ? "red" : "blue";
+               $statusClass = ($nResponses == 0) ? "status-box--pending" : "status-box--completed";
 
                printf("<tr ><td>%d</td><td><div class='d-flex status-box $statusClass align-items-center justify-content-center'></div></td><td>%s</td><td>%s</td><td>%s</td>
                <td class='image-container'>", $id, $user, $title, $content,);
