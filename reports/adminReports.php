@@ -37,6 +37,7 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
    <!-- Core theme CSS (includes Bootstrap)-->
    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
    <link href="../assets/css/styles2.css" rel="stylesheet" />
+   <link href="../assets/css/reports.css" rel="stylesheet" />
 </head>
 
 <style>
@@ -119,10 +120,9 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
                $image = $row['image'];
                $nResponses = $row['counter_responses'];
                $status = ($nResponses == 0) ? "Sin resolver" : "Resuelta";
-               $statusColor = ($nResponses == 0) ? "warning" : "success";
-               $statusBgColor = ($nResponses == 0) ? "red" : "blue";
+               $statusClass = ($nResponses == 0) ? "status-box--pending" : "status-box--completed";
 
-               printf("<tr ><td>%d</td><td><div style='background-color: $statusBgColor; width: 25px; height: 25px;' class='d-flex  align-items-center justify-content-center'></div></td><td>%s</td><td>%s</td><td>%s</td>
+               printf("<tr ><td>%d</td><td><div class='d-flex status-box $statusClass align-items-center justify-content-center'></div></td><td>%s</td><td>%s</td><td>%s</td>
                   <td class='image-container'>", $id, $user, $title, $content,);
                if ($image != null) {
                   echo "<i class='show-icon bi bi-image-fill'></i>";
@@ -177,7 +177,7 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
                $statusColor = ($nResponses == 0) ? "warning" : "success";
                $statusBgColor = ($nResponses == 0) ? "red" : "blue";
 
-               printf("<tr ><td>%d</td><td><div style='background-color: $statusBgColor; width: 25px; height: 25px;' class='d-flex  align-items-center justify-content-center'></div></td><td>%s</td><td>%s</td><td>%s</td>
+               printf("<tr ><td>%d</td><td><div class='d-flex status-box $statusClass align-items-center justify-content-center'></div></td><td>%s</td><td>%s</td><td>%s</td>
                <td class='image-container'>", $id, $user, $title, $content,);
                if ($image != null) {
                   echo "<i class='show-icon bi bi-image-fill'></i>";
@@ -197,6 +197,11 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
             ?>
          </tbody>
       </table>
+
+      <?php
+      include('./statusResume.php');
+      ?>
+
    </div>
 
    <!-- Footer-->

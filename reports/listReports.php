@@ -28,6 +28,7 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="../assets/css/styles2.css" rel="stylesheet" />
+    <link href="../assets/css/reports.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.6.0/font/bootstrap-icons.min.css" integrity="sha512-7w04XesEFaoeeKX0oxkwayDboZB/+AKNF5IUE50fCUDUywLvDN4gv2513TLQS+RDenAeHEK3O40jZZVrkpnWWw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <style>
@@ -66,9 +67,8 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
 
         <?php
         if (!is_null($userType)  && $userType == 0) {
-            echo "<a class='mb-5 d-inline-block text-decoration-none' href='createReport.php'>Crear nueva queja</a>";
+            echo "<a class='mb-3 d-inline-block text-decoration-none' href='createReport.php'>Crear nueva queja</a>";
         }
-
         ?>
 
         <table class='table table-hover'>
@@ -106,10 +106,9 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
                     $image = $row['image'];
                     $nResponses = $row['counter_responses'];
                     $status = ($nResponses == 0) ? "Sin resolver" : "Resuelta";
-                    $statusColor = ($nResponses == 0) ? "warning" : "success";
-                    $statusBgColor = ($nResponses == 0) ? "red" : "blue";
+                    $statusClass = ($nResponses == 0) ? "status-box--pending" : "status-box--completed";
 
-                    printf("<tr style='cursor: pointer' onclick='window.location = \"detail.php?id=$id\"'><td><div style='background-color: $statusBgColor; width: 25px; height: 25px;' class='d-flex  align-items-center justify-content-center'></div></td><td>%s</td><td>%s</td><td>%s</td>
+                    printf("<tr style='cursor: pointer' onclick='window.location = \"detail.php?id=$id\"'><td><div class='d-flex status-box $statusClass rounded-circle align-items-center justify-content-center'></div></td><td>%s</td><td>%s</td><td>%s</td>
                   <td class='image-container'>",  $user, $title, $content,);
                     if ($image != null) {
                         echo "<i class='show-icon bi bi-image-fill'></i>";
@@ -122,6 +121,10 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
                 ?>
             </tbody>
         </table>
+
+        <?php
+        include('./statusResume.php');
+        ?>
     </div>
 
     <!-- Footer-->

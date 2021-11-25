@@ -60,6 +60,8 @@ $reportsWithLikes = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELEC
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="./assets/css/styles2.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.6.0/font/bootstrap-icons.min.css" integrity="sha512-7w04XesEFaoeeKX0oxkwayDboZB/+AKNF5IUE50fCUDUywLvDN4gv2513TLQS+RDenAeHEK3O40jZZVrkpnWWw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="./assets/css/reports.css" rel="stylesheet" />
+
     <style>
         .image-container {
             position: relative;
@@ -223,10 +225,9 @@ $reportsWithLikes = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELEC
                                                 $image = $row['image'];
                                                 $nResponses = $row['counter_responses'];
                                                 $status = ($nResponses == 0) ? "Sin resolver" : "Resuelta";
-                                                $statusColor = ($nResponses == 0) ? "warning" : "success";
-                                                $statusBgColor = ($nResponses == 0) ? "red" : "blue";
+                                                $statusClass = ($nResponses == 0) ? "status-box--pending" : "status-box--completed";
 
-                                                printf("<tr style='cursor: pointer' onclick='window.location = \"./reports/detail.php?id=$id\"'><td>%d</td><td><div style='background-color: $statusBgColor; width: 25px; height: 25px;' class='d-flex  align-items-center justify-content-center'></div></td><td>%s</td><td>%s</td><td>%s</td>
+                                                printf("<tr style='cursor: pointer' onclick='window.location = \"./reports/detail.php?id=$id\"'><td>%d</td><td><div class='d-flex status-box $statusClass align-items-center justify-content-center'></div></td><td>%s</td><td>%s</td><td>%s</td>
                   <td class='image-container'>",  $rating, $user, $title, $content,);
                                                 if ($image != null) {
                                                     echo "<i class='show-icon bi bi-image-fill'></i>";
@@ -274,10 +275,9 @@ $reportsWithLikes = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELEC
                                                 $image = $row['image'];
                                                 $nResponses = $row['counter_responses'];
                                                 $status = ($nResponses == 0) ? "Sin resolver" : "Resuelta";
-                                                $statusColor = ($nResponses == 0) ? "warning" : "success";
-                                                $statusBgColor = ($nResponses == 0) ? "red" : "blue";
+                                                $statusClass = ($nResponses == 0) ? "status-box--pending" : "status-box--completed";
 
-                                                printf("<tr style='cursor: pointer' onclick='window.location = \"./reports/detail.php?id=$id\"'><td><div style='background-color: $statusBgColor; width: 25px; height: 25px;' class='d-flex  align-items-center justify-content-center'></div></td><td>%s</td><td>%s</td><td>%s</td>
+                                                printf("<tr style='cursor: pointer' onclick='window.location = \"./reports/detail.php?id=$id\"'><td><div class='d-flex status-box $statusClass align-items-center justify-content-center'></div></td><td>%s</td><td>%s</td><td>%s</td>
                   <td class='image-container'>",  $user, $title, $content,);
                                                 if ($image != null) {
                                                     echo "<i class='show-icon bi bi-image-fill'></i>";
@@ -298,6 +298,12 @@ $reportsWithLikes = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELEC
                     <!-- End of Main Content -->
                 </div>
                 <!-- End of Content Wrapper -->
+
+                <div class='ml-5'>
+                    <?php
+                    include('./reports/statusResume.php');
+                    ?>
+                </div>
 
             </div>
             <!-- End of Page Wrapper -->
