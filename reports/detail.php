@@ -1,10 +1,6 @@
   <?php
     session_start();
     include("../funcs/conexion.php");
-    if (!isset($_SESSION['id_user'])) {
-        header("Location: ../auth/adminLogin.php");
-    }
-
     $reportId = $_GET['id'];
 
     # Fetch reports
@@ -12,7 +8,8 @@
     $resultado = mysqli_query($conn, $sql);
     $row = mysqli_fetch_assoc($resultado);
 
-    if ($_SESSION['id_user'] == $row['id_user'] && $row['counter_responses'] < 1) {
+    $userId = isset($_SESSION['id_user']) ?? null;
+    if ($userId == $row['id_user'] && $row['counter_responses'] < 1) {
         $onReturnUrl = urlencode("./listReports.php?id=$reportId");
         header("Location: ./updateReport.php?id=$reportId&from=$onReturnUrl");
     }
@@ -21,16 +18,10 @@
     $sql = "SELECT id, id_report, image FROM images WHERE id_report=$reportId;";
     $imageRows = mysqli_query($conn, $sql);
     $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
-    $userId = $_SESSION['id_user'];
 
     # Fetch like
     $sql = "SELECT count(id) as count FROM likes WHERE id_report=$reportId AND id_user=$userId";
     $result = mysqli_query($conn, $sql);
-    $hasAssignedLike = false;
-
-    if (mysqli_fetch_assoc($result)["count"] > 0) {
-        $hasAssignedLike = true;
-    }
 
     ?>
 
@@ -99,7 +90,13 @@
             echo "<div class='p-5 rounded bg-light'>";
 
             echo "<div class='d-flex align-items-baseline'>";
-            if (!is_null($userType) && $userType == 0 && $_SESSION['id_user'] != $row['id_user']) {
+            if (!is_null($userType) && $userType == 0 && $idUser != $row['id_user']) {
+                $hasAssignedLike = false;
+
+                if (mysqli_fetch_assoc($result)["count"] > 0) {
+                    $hasAssignedLike = true;
+                }
+
                 if ($hasAssignedLike) {
                     echo '<i onclick="handleToggledLiked()" id="liked-icon" class="p-1 mr-2 d-block bi bi-star-fill" style="color: #ffd700; cursor: pointer"></i>';
                     echo '<i onclick="handleToggledLiked()" id="nonliked-icon" class="p-1 mr-2 d-block bi bi-star d-none" style="cursor: pointer"></i>';
@@ -138,7 +135,7 @@
 
             if ($nResponses == 0) {
                 if ($userType == 1) {
-                    $idUser = $_SESSION['id_user'];
+                    $idUser = isset($_SESSION['id_user']) ?? null;
 
                     // Solo moderadores
                     echo "<h2 class='text-center mt-5'>Agregar respuesta</h2>" .
