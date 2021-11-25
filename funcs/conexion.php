@@ -1,6 +1,6 @@
 <?php
 
-$mysqli = new mysqli("localhost", "root", "", "sistemaalumnos"); //servidor, usuario de base de datos, contraseña del usuario, nombre de base de datos
+$mysqli = new mysqli("localhost", "blue", "password", "sistemaalumnos"); //servidor, usuario de base de datos, contraseña del usuario, nombre de base de datos
 $conn = $mysqli;
 
 if (mysqli_connect_errno()) {

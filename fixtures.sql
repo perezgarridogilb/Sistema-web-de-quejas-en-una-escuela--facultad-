@@ -1,3 +1,5 @@
+DELETE FROM users;
+
 INSERT INTO `users` (`id_user`, `name`, `image`, `mail`, `password`, `usertype`, `activate`, `token`, `token_password`, `password_request`) VALUES
 (NULL, 'Gilberto Pérez Garrido', NULL, 'betho6990@gmail.com', 'abc', 0, 1, '', '', 0),
 (NULL, 'Francisco Perez', NULL, 'francisco@gmail.com', 'abc', 0, 1, '', NULL, 0),
