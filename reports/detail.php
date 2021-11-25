@@ -8,7 +8,7 @@
     $reportId = $_GET['id'];
 
     # Fetch reports
-    $sql = "SELECT id, title, id_user, content, created_at, modified_at, (SELECT count(id) FROM responses as r WHERE r.id_report = id) as counter_responses FROM reports WHERE id=$reportId;";
+    $sql = "SELECT r.id, r.title, r.id_user, r.content, r.created_at, r.modified_at, (SELECT count(id) FROM responses as re WHERE re.id_report = r.id) as counter_responses FROM reports as r WHERE id=$reportId;";
     $resultado = mysqli_query($conn, $sql);
     $row = mysqli_fetch_assoc($resultado);
 
@@ -94,8 +94,6 @@
             $modifiedAt = $row['modified_at'];
             $nResponses = $row['counter_responses'];
             $status = ($nResponses == 0) ? "Sin resolver" : "Resuelta";
-            $statusColor = ($nResponses == 0) ? "warning" : "success";
-            $statusBgColor = ($nResponses == 0) ? "rgba(255, 193, 7, 0.1)" : "rgba(25, 134, 83, 0.1)";
             $notImages = true;
 
             echo "<div class='p-5 rounded bg-light'>";
@@ -109,16 +107,15 @@
                 echo '<i onclick="handleToggledLiked()" id="nonliked-icon" class="bi bi-star" style="cursor: pointer; "></i>';
             }
 
-            echo "<h2 class='h3 m-0 p-2'>$title</h2>";
-            echo "</div>";
-            echo "<span class='fw-bold'>Creado:</span> $createdAt <span>|</span> <span class='fw-bold'>Modificado:</span> $modifiedAt <br>";
-            echo "<span class='mt-n1 fw-bold'>Estado:</span> $status <br>";
-            echo "<hr class='bg-dark'>";
-            echo '<p class="mt-3">';
-            echo $content;
-            echo '</p>';
-
-            echo "</div>";
+            echo "<h2 class='h3 m-0 p-2'>$title</h2>" .
+                "</div>" .
+                "<span class='fw-bold'>Creado:</span> $createdAt <span>|</span> <span class='fw-bold'>Modificado:</span> $modifiedAt <br>" .
+                "<span class='mt-n1 fw-bold'>Estado:</span> $status <br>" .
+                "<hr class='bg-dark'>" .
+                '<p class="mt-3">' .
+                $content .
+                '</p>' .
+                "</div>";
 
             echo "<div class='my-4' />";
             echo "<h4 class='text-center'>Imagenes</h4>";
@@ -133,24 +130,33 @@
             }
             echo "</div>";
             echo "</div>";
+            echo "<div class='py-3'><hr/></div>";
 
-            if ($userType == 1) {
-                $idUser = $_SESSION['id_user'];
 
-                // Solo moderadores
-                echo "<div class='py-3'><hr/></div>";
-                echo "<h2 class='text-center mt-5'>Agregar respuesta</h2>" .
-                    "<form method='POST' action='./addResponse.php'>" .
-                    '<div class="form-group mb-3">' .
-                    '<label class="mb-1 fw-bold">Contenido *</label>' .
-                    "<input type='number' hidden name='id_user' value='$idUser'>" .
-                    "<input type='number' hidden name='id_report' value='$reportId'>" .
-                    '<textarea rows="8" name="content" placeholder="Redacta la respuesta..." class="form-control" required></textarea>' .
-                    '</div>' .
-                    "<div class='text-center'>" .
-                    '<button type="submit" class="btn btn-primary">Enviar</button>' .
-                    '</div>' .
-                    '</form>';
+            if ($nResponses == 0) {
+                if ($userType == 1) {
+                    $idUser = $_SESSION['id_user'];
+
+                    // Solo moderadores
+                    echo "<h2 class='text-center mt-5'>Agregar respuesta</h2>" .
+                        "<form method='POST' action='./addResponse.php'>" .
+                        '<div class="form-group mb-3">' .
+                        '<label class="mb-1 fw-bold">Contenido *</label>' .
+                        "<input type='number' hidden name='id_user' value='$idUser'>" .
+                        "<input type='number' hidden name='id_report' value='$reportId'>" .
+                        '<textarea rows="8" name="content" placeholder="Redacta la respuesta..." class="form-control" required></textarea>' .
+                        '</div>' .
+                        "<div class='text-center'>" .
+                        '<button type="submit" class="btn btn-primary">Enviar</button>' .
+                        '</div>' .
+                        '</form>';
+                }
+            } else {
+                $sql = "SELECT * FROM responses WHERE id_report = $reportId LIMIT 1";
+                $result = mysqli_query($conn, $sql);
+                $responseContent = mysqli_fetch_assoc($result)["content"];
+                echo "<h2 class='text-center mt-5 mb-2'>Respuesta</h2>" .
+                    "<div class='p-3 rounded' style='background-color: #22577A; color: white;'>$responseContent</div>";
             }
             ?>
 
