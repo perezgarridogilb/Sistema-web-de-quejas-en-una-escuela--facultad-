@@ -192,13 +192,8 @@
                 });
 
                 dzClosure.on('successmultiple', function(files, response) {
-                   Toastify({
-                      text: "Actualización exitosa!",
-                      duration: 3000,
-                      backgroundColor: "#396EB0",
-                      gravity: "bottom",
-                      position: "right",
-                   }).showToast();
+                   const message = encodeURIComponent("Actualización exitosa!");
+                   window.location = `./listReports.php?message=${message}`;
                 });
 
                 dzClosure.on('errormultiple', function(files, response) {

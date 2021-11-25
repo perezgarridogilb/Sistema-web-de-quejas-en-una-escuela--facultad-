@@ -201,19 +201,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     dzClosure.on('successmultiple', function(files, response) {
                         titleInput.value = '';
                         contentInput.value = '';
+                        const message = encodeURIComponent("Creación exitosa!");
+                        window.location = `./listReports.php?message=${message}`;
                         dzClosure.removeAllFiles();
-                        Toastify({
-                            text: "Creación exitosa!",
-                            duration: 3000,
-                            backgroundColor: "#396EB0",
-                            gravity: "bottom",
-                            position: "right",
-                        }).showToast();
                     });
 
                     dzClosure.on('errormultiple', function(files, response) {
                         Toastify({
-                            text: "Actualización fallida!",
+                            text: "Creación fallida!",
                             duration: 3000,
                             backgroundColor: "#B91646",
                             gravity: "bottom",

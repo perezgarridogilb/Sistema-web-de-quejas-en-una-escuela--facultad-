@@ -14,5 +14,4 @@ $sql = "INSERT INTO responses(id, id_report, id_user, content, created_at, modif
 $resultado = mysqli_query($conn, $sql);
 echo $resultado;
 
-echo "INSERT INTO responses(id, id_report, id_user, content, created_at, modified_at) VALUES(NULL, $reportId, $userId, '$content', now(), now());";
-// header('Location: ./listReports.php');
+header('Location: ./listReports.php');

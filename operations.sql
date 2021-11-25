@@ -5,7 +5,7 @@ DROP PROCEDURE IF EXISTS insert_old_password;
 DROP PROCEDURE IF EXISTS update_password;
 DROP PROCEDURE IF EXISTS insertPreviusKeys;
 
-DROP TRIGGER IF EXISTS before_change_password;
+DROP TRIGGER IF EXISTS after_change_password;
 DROP TRIGGER IF EXISTS before_delete_report;
 
 
@@ -49,14 +49,14 @@ DELIMITER ;
 -- Trigger que almacena la vieja contraseña cuando se realiza un cambio en ella --
 
 DELIMITER //
-  CREATE TRIGGER before_change_password
-    BEFORE UPDATE
+  CREATE TRIGGER after_change_password
+    AFTER UPDATE
     ON users
     FOR EACH ROW
       BEGIN
         IF new.password <> old.password THEN
           CALL insert_old_password(old.id_user, old.password);
-        END//
+        END IF;
       END//
 DELIMITER ;
 

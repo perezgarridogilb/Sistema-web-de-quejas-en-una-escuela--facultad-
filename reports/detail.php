@@ -98,16 +98,18 @@
 
             echo "<div class='p-5 rounded bg-light'>";
 
-            echo "<div class='d-flex align-items-center'>";
-            if ($hasAssignedLike) {
-                echo '<i onclick="handleToggledLiked()" id="liked-icon" class="bi bi-star-fill" style="color: #ffd700; cursor: pointer"></i>';
-                echo '<i onclick="handleToggledLiked()" id="nonliked-icon" class="bi bi-star d-none" style="cursor: pointer"></i>';
-            } else {
-                echo '<i onclick="handleToggledLiked()" id="liked-icon" class="bi bi-star-fill d-none" style="color: #ffd700; cursor: pointer"></i>';
-                echo '<i onclick="handleToggledLiked()" id="nonliked-icon" class="bi bi-star" style="cursor: pointer; "></i>';
+            echo "<div class='d-flex align-items-baseline'>";
+            if (!is_null($userType) && $userType == 0 && $_SESSION['id_user'] != $row['id_user']) {
+                if ($hasAssignedLike) {
+                    echo '<i onclick="handleToggledLiked()" id="liked-icon" class="p-1 mr-2 d-block bi bi-star-fill" style="color: #ffd700; cursor: pointer"></i>';
+                    echo '<i onclick="handleToggledLiked()" id="nonliked-icon" class="p-1 mr-2 d-block bi bi-star d-none" style="cursor: pointer"></i>';
+                } else {
+                    echo '<i onclick="handleToggledLiked()" id="liked-icon" class="p-1 mr-2 d-block bi bi-star-fill d-none" style="color: #ffd700; cursor: pointer"></i>';
+                    echo '<i onclick="handleToggledLiked()" id="nonliked-icon" class="p-1 mr-2 d-block bi bi-star" style="cursor: pointer; "></i>';
+                }
             }
 
-            echo "<h2 class='h3 m-0 p-2'>$title</h2>" .
+            echo "<h2 class='h3 m-0 mb-2 '>$title</h2>" .
                 "</div>" .
                 "<span class='fw-bold'>Creado:</span> $createdAt <span>|</span> <span class='fw-bold'>Modificado:</span> $modifiedAt <br>" .
                 "<span class='mt-n1 fw-bold'>Estado:</span> $status <br>" .
@@ -123,8 +125,9 @@
             while ($imageRow = mysqli_fetch_array($imageRows)) {
                 $notImages = false;
                 $image = $imageRow['image'];
-                echo "<img  class='img-fluid col-6 rounded p-3' src='../medias/$image'/>";
+                echo "<img style='max-width: 300px' class='img-fluid rounded p-3' src='../medias/$image'/>";
             }
+
             if ($notImages) {
                 echo "<div class='text-center p-5 mb-4 bg-light rounded-3'> No hay imagenes disponibles</div>";
             }
@@ -156,7 +159,7 @@
                 $result = mysqli_query($conn, $sql);
                 $responseContent = mysqli_fetch_assoc($result)["content"];
                 echo "<h2 class='text-center mt-5 mb-2'>Respuesta</h2>" .
-                    "<div class='p-3 rounded' style='background-color: #22577A; color: white;'>$responseContent</div>";
+                    "<div class='p-3 rounded fw-bold' style='background-color: #22577A; color: white;'>$responseContent</div>";
             }
             ?>
 

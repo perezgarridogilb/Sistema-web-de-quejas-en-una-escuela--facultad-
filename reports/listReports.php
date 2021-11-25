@@ -6,6 +6,7 @@ $failled_message = null;
 $liveResults = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT image FROM images WHERE id_report = r.id LIMIT 1) as image, (SELECT count(id) FROM responses as re WHERE re.id_report = r.id) as counter_responses, (SELECT name FROM users as d WHERE d.id_user=r.id_user) as user FROM reports as r WHERE deleted_at IS NULL ORDER BY created_at");
 
 $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
+$topMessage = isset($_GET['message']) ? urldecode($_GET['message']) : null;
 ?>
 
 <!DOCTYPE html>
@@ -58,6 +59,10 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
 
 <body id="page-top">
     <?php
+    if ($topMessage) {
+        echo "<div class='alert alert-info'>$topMessage</div>";
+    }
+
     include('../layout/menu.php');
     ?>
 
