@@ -140,10 +140,11 @@
                 // Solo moderadores
                 echo "<div class='py-3'><hr/></div>";
                 echo "<h2 class='text-center mt-5'>Agregar respuesta</h2>" .
-                    "<form method='POST' action='./addResponse'>" .
+                    "<form method='POST' action='./addResponse.php'>" .
                     '<div class="form-group mb-3">' .
                     '<label class="mb-1 fw-bold">Contenido *</label>' .
-                    "<input type='number' hidden name='user_id' value='$idUser'>" .
+                    "<input type='number' hidden name='id_user' value='$idUser'>" .
+                    "<input type='number' hidden name='id_report' value='$reportId'>" .
                     '<textarea rows="8" name="content" placeholder="Redacta la respuesta..." class="form-control" required></textarea>' .
                     '</div>' .
                     "<div class='text-center'>" .
