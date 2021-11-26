@@ -1,15 +1,30 @@
 <?php
-include("../conexion.php");
+include("../funcs/conexion.php");
 
 session_start();
-if (!isset($_SESSION['id_usuario'])) {
+if (!isset($_SESSION['id_user'])) {
     header('Location: ../auth/userLogin.php');
 }
 
-$userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : null;
+$userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
 $message = null;
 $messageType = null;
 
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $title = $_POST['titulo'];
+    $content = $_POST['contenido'];
+    $usuario = $_SESSION['id_user'];
+
+    $sql = "INSERT INTO reports(id,  id_user, title, content) VALUES (null, $usuario, '$title', '$content');";
+    $result = mysqli_query($conn, $sql);
+    if ($result == true) {
+        $message = 'Creacion exitosa';
+        $messageType = 'success';
+    } else {
+        $message = 'Creacion fallida';
+        $messageType = 'danger';
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -34,6 +49,7 @@ $messageType = null;
     <link href="../assets/css/styles2.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/basic.min.css" integrity="sha512-MeagJSJBgWB9n+Sggsr/vKMRFJWs+OUphiDV7TJiYu+TNQD9RtVJaPDYP8hA/PAjwRnkdvU+NsTncYTKlltgiw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.css" integrity="sha512-jU/7UFiaW5UBGODEopEqnbIAHOI8fO6T99m7Tsmqs2gkdujByJfkCbbfPSN4Wlqlb9TGnsuC0YgUgWkRBK7B9A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 
 <style>
@@ -52,6 +68,8 @@ $messageType = null;
         background-color: rgb(0, 135, 247, 0.1);
     }
 </style>
+
+</head>
 
 <body id="page-top">
     <?php
@@ -117,7 +135,11 @@ $messageType = null;
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
     <script src="../assets/js/scripts.js"></script>
+    <script src="../assets/js/badWords.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js" integrity="sha512-oQq8uth41D+gIH/NJvSJvVB85MFk1eWpMK6glnkg6I7EdMqC1XVkW7RxLheXwmFdG03qScCM7gKS/Cx3FYt7Tg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js" integrity="sha512-oQq8uth41D+gIH/NJvSJvVB85MFk1eWpMK6glnkg6I7EdMqC1XVkW7RxLheXwmFdG03qScCM7gKS/Cx3FYt7Tg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
     <script>
         Dropzone.autoDiscover = false;
@@ -132,6 +154,7 @@ $messageType = null;
                 parallelUploads: 100,
                 maxFiles: 100,
                 acceptedFiles: 'image/*',
+                addRemoveLinks: true,
                 init: function() {
                     dzClosure = this;
                     const titleInput = document.querySelector('input[name="titulo"]');
@@ -140,6 +163,18 @@ $messageType = null;
                     document.querySelector('#report-form').addEventListener('submit', function(e) {
                         e.preventDefault();
                         e.stopPropagation();
+
+                        if (containsBadWords(titleInput.value) || containsBadWords(contentInput.value)) {
+                            Toastify({
+                                text: "El contenido de la queja es inadecuado. Por favor verifica su contenido.",
+                                duration: 3000,
+                                backgroundColor: "#B91646",
+                                gravity: "bottom",
+                                position: "right",
+                            }).showToast();
+
+                            return;
+                        }
 
                         if (dzClosure.getQueuedFiles().length === 0) {
                             var blob = new Blob();
@@ -166,14 +201,20 @@ $messageType = null;
                     dzClosure.on('successmultiple', function(files, response) {
                         titleInput.value = '';
                         contentInput.value = '';
+                        const message = encodeURIComponent("Creación exitosa!");
+                        window.location = `./listReports.php?message=${message}`;
                         dzClosure.removeAllFiles();
-                        alert('Envio Exitoso');
                     });
 
                     dzClosure.on('errormultiple', function(files, response) {
-                        alert('Envio Fallido');
+                        Toastify({
+                            text: "Creación fallida!",
+                            duration: 3000,
+                            backgroundColor: "#B91646",
+                            gravity: "bottom",
+                            position: "right",
+                        }).showToast();
                     });
-
                 },
             });
     </script>

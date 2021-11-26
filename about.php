@@ -1,6 +1,6 @@
 <?php
 session_start();
-$userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : null;
+$userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
 ?>
 
 <!DOCTYPE html>

@@ -1,6 +1,6 @@
 <?php
 session_start();
-$userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : null;
+$userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
 ?>
 
 <!DOCTYPE html>
@@ -71,6 +71,7 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
       </div>
     </div>
   </section>
+
   <!-- Footer-->
   <footer class="footer text-center">
     <div class="container px-4 px-lg-5">
@@ -85,12 +86,15 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
       <p class="text-muted small mb-0">Copyright &copy; Your Website 2021</p>
     </div>
   </footer>
+
   <!-- Scroll to Top Button-->
   <a class="scroll-to-top rounded" href="#page-top"><i class="fas fa-angle-up"></i></a>
+
   <!-- Bootstrap core JS-->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+
   <!-- Core theme JS-->
-  <script src="assets/js/scripts.js"></script>
+  <script src="./assets/js/scripts.js"></script>
 </body>
 
 </html>

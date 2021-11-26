@@ -3,8 +3,10 @@
 * Copyright 2013-2021 Start Bootstrap
 * Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-stylish-portfolio/blob/master/LICENSE)
 */
-window.addEventListener('DOMContentLoaded', event => {
+console.log('not loaded');
 
+window.addEventListener('DOMContentLoaded', event => {
+    console.log('loaded');
     const sidebarWrapper = document.getElementById('sidebar-wrapper');
     let scrollToTopVisible = false;
     // Closes the sidebar menu

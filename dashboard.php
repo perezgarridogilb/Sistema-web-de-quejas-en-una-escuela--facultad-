@@ -1,30 +1,36 @@
 <?php
 session_start();
-if (!isset($_SESSION['id_usuario'])) {
+include('./funcs/conexion.php');
+include('./funcs/text.php');
+
+if (!isset($_SESSION['id_user'])) {
     header("Location: ./auth/adminLogin.php");
 }
 
 // Total of users
-// $sql = "SELECT count(id) FROM users;";
-// $resultado = mysqli_query($conn, $sql);
-$usersCount = 0;
+$sql = "SELECT count(id_user) AS total FROM users";
+$resultado = mysqli_query($conn, $sql);
+$usersCount = mysqli_fetch_assoc($resultado)["total"];
 
 // Total of users created in the last month
-// $sql = "SELECT count(id) FROM users WHERE created_at > now();";
-// $resultado = mysqli_query($conn, $sql);
-$lastMonthUsersCount = 0;
+$sql = "SELECT count(id_user) as total FROM users";
+$resultado = mysqli_query($conn, $sql);
+$lastMonthUsersCount = mysqli_fetch_assoc($resultado)["total"];
 
 // Total of reports
-// $sql = "SELECT count(id) FROM reports;";
-// $resultado = mysqli_query($conn, $sql);
-$reportsCount = 0;
+$sql = "SELECT count(id) as total FROM reports";
+$resultado = mysqli_query($conn, $sql);
+$reportsCount = mysqli_fetch_assoc($resultado)["total"];
 
 // Total of reports in the last month
-// $sql = "SELECT count(id) FROM users WHERE created_at > now();";
-// $resultado = mysqli_query($conn, $sql);
-$lastMonthReportsCount = 0;
+$sql = "SELECT count(id) as total FROM reports WHERE MONTH(created_at)=MONTH(NOW()) and YEAR(created_at) = YEAR(NOW())";
+$resultado = mysqli_query($conn, $sql);
+$lastMonthReportsCount = mysqli_fetch_assoc($resultado)["total"];
 
-$userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : null;
+$userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
+
+$reportsWithoutResponse = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT image FROM images WHERE id_report = r.id LIMIT 1) as image, (SELECT count(id) FROM responses as re WHERE re.id_report = r.id) as counter_responses, (SELECT name FROM users as d WHERE d.id_user=r.id_user) as user FROM reports as r WHERE deleted_at IS NULL AND (SELECT count(re.id) FROM responses as re WHERE re.id_report = r.id) = 0 ORDER BY created_at LIMIT 8");
+$reportsWithLikes = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT image FROM images WHERE id_report = r.id LIMIT 1) as image, (SELECT count(id) FROM responses as re WHERE re.id_report = r.id) as counter_responses, (SELECT count(l.id) as counter FROM likes as l WHERE l.id_report=r.id) as counter_likes, (SELECT name FROM users as d WHERE d.id_user=r.id_user) as user FROM reports as r WHERE deleted_at IS NULL ORDER BY counter_likes DESC LIMIT 8");
 ?>
 
 <!DOCTYPE html>
@@ -54,6 +60,32 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="./assets/css/styles2.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.6.0/font/bootstrap-icons.min.css" integrity="sha512-7w04XesEFaoeeKX0oxkwayDboZB/+AKNF5IUE50fCUDUywLvDN4gv2513TLQS+RDenAeHEK3O40jZZVrkpnWWw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="./assets/css/reports.css" rel="stylesheet" />
+
+    <style>
+        .image-container {
+            position: relative;
+        }
+
+        .hidden-image {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            display: none;
+            z-index: 99;
+            max-width: 150px;
+        }
+
+        .show-icon:hover {
+            color: green;
+            cursor: pointer;
+        }
+
+        .show-icon:hover+.hidden-image {
+            display: block;
+        }
+    </style>
 </head>
 
 <body>
@@ -72,7 +104,7 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
                 <!-- Begin Page Content -->
                 <div class="container-fluid mt-5">
                     <div class="text-center mb-3">
-                        <h2 class="text-center mt-5 text-primary">Estadísticas</h2>
+                        <h2 class="text-center mt-5 text-primary">Panel de control</h2>
                     </div>
 
                     <hr class="mb-5 bg-primary" />
@@ -116,7 +148,7 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Total de reportes</div>
+                                                Total de quejas</div>
                                             <?php
                                             echo "<div class='h5 mb-0 font-weight-bold text-gray-800'>$reportsCount</div>"
                                             ?>
@@ -132,7 +164,7 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Reportes de este mes</div>
+                                                Nuevas quejas de este mes</div>
                                             <?php
                                             echo "<div class='h5 mb-0 font-weight-bold text-gray-800'>$lastMonthReportsCount</div>"
                                             ?>
@@ -141,131 +173,181 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
                                 </div>
                             </div>
                         </div>
-
                     </div>
+
+                    <a class="mb-5 d-inline-block" href='./reports/adminReports.php'>Administrar quejas</a>
 
                     <div class="row">
 
-                        <!-- Area Chart -->
-                        <div class="col-xl-8 col-lg-7">
+                        <!-- Reports area -->
+                        <div class="col-md-12 col-lg-6">
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Dropdown -->
                                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Resumen de reportes</h6>
-                                    <div class="dropdown no-arrow">
-                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-                                            <div class="dropdown-header">Dropdown Header:</div>
-                                            <a class="dropdown-item" href="#">Action</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Something else here</a>
-                                        </div>
-                                    </div>
+                                    <h6 class="m-0 font-weight-bold text-primary">Quejas más populares</h6>
                                 </div>
+
                                 <!-- Card Body -->
                                 <div class="card-body">
-                                    <div class="chart-area">
-                                        <canvas id="myAreaChart"></canvas>
-                                    </div>
+                                    <table class='table table-hover'>
+                                        <thead class='thead-dark'>
+                                            <tr>
+                                                <td class='fw-bold'>Rating</td>
+                                                <td class='fw-bold'>Estado</td>
+                                                <td class='fw-bold'>Usuario</td>
+                                                <td class='fw-bold'>Titulo</td>
+                                                <td class='fw-bold'>Contenido</td>
+                                                <td class='fw-bold'>Imagen</td>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            <?php
+                                            while ($row = mysqli_fetch_array($reportsWithLikes)) {
+                                                $title = $row["title"];
+                                                $rating = $row['counter_likes'];
+                                                $content = truncate($row["content"]);
+                                                $user = $row["user"];
+                                                $id = $row["id"];
+                                                $image = $row['image'];
+                                                $nResponses = $row['counter_responses'];
+                                                $statusClass = ($nResponses == 0) ? "status-box--pending" : "status-box--completed";
+
+                                                printf("<tr style='cursor: pointer' onclick='window.location = \"./reports/detail.php?id=$id\"'><td>%d</td><td><div class='d-flex status-box $statusClass align-items-center justify-content-center'></div></td><td>%s</td><td>%s</td><td>%s</td>
+                  <td class='image-container'>",  $rating, $user, $title, $content,);
+                                                if ($image != null) {
+                                                    echo "<i class='show-icon bi bi-image-fill'></i>";
+                                                    echo "<img class='hidden-image rounded img-fluid' src='./medias/$image'/>";
+                                                }
+                                            }
+                                            echo "</tr>";
+                                            mysqli_free_result($reportsWithLikes);
+                                            ?>
+                                        </tbody>
+                                    </table>
+
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Pie Chart -->
-                        <div class="col-xl-4 col-lg-5">
+                        <!-- Reports area -->
+                        <div class="col-md-12 col-lg-6">
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Dropdown -->
                                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
-                                    <div class="dropdown no-arrow">
-                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-                                            <div class="dropdown-header">Dropdown Header:</div>
-                                            <a class="dropdown-item" href="#">Action</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Something else here</a>
-                                        </div>
-                                    </div>
+                                    <h6 class="m-0 font-weight-bold text-primary">Últimas quejas sin responder</h6>
                                 </div>
+
                                 <!-- Card Body -->
                                 <div class="card-body">
-                                    <div class="chart-pie pt-4 pb-2">
-                                        <canvas id="myPieChart"></canvas>
-                                    </div>
-                                    <div class="mt-4 text-center small">
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-primary"></i> Direct
-                                        </span>
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-success"></i> Social
-                                        </span>
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-info"></i> Referral
-                                        </span>
-                                    </div>
+                                    <table class='table table-hover'>
+                                        <thead class='thead-dark'>
+                                            <tr>
+                                                <td class='fw-bold'>Usuario</td>
+                                                <td class='fw-bold'>Titulo</td>
+                                                <td class='fw-bold'>Contenido</td>
+                                                <td class='fw-bold'>Imagen</td>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            <?php
+
+                                            while ($row = mysqli_fetch_array($reportsWithoutResponse)) {
+                                                $title = $row["title"];
+                                                $content = truncate($row["content"]);
+                                                $user = $row["user"];
+                                                $id = $row["id"];
+                                                $image = $row['image'];
+                                                $nResponses = $row['counter_responses'];
+
+                                                printf("<tr style='cursor: pointer' onclick='window.location = \"./reports/detail.php?id=$id\"'><td>%s</td><td>%s</td><td>%s</td>
+                  <td class='image-container'>",  $user, $title, $content,);
+                                                if ($image != null) {
+                                                    echo "<i class='show-icon bi bi-image-fill'></i>";
+                                                    echo "<img class='hidden-image rounded img-fluid' src='./medias/$image'/>";
+                                                }
+                                            }
+                                            echo "</tr>";
+                                            mysqli_free_result($reportsWithoutResponse);
+                                            mysqli_close($conn);
+                                            ?>
+                                        </tbody>
+                                    </table>
+
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <!-- End of Main Content -->
                 </div>
-                <!-- /.container-fluid -->
+                <!-- End of Content Wrapper -->
+
+                <div class='ml-5'>
+                    <?php
+                    include('./reports/statusResume.php');
+                    ?>
+                </div>
 
             </div>
-            <!-- End of Main Content -->
-        </div>
-        <!-- End of Content Wrapper -->
+            <!-- End of Page Wrapper -->
 
-    </div>
-    <!-- End of Page Wrapper -->
+            <!-- Scroll to Top Button-->
+            <a class="scroll-to-top rounded" href="#page-top">
+                <i class="fas fa-angle-up"></i>
+            </a>
 
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+            <!-- Logout Modal-->
+            <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                            <a class="btn btn-primary" href="login.html">Logout</a>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- Core plugin JavaScript-->
-    <!-- <script src="../assets/vendor/jquery-easing/jquery.easing.min.js"></script> -->
+            <!-- Footer-->
+            <footer class="footer text-center">
+                <div class="container px-4 px-lg-5">
+                    <ul class="list-inline mb-5">
+                        <li class="list-inline-item">
+                            <a class="social-link rounded-circle text-white mr-3" href="#!"><i class="icon-social-facebook"></i></a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a class="social-link rounded-circle text-white mr-3" href="#!"><i class="icon-social-twitter"></i></a>
+                        </li>
+                    </ul>
+                    <p class="text-muted small mb-0">Copyright &copy; Your Website 2021</p>
+                </div>
+            </footer>
 
-    <!-- Custom scripts for all pages-->
-    <script src="./assets/js/sb-admin-2.min.js"></script>
+            <!-- Core plugin JavaScript-->
+            <!-- <script src="../assets/vendor/jquery-easing/jquery.easing.min.js"></script> -->
 
-    <!-- Page level plugins -->
-    <script src="./assets/js/Chart.min.js"></script>
+            <!-- Custom scripts for all pages-->
+            <script src="./assets/js/sb-admin-2.min.js"></script>
 
-    <!-- Page level custom scripts -->
-    <script src="./assets/js/chart-area-demo.js"></script>
-    <script src="./assets/js/chart-pie-demo.js"></script>
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top"><i class="fas fa-angle-up"></i></a>
-    <!-- Bootstrap core JS-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Core theme JS-->
-    <script src="./assets/js/scripts.js"></script>
+            <!-- Page level plugins -->
+            <script src="./assets/js/Chart.min.js"></script>
+
+            <!-- Page level custom scripts -->
+            <script src="./assets/js/chart-area-demo.js"></script>
+            <script src="./assets/js/chart-pie-demo.js"></script>
+            <!-- Scroll to Top Button-->
+            <a class="scroll-to-top rounded" href="#page-top"><i class="fas fa-angle-up"></i></a>
+            <!-- Bootstrap core JS-->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+            <!-- Core theme JS-->
+            <script src="./assets/js/scripts.js"></script>
 
 </body>
 

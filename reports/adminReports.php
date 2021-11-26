@@ -1,15 +1,15 @@
 <?php
 session_start();
-include("../conexion.php");
-if (!isset($_SESSION['id_usuario'])) {
+include("../funcs/conexion.php");
+if (!isset($_SESSION['id_user'])) {
    header("Location: ../auth/adminLogin.php");
 }
 
-if ($_SESSION['tipo_usuario'] != 1) {
+if ($_SESSION['usertype'] != 1) {
    header("Location: ../");
 }
 
-$userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : null;
+$userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
 ?>
 
 <!DOCTYPE html>
@@ -37,6 +37,7 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
    <!-- Core theme CSS (includes Bootstrap)-->
    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
    <link href="../assets/css/styles2.css" rel="stylesheet" />
+   <link href="../assets/css/reports.css" rel="stylesheet" />
 </head>
 
 <style>
@@ -46,9 +47,11 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
 
    .hidden-image {
       position: absolute;
+      top: 2rem;
+      left: 2rem;
       display: none;
       z-index: 99;
-      max-width: 500px;
+      max-width: 150px;
    }
 
    .show-icon:hover {
@@ -64,22 +67,23 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
 <body id='page-top'>
    <?php
    include('../layout/menu.php');
+   include('../funcs/text.php');
    if (isset($_GET['deleted'])) {
       echo "<div class='alert alert-primary'>Eliminación exitosa</div>";
    }
    ?>
 
    <div class="container">
-      <h2 class="text-center mt-5 text-primary mb-3">Administrar reportes</h2>
+      <h2 class="text-center mt-5 text-primary mb-3">Administrar quejas</h2>
       <hr class="mb-5 bg-primary" />
 
       <?php
-      include("../conexion.php");
-      $liveResults = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT image FROM images WHERE id_report = r.id LIMIT 1) as image, (SELECT count(id) FROM responses as r WHERE r.id_report = id) as counter_responses, (SELECT nombre FROM users as d WHERE d.id_usuario=r.id_user) as user FROM reports as r WHERE deleted_at IS NULL");
-      $deletedResults = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT image FROM images WHERE id_report = r.id LIMIT 1) as image, (SELECT count(id) FROM responses as r WHERE r.id_report = id) as counter_responses, (SELECT nombre FROM users as d WHERE d.id_usuario=r.id_user) as user FROM reports as r WHERE deleted_at IS NOT NULL");
+      include("../funcs/conexion.php");
+      $liveResults = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT image FROM images WHERE id_report = r.id LIMIT 1) as image, (SELECT count(id) FROM responses as re WHERE re.id_report = r.id) as counter_responses, (SELECT name FROM users as d WHERE d.id_user=r.id_user) as user FROM reports as r WHERE deleted_at IS NULL ORDER BY created_at");
+      $deletedResults = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT image FROM images WHERE id_report = r.id LIMIT 1) as image, (SELECT count(id) FROM responses as re WHERE re.id_report = r.id) as counter_responses, (SELECT name FROM users as d WHERE d.id_user=r.id_user) as user FROM reports as r WHERE deleted_at IS NOT NULL ORDER BY created_at");
       ?>
 
-      <h4 class="mt-5 mb-3">Reportes</h4>
+      <h4 class="mt-5 mb-3">Quejas</h4>
       <table class='table table-hover'>
          <thead class='thead-dark'>
             <tr>
@@ -97,16 +101,15 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
             <?php
             while ($row = mysqli_fetch_array($liveResults)) {
                $title = $row["title"];
-               $content = $row["content"];
+               $content = truncate($row["content"]);
                $user = $row["user"];
                $id = $row["id"];
                $image = $row['image'];
                $nResponses = $row['counter_responses'];
                $status = ($nResponses == 0) ? "Sin resolver" : "Resuelta";
-               $statusColor = ($nResponses == 0) ? "warning" : "success";
-               $statusBgColor = ($nResponses == 0) ? "rgba(255, 193, 7, 0.1)" : "rgba(25, 134, 83, 0.1)";
+               $statusClass = ($nResponses == 0) ? "status-box--pending" : "status-box--completed";
 
-               printf("<tr ><td>%d</td><td><div style='background-color: $statusBgColor; width: 25px; height: 25px;' class='d-flex  align-items-center justify-content-center'></div></td><td>%s</td><td>%s</td><td>%s</td>
+               printf("<tr ><td>%d</td><td><div class='d-flex status-box $statusClass align-items-center justify-content-center'></div></td><td>%s</td><td>%s</td><td>%s</td>
                   <td class='image-container'>", $id, $user, $title, $content,);
                if ($image != null) {
                   echo "<i class='show-icon bi bi-image-fill'></i>";
@@ -119,7 +122,7 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
                            <i class='bi bi-trash-fill text-danger' style='font-size: 1.25rem;'></i>
                         </a>
                         <span style='width: .5rem;'></span>
-                        <a class='text-decoration-none' href=\"updateReport.php?id=%s\">
+                        <a class='text-decoration-none' href=\"updateReport.php?id=%s&from=./adminReports.php\">
                            <i class='bi bi-pencil-fill' style='font-size: 1.25rem;'></i>
                         </a>
                      </div>
@@ -133,7 +136,7 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
          </tbody>
       </table>
 
-      <h4 class="mt-5 mb-3">Reportes eliminados</h4>
+      <h4 class="mt-5 mb-3">Quejas eliminadas</h4>
 
       <table class='table table-hover'>
          <thead class='thead-dark'>
@@ -152,16 +155,15 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
             <?php
             while ($row = mysqli_fetch_array($deletedResults)) {
                $title = $row["title"];
-               $content = $row["content"];
+               $content = truncate($row["content"]);
                $user = $row["user"];
                $id = $row["id"];
                $image = $row['image'];
                $nResponses = $row['counter_responses'];
                $status = ($nResponses == 0) ? "Sin resolver" : "Resuelta";
-               $statusColor = ($nResponses == 0) ? "warning" : "success";
-               $statusBgColor = ($nResponses == 0) ? "rgba(255, 193, 7, 0.1)" : "rgba(25, 134, 83, 0.1)";
+               $statusClass = ($nResponses == 0) ? "status-box--pending" : "status-box--completed";
 
-               printf("<tr ><td>%d</td><td><div style='background-color: $statusBgColor; width: 25px; height: 25px;' class='d-flex  align-items-center justify-content-center'></div></td><td>%s</td><td>%s</td><td>%s</td>
+               printf("<tr ><td>%d</td><td><div class='d-flex status-box $statusClass align-items-center justify-content-center'></div></td><td>%s</td><td>%s</td><td>%s</td>
                <td class='image-container'>", $id, $user, $title, $content,);
                if ($image != null) {
                   echo "<i class='show-icon bi bi-image-fill'></i>";
@@ -181,7 +183,27 @@ $userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : nul
             ?>
          </tbody>
       </table>
+
+      <?php
+      include('./statusResume.php');
+      ?>
+
    </div>
+
+   <!-- Footer-->
+   <footer class="footer text-center">
+      <div class="container px-4 px-lg-5">
+         <ul class="list-inline mb-5">
+            <li class="list-inline-item">
+               <a class="social-link rounded-circle text-white mr-3" href="#!"><i class="icon-social-facebook"></i></a>
+            </li>
+            <li class="list-inline-item">
+               <a class="social-link rounded-circle text-white mr-3" href="#!"><i class="icon-social-twitter"></i></a>
+            </li>
+         </ul>
+         <p class="text-muted small mb-0">Copyright &copy; Your Website 2021</p>
+      </div>
+   </footer>
 
    <script src="../assets/js/scripts.js"></script>
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>

@@ -1,0 +1,18 @@
+.status-box {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%!important;
+}
+
+.status-box--pending {
+    background-color: red;
+}
+
+.status-box--completed {
+    background-color: green;
+}
+
+
+.ml-1 {
+    margin-left: 5px;
+}

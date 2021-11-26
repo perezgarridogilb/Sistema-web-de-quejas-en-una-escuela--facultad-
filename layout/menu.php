@@ -1,7 +1,6 @@
 <?php
-$userType = (isset($_SESSION['tipo_usuario'])) ? $_SESSION['tipo_usuario'] : null;
-
-$rootProjectPath = "/Otono2021/Sistema-web-de-quejas-en-una-escuela-facultad";
+$userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
+include(__DIR__ . '/../funcs/path.php');
 ?>
 
 <!-- Navigation-->
@@ -12,26 +11,26 @@ $rootProjectPath = "/Otono2021/Sistema-web-de-quejas-en-una-escuela-facultad";
         <li class="sidebar-brand text-white">
             Sistema de quejas
             <?php
-            if ($userType != null) {
-                $nombre = $_SESSION['nombre'];
-                echo "<div class='name'>Bienvenido, <span class='fw-bold'>$nombre</span></div>";
+            if (!is_null($userType)) {
+                $userMode = ($userType == 1) ? "Administrador" : "Usuario";
+                $nombre = $_SESSION['name'];
+                echo "<div class='nombre'>Bienvenido, <span class='fw-bold'>$nombre ($userMode)</span></div>";
             }
             ?>
         </li>
         <?php
         echo "<li class='sidebar-nav-item'><a href='$rootProjectPath/'>Inicio</a></li>";
-        if ($userType != null) {
-            echo "<li class='sidebar-nav-item'><a href='$rootProjectPath/reports/createReport.php'>Crear reportes</a></li>";
-            echo "<li class='sidebar-nav-item'><a href='$rootProjectPath/dashboard.php'>Estadísticas</a></li>";
+        if (!is_null($userType) && $userType == 0) {
+            echo "<li class='sidebar-nav-item'><a href='$rootProjectPath/reports/createReport.php'>Crear queja</a></li>";
         }
-        echo "<li class='sidebar-nav-item'><a href='$rootProjectPath/reports/listReports.php'>Listar reportes</a></li>";
+        echo "<li class='sidebar-nav-item'><a href='$rootProjectPath/reports/listReports.php'>Listar quejas</a></li>";
         if ($userType == 1) {
-            echo "<li class='sidebar-nav-item'><a href='$rootProjectPath/reports/adminReports.php'>Administrar reportes</a></li>";
+            echo "<li class='sidebar-nav-item'><a href='$rootProjectPath/dashboard.php'>Panel de control</a></li>";
         }
         echo "<li class='sidebar-nav-item'><a href='$rootProjectPath/about.php'>Acerca de nosotros</a></li>";
         echo "<hr class='bg-white'>";
 
-        if ($userType == null) {
+        if (is_null($userType)) {
             echo "<li class='sidebar-nav-item'><a href='$rootProjectPath/auth/userLogin.php'>Iniciar sesion</a></li>";
             echo "<li class='sidebar-nav-item'><a href='$rootProjectPath/auth/crearUsuario.php'>Crear nueva cuenta</a></li>";
         } else {
