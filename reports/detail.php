@@ -3,13 +3,13 @@
     include("../funcs/conexion.php");
     $reportId = $_GET['id'];
 
-    # Fetch reports
+    # Fetch report info
     $sql = "SELECT r.id, r.title, r.id_user, r.content, r.created_at, r.modified_at, (SELECT count(id) FROM responses as re WHERE re.id_report = r.id) as counter_responses FROM reports as r WHERE id=$reportId;";
-    $resultado = mysqli_query($conn, $sql);
-    $row = mysqli_fetch_assoc($resultado);
+    $reportResult = mysqli_query($conn, $sql);
+    $reportRow = mysqli_fetch_assoc($reportResult);
 
-    $userId = isset($_SESSION['id_user']) ?? null;
-    if ($userId == $row['id_user'] && $row['counter_responses'] < 1) {
+    $userId = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : null;
+    if ($userId === $reportRow['id_user'] && $reportRow['counter_responses'] < 1) {
         $onReturnUrl = urlencode("./listReports.php?id=$reportId");
         header("Location: ./updateReport.php?id=$reportId&from=$onReturnUrl");
     }
@@ -20,9 +20,8 @@
     $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
 
     # Fetch like
-    $sql = "SELECT count(id) as count FROM likes WHERE id_report=$reportId AND id_user=$userId";
-    $result = mysqli_query($conn, $sql);
-
+    $canAssignLike = !is_null($userId) && $userType == 0 && $userId !== $reportRow['id_user'];
+    $hasAssignedLike = ($canAssignLike) ?  mysqli_fetch_assoc(mysqli_query($conn, "SELECT count(id) as count FROM likes WHERE id_report=$reportId AND id_user=$userId"))['count'] > 0 : true;
     ?>
 
   <!DOCTYPE html>
@@ -79,24 +78,18 @@
           <a class="text-decoration-none mb-3 d-block" href='./listReports.php'>Ver listado de quejas</a>
 
           <?php
-            $title = $row['title'];
-            $content = $row['content'];
-            $createdAt = $row['created_at'];
-            $modifiedAt = $row['modified_at'];
-            $nResponses = $row['counter_responses'];
+            $title = $reportRow['title'];
+            $content = $reportRow['content'];
+            $createdAt = $reportRow['created_at'];
+            $modifiedAt = $reportRow['modified_at'];
+            $nResponses = $reportRow['counter_responses'];
             $status = ($nResponses == 0) ? "Sin resolver" : "Resuelta";
             $notImages = true;
 
             echo "<div class='p-5 rounded bg-light'>";
 
             echo "<div class='d-flex align-items-baseline'>";
-            if (!is_null($userType) && $userType == 0 && $idUser != $row['id_user']) {
-                $hasAssignedLike = false;
-
-                if (mysqli_fetch_assoc($result)["count"] > 0) {
-                    $hasAssignedLike = true;
-                }
-
+            if ($canAssignLike) {
                 if ($hasAssignedLike) {
                     echo '<i onclick="handleToggledLiked()" id="liked-icon" class="p-1 mr-2 d-block bi bi-star-fill" style="color: #ffd700; cursor: pointer"></i>';
                     echo '<i onclick="handleToggledLiked()" id="nonliked-icon" class="p-1 mr-2 d-block bi bi-star d-none" style="cursor: pointer"></i>';
@@ -135,14 +128,14 @@
 
             if ($nResponses == 0) {
                 if ($userType == 1) {
-                    $idUser = isset($_SESSION['id_user']) ?? null;
+                    $userId = isset($_SESSION['id_user']) ?? null;
 
                     // Solo moderadores
                     echo "<h2 class='text-center mt-5'>Agregar respuesta</h2>" .
                         "<form method='POST' action='./addResponse.php'>" .
                         '<div class="form-group mb-3">' .
                         '<label class="mb-1 fw-bold">Contenido *</label>' .
-                        "<input type='number' hidden name='id_user' value='$idUser'>" .
+                        "<input type='number' hidden name='id_user' value='$userId'>" .
                         "<input type='number' hidden name='id_report' value='$reportId'>" .
                         '<textarea rows="8" name="content" placeholder="Redacta la respuesta..." class="form-control" required></textarea>' .
                         '</div>' .
@@ -153,8 +146,8 @@
                 }
             } else {
                 $sql = "SELECT * FROM responses WHERE id_report = $reportId LIMIT 1";
-                $result = mysqli_query($conn, $sql);
-                $responseContent = mysqli_fetch_assoc($result)["content"];
+                $resultLikes = mysqli_query($conn, $sql);
+                $responseContent = mysqli_fetch_assoc($resultLikes)["content"];
                 echo "<h2 class='text-center mt-5 mb-2'>Respuesta</h2>" .
                     "<div class='p-3 rounded fw-bold' style='background-color: #22577A; color: white;'>$responseContent</div>";
             }

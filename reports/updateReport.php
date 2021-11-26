@@ -193,7 +193,7 @@
 
                 dzClosure.on('successmultiple', function(files, response) {
                    const message = encodeURIComponent("Actualización exitosa!");
-                   window.location = `./listReports.php?message=${message}`;
+                   window.history.back();
                 });
 
                 dzClosure.on('errormultiple', function(files, response) {

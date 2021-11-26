@@ -29,7 +29,7 @@ $lastMonthReportsCount = mysqli_fetch_assoc($resultado)["total"];
 
 $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
 
-$liveResults = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT image FROM images WHERE id_report = r.id LIMIT 1) as image, (SELECT count(id) FROM responses as re WHERE re.id_report = r.id) as counter_responses, (SELECT name FROM users as d WHERE d.id_user=r.id_user) as user FROM reports as r WHERE deleted_at IS NULL AND (SELECT count(id) FROM responses as r WHERE r.id_report = id) = 0 ORDER BY created_at LIMIT 8");
+$reportsWithoutResponse = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT image FROM images WHERE id_report = r.id LIMIT 1) as image, (SELECT count(id) FROM responses as re WHERE re.id_report = r.id) as counter_responses, (SELECT name FROM users as d WHERE d.id_user=r.id_user) as user FROM reports as r WHERE deleted_at IS NULL AND (SELECT count(re.id) FROM responses as re WHERE re.id_report = r.id) = 0 ORDER BY created_at LIMIT 8");
 $reportsWithLikes = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT image FROM images WHERE id_report = r.id LIMIT 1) as image, (SELECT count(id) FROM responses as re WHERE re.id_report = r.id) as counter_responses, (SELECT count(l.id) as counter FROM likes as l WHERE l.id_report=r.id) as counter_likes, (SELECT name FROM users as d WHERE d.id_user=r.id_user) as user FROM reports as r WHERE deleted_at IS NULL ORDER BY counter_likes DESC LIMIT 8");
 ?>
 
@@ -252,7 +252,7 @@ $reportsWithLikes = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELEC
                                         <tbody>
                                             <?php
 
-                                            while ($row = mysqli_fetch_array($liveResults)) {
+                                            while ($row = mysqli_fetch_array($reportsWithoutResponse)) {
                                                 $title = $row["title"];
                                                 $content = truncate($row["content"]);
                                                 $user = $row["user"];
@@ -268,7 +268,7 @@ $reportsWithLikes = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELEC
                                                 }
                                             }
                                             echo "</tr>";
-                                            mysqli_free_result($liveResults);
+                                            mysqli_free_result($reportsWithoutResponse);
                                             mysqli_close($conn);
                                             ?>
                                         </tbody>
