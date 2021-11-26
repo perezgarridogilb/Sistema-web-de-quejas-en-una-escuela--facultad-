@@ -6,6 +6,8 @@ require '../funcs/funcs.php';
 $id_user = null;
 $token = null;
 
+$errors = array();
+
 if (empty($_GET['id_user'])) {
 	header('Location: ../index.php');
 }
@@ -14,8 +16,23 @@ $id_user = $mysqli->real_escape_string($_GET['id_user']);
 $token = $mysqli->real_escape_string($_GET['token']);
 
 if (!verificaTokenPass($id_user, $token)) {
-	echo 'No se pudo verificar los Datos';
+	$errors[] = 'No se pudo verificar los Datos';
+	echo resultBlock($errors);
 	exit;
+}
+
+if (!empty($_POST)) {
+	$id_user = $mysqli->real_escape_string($_POST['id_user']);
+	$token = $mysqli->real_escape_string($_POST['token']);
+	$password = $mysqli->real_escape_string($_POST['password']);
+	$con_password = $mysqli->real_escape_string($_POST['con_password']);
+
+	if (previusKeys($id_user, $password)) {
+		guardaPass($password, $id_user, $con_password, $token);
+		echo "<div class='alert alert-primary'>Guardado</div>";
+	} else {
+		echo "<div class='alert alert-primary'>Esta contraseña es antigua</div>";
+	}
 }
 
 ?>
@@ -51,7 +68,7 @@ if (!verificaTokenPass($id_user, $token)) {
 									<h1 class="h4 text-gray-900 mb-4">Cambia tu contraseña<?php echo ' ' . getValor('name', 'id_user', $id_user); ?></h1>
 								</div>
 
-								<form id="loginform" class="form-horizontal" role="form" action="guarda_pass.php" method="POST" autocomplete="off">
+								<form id="loginform" class="form-horizontal" role="form" action="<?php $_SERVER['PHP_SELF'] ?>" method="POST" autocomplete="off">
 
 									<input type="hidden" id="id_user" name="id_user" value="<?php echo $id_user; ?>" />
 

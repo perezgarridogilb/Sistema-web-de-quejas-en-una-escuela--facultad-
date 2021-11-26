@@ -24,7 +24,7 @@ if (!empty($_POST)) {
         $url = 'http://' . $_SERVER["SERVER_NAME"] . ':' . $_SERVER['SERVER_PORT'] .
             '/Otono2021/Sistema-web-de-quejas-en-una-escuela-facultad/auth/cambia_pass.php?id_user=' . $id_user . '&token=' . $token;
 
-        $asunto = 'Recuperar Password - Sistema de Usuarios';
+        $asunto = 'Recuperar contraseña - Sistema web de quejas';
         $cuerpo = "Hola $nombre: <br /><br />Se ha solicitado un reinicio de contrase&ntilde;a. <br/><br/>Para restaurar la 
 			contrase&ntilde;a, visita la siguiente direcci&oacute;n: <a href='$url'> Cambiar contraseña </a>";
 
@@ -52,6 +52,7 @@ if (!empty($_POST)) {
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
+    <link href="../assets/css/styles2.css" rel="stylesheet">
     <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
     <!-- Simple line icons-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css" rel="stylesheet" />

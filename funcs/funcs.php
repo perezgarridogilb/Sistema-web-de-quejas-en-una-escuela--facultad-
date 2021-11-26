@@ -319,3 +319,43 @@ function cambiaPassword($password, $id_user, $token)
 		return false;
 	}
 }
+
+function previusKeys($id_user, $password)
+{
+
+	global $mysqli;
+
+	$stmt = $mysqli->prepare("SELECT name, password FROM previuskeys WHERE id_user = ?");
+	$stmt->bind_param('i', $id_user);
+	$stmt->execute();
+	$stmt->bind_result($name, $passwd);
+
+	$band = 0;
+	while ($stmt->fetch()) {
+		if ($passwd == $password) {
+			$band = 1;
+		}
+	}
+
+	if ($band != 1) {
+		return true;		
+	} else {
+		return false;
+	}
+}
+
+function guardaPass($password, $id_user, $con_password, $token)
+{
+	if (validaPassword($password, $con_password)) {
+		$pass_hash = $password;
+		previusKeys($pass_hash, $id_user);
+		if (cambiaPassword($pass_hash, $id_user, $token)) {
+			echo 'Ha sido modificado';
+			echo "<br><a href='userLogin.php'>Iniciar sesi&oacute;n</a>";
+		} else {
+			echo 'Error al modificar contraseñas';
+		}
+	} else {
+		echo 'Las contraseñas no coinciden';
+	}
+}
