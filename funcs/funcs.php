@@ -325,10 +325,10 @@ function previusKeys($id_user, $password)
 
 	global $mysqli;
 
-	$stmt = $mysqli->prepare("SELECT name, password FROM previuskeys WHERE id_user = ?");
+	$stmt = $mysqli->prepare("SELECT password FROM previous_passwords WHERE id_user = ?");
 	$stmt->bind_param('i', $id_user);
 	$stmt->execute();
-	$stmt->bind_result($name, $passwd);
+	$stmt->bind_result($passwd);
 
 	$band = 0;
 	while ($stmt->fetch()) {
