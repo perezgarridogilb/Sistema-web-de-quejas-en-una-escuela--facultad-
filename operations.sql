@@ -9,12 +9,6 @@ DROP TRIGGER IF EXISTS after_change_password;
 DROP TRIGGER IF EXISTS before_delete_report;
 
 
--- Procedimiento almacenado para eliminar el reporte --
-
-CREATE PROCEDURE delete_report(id_report INTEGER)
-    UPDATE SET is_deleted=true WHERE id=id_report;
-
-
 -- Procedimiento que inserta una contraseña en el histoial --
 
 DELIMITER //
