@@ -2,7 +2,6 @@
 session_start();
 if (isset($_SESSION['id_user'])) {
     header('Location: ../index.php');
-    include("../funcs/conexion.php");
 }
 
 require '../funcs/conexion.php';
@@ -25,7 +24,7 @@ if (!empty($_POST)) {
         $url = 'http://' . $_SERVER["SERVER_NAME"] . ':' . $_SERVER['SERVER_PORT'] .
             '/Otono2021/Sistema-web-de-quejas-en-una-escuela-facultad/auth/cambia_pass.php?id_user=' . $id_user . '&token=' . $token;
 
-        $asunto = 'Recuperar Password - Sistema de Usuarios';
+        $asunto = 'Recuperar contraseña - Sistema web de quejas';
         $cuerpo = "Hola $nombre: <br /><br />Se ha solicitado un reinicio de contrase&ntilde;a. <br/><br/>Para restaurar la 
 			contrase&ntilde;a, visita la siguiente direcci&oacute;n: <a href='$url'> Cambiar contraseña </a>";
 
@@ -54,35 +53,6 @@ if (!empty($_POST)) {
     <meta name="description" content="">
     <meta name="author" content="">
     <link href="../assets/css/styles2.css" rel="stylesheet">
-
-    <?php
-    if (!empty($_POST)) {
-        $conn = new mysqli("localhost", "root", "", "sistemaalumnos");
-        if ($_REQUEST['passwd'] != $_REQUEST['passwd_confirmation']) {
-            echo "Incorrecta";
-        } else {
-            $correo = $_GET['correo'];
-            $result = mysqli_query($conn, "select id_user from users where mail='$correo'");
-            while ($row = mysqli_fetch_array($result)) {
-                $id_user = $row["id_user"];
-            }
-            $band = 0;
-            $result = mysqli_query($conn, "select password from previous_passwords where id_user=$id_user");
-            while ($row = mysqli_fetch_array($result)) {
-                $passwd = $row["password"];
-                if ($_REQUEST['passwd'] != $passwd) {
-                    $band = 1;
-                }
-            }
-            if ($band != 0) {
-                echo "<div class='alert alert-primary'>Esta contraseña es antigua</div>";
-            } else {
-                echo "<div class='alert alert-primary'>Guardado</div>";
-            }
-        }
-    }
-
-    ?>
     <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
     <!-- Simple line icons-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css" rel="stylesheet" />

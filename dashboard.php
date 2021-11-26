@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('./funcs/conexion.php');
+include('./funcs/text.php');
 
 if (!isset($_SESSION['id_user'])) {
     header("Location: ./auth/adminLogin.php");
@@ -28,7 +29,8 @@ $lastMonthReportsCount = mysqli_fetch_assoc($resultado)["total"];
 
 $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
 
-$liveResults = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT image FROM images WHERE id_report = r.id LIMIT 1) as image, (SELECT count(id) FROM responses as r WHERE r.id_report = id) as counter_responses, (SELECT name FROM users as d WHERE d.id_user=r.id_user) as user FROM reports as r WHERE deleted_at IS NULL AND (SELECT count(id) FROM responses as r WHERE r.id_report = id) = 0 ORDER BY created_at");
+$reportsWithoutResponse = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT image FROM images WHERE id_report = r.id LIMIT 1) as image, (SELECT count(id) FROM responses as re WHERE re.id_report = r.id) as counter_responses, (SELECT name FROM users as d WHERE d.id_user=r.id_user) as user FROM reports as r WHERE deleted_at IS NULL AND (SELECT count(re.id) FROM responses as re WHERE re.id_report = r.id) = 0 ORDER BY created_at LIMIT 8");
+$reportsWithLikes = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT image FROM images WHERE id_report = r.id LIMIT 1) as image, (SELECT count(id) FROM responses as re WHERE re.id_report = r.id) as counter_responses, (SELECT count(l.id) as counter FROM likes as l WHERE l.id_report=r.id) as counter_likes, (SELECT name FROM users as d WHERE d.id_user=r.id_user) as user FROM reports as r WHERE deleted_at IS NULL ORDER BY counter_likes DESC LIMIT 8");
 ?>
 
 <!DOCTYPE html>
@@ -59,6 +61,8 @@ $liveResults = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT ima
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="./assets/css/styles2.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.6.0/font/bootstrap-icons.min.css" integrity="sha512-7w04XesEFaoeeKX0oxkwayDboZB/+AKNF5IUE50fCUDUywLvDN4gv2513TLQS+RDenAeHEK3O40jZZVrkpnWWw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="./assets/css/reports.css" rel="stylesheet" />
+
     <style>
         .image-container {
             position: relative;
@@ -70,7 +74,7 @@ $liveResults = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT ima
             left: 2rem;
             display: none;
             z-index: 99;
-            max-width: 500px;
+            max-width: 150px;
         }
 
         .show-icon:hover {
@@ -144,7 +148,7 @@ $liveResults = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT ima
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Total de reportes</div>
+                                                Total de quejas</div>
                                             <?php
                                             echo "<div class='h5 mb-0 font-weight-bold text-gray-800'>$reportsCount</div>"
                                             ?>
@@ -160,7 +164,7 @@ $liveResults = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT ima
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Reportes de este mes</div>
+                                                Nuevas quejas de este mes</div>
                                             <?php
                                             echo "<div class='h5 mb-0 font-weight-bold text-gray-800'>$lastMonthReportsCount</div>"
                                             ?>
@@ -171,15 +175,16 @@ $liveResults = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT ima
                         </div>
                     </div>
 
-                    <a class="mb-5 d-inline-block" href='./reports/adminReports.php'>Administrar reportes</a>
+                    <a class="mb-5 d-inline-block" href='./reports/adminReports.php'>Administrar quejas</a>
 
                     <div class="row">
-                        <!-- Area Chart -->
-                        <div class="col-xl-12 col-lg-12">
+
+                        <!-- Reports area -->
+                        <div class="col-md-12 col-lg-6">
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Dropdown -->
                                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Últimos reportes sin respuesta</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Quejas más populares</h6>
                                 </div>
 
                                 <!-- Card Body -->
@@ -187,6 +192,7 @@ $liveResults = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT ima
                                     <table class='table table-hover'>
                                         <thead class='thead-dark'>
                                             <tr>
+                                                <td class='fw-bold'>Rating</td>
                                                 <td class='fw-bold'>Estado</td>
                                                 <td class='fw-bold'>Usuario</td>
                                                 <td class='fw-bold'>Titulo</td>
@@ -197,32 +203,64 @@ $liveResults = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT ima
 
                                         <tbody>
                                             <?php
+                                            while ($row = mysqli_fetch_array($reportsWithLikes)) {
+                                                $title = $row["title"];
+                                                $rating = $row['counter_likes'];
+                                                $content = truncate($row["content"]);
+                                                $user = $row["user"];
+                                                $id = $row["id"];
+                                                $image = $row['image'];
+                                                $nResponses = $row['counter_responses'];
+                                                $statusClass = ($nResponses == 0) ? "status-box--pending" : "status-box--completed";
 
-                                            function truncate($text)
-                                            {
-
-                                                //specify number fo characters to shorten by
-                                                $chars = 25;
-
-                                                $text = $text . " ";
-                                                $text = substr($text, 0, $chars);
-                                                $text = substr($text, 0, strrpos($text, ' '));
-                                                $text = $text . "...";
-                                                return $text;
+                                                printf("<tr style='cursor: pointer' onclick='window.location = \"./reports/detail.php?id=$id\"'><td>%d</td><td><div class='d-flex status-box $statusClass align-items-center justify-content-center'></div></td><td>%s</td><td>%s</td><td>%s</td>
+                  <td class='image-container'>",  $rating, $user, $title, $content,);
+                                                if ($image != null) {
+                                                    echo "<i class='show-icon bi bi-image-fill'></i>";
+                                                    echo "<img class='hidden-image rounded img-fluid' src='./medias/$image'/>";
+                                                }
                                             }
+                                            echo "</tr>";
+                                            mysqli_free_result($reportsWithLikes);
+                                            ?>
+                                        </tbody>
+                                    </table>
 
-                                            while ($row = mysqli_fetch_array($liveResults)) {
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Reports area -->
+                        <div class="col-md-12 col-lg-6">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Últimas quejas sin responder</h6>
+                                </div>
+
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <table class='table table-hover'>
+                                        <thead class='thead-dark'>
+                                            <tr>
+                                                <td class='fw-bold'>Usuario</td>
+                                                <td class='fw-bold'>Titulo</td>
+                                                <td class='fw-bold'>Contenido</td>
+                                                <td class='fw-bold'>Imagen</td>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            <?php
+
+                                            while ($row = mysqli_fetch_array($reportsWithoutResponse)) {
                                                 $title = $row["title"];
                                                 $content = truncate($row["content"]);
                                                 $user = $row["user"];
                                                 $id = $row["id"];
                                                 $image = $row['image'];
                                                 $nResponses = $row['counter_responses'];
-                                                $status = ($nResponses == 0) ? "Sin resolver" : "Resuelta";
-                                                $statusColor = ($nResponses == 0) ? "warning" : "success";
-                                                $statusBgColor = ($nResponses == 0) ? "red" : "blue";
 
-                                                printf("<tr style='cursor: pointer' onclick='window.location = \"./reports/detail.php?id=$id\"'><td><div style='background-color: $statusBgColor; width: 25px; height: 25px;' class='d-flex  align-items-center justify-content-center'></div></td><td>%s</td><td>%s</td><td>%s</td>
+                                                printf("<tr style='cursor: pointer' onclick='window.location = \"./reports/detail.php?id=$id\"'><td>%s</td><td>%s</td><td>%s</td>
                   <td class='image-container'>",  $user, $title, $content,);
                                                 if ($image != null) {
                                                     echo "<i class='show-icon bi bi-image-fill'></i>";
@@ -230,7 +268,7 @@ $liveResults = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT ima
                                                 }
                                             }
                                             echo "</tr>";
-                                            mysqli_free_result($liveResults);
+                                            mysqli_free_result($reportsWithoutResponse);
                                             mysqli_close($conn);
                                             ?>
                                         </tbody>
@@ -239,11 +277,16 @@ $liveResults = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT ima
                                 </div>
                             </div>
                         </div>
-
                     </div>
                     <!-- End of Main Content -->
                 </div>
                 <!-- End of Content Wrapper -->
+
+                <div class='ml-5'>
+                    <?php
+                    include('./reports/statusResume.php');
+                    ?>
+                </div>
 
             </div>
             <!-- End of Page Wrapper -->
@@ -271,6 +314,21 @@ $liveResults = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT ima
                     </div>
                 </div>
             </div>
+
+            <!-- Footer-->
+            <footer class="footer text-center">
+                <div class="container px-4 px-lg-5">
+                    <ul class="list-inline mb-5">
+                        <li class="list-inline-item">
+                            <a class="social-link rounded-circle text-white mr-3" href="#!"><i class="icon-social-facebook"></i></a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a class="social-link rounded-circle text-white mr-3" href="#!"><i class="icon-social-twitter"></i></a>
+                        </li>
+                    </ul>
+                    <p class="text-muted small mb-0">Copyright &copy; Your Website 2021</p>
+                </div>
+            </footer>
 
             <!-- Core plugin JavaScript-->
             <!-- <script src="../assets/vendor/jquery-easing/jquery.easing.min.js"></script> -->

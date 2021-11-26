@@ -47,7 +47,8 @@ if (!empty($_POST)) {
 
     if ($arr['success']) {
 
-      $pass_hash = hashPassword($password);
+      // $pass_hash = hashPassword($password);
+      $pass_hash = $password;
       $token = generateToken();
 
       $registro = registraUsuario($nombre, $email, $password, $tipo_usuario, $activo, $token);

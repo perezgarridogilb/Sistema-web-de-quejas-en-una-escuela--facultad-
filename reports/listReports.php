@@ -3,9 +3,10 @@ include("../funcs/conexion.php");
 session_start();
 $failled_message = null;
 
-$liveResults = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT image FROM images WHERE id_report = r.id LIMIT 1) as image, (SELECT count(id) FROM responses as r WHERE r.id_report = id) as counter_responses, (SELECT name FROM users as d WHERE d.id_user=r.id_user) as user FROM reports as r WHERE deleted_at IS NULL ORDER BY created_at");
+$liveResults = mysqli_query($conn, "SELECT r.id, r.title, r.content, (SELECT image FROM images WHERE id_report = r.id LIMIT 1) as image, (SELECT count(id) FROM responses as re WHERE re.id_report = r.id) as counter_responses, (SELECT name FROM users as d WHERE d.id_user=r.id_user) as user FROM reports as r WHERE deleted_at IS NULL ORDER BY created_at");
 
 $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
+$topMessage = isset($_GET['message']) ? urldecode($_GET['message']) : null;
 ?>
 
 <!DOCTYPE html>
@@ -28,6 +29,7 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="../assets/css/styles2.css" rel="stylesheet" />
+    <link href="../assets/css/reports.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.6.0/font/bootstrap-icons.min.css" integrity="sha512-7w04XesEFaoeeKX0oxkwayDboZB/+AKNF5IUE50fCUDUywLvDN4gv2513TLQS+RDenAeHEK3O40jZZVrkpnWWw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <style>
@@ -41,7 +43,7 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
             left: 2rem;
             display: none;
             z-index: 99;
-            max-width: 500px;
+            max-width: 150px;
         }
 
         .show-icon:hover {
@@ -57,6 +59,10 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
 
 <body id="page-top">
     <?php
+    if ($topMessage) {
+        echo "<div class='alert alert-info'>$topMessage</div>";
+    }
+
     include('../layout/menu.php');
     ?>
 
@@ -65,10 +71,9 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
         <hr class="mb-5 bg-primary" />
 
         <?php
-        if ($userType == 0) {
-            echo "<a class='mb-5 d-inline-block text-decoration-none' href='createReport.php'>Crear nueva queja</a>";
+        if (!is_null($userType)  && $userType == 0) {
+            echo "<a class='mb-3 d-inline-block text-decoration-none' href='createReport.php'>Crear nueva queja</a>";
         }
-
         ?>
 
         <table class='table table-hover'>
@@ -84,19 +89,7 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
 
             <tbody>
                 <?php
-
-                function truncate($text)
-                {
-
-                    //specify number fo characters to shorten by
-                    $chars = 25;
-
-                    $text = $text . " ";
-                    $text = substr($text, 0, $chars);
-                    $text = substr($text, 0, strrpos($text, ' '));
-                    $text = $text . "...";
-                    return $text;
-                }
+                include('../funcs/text.php');
 
                 while ($row = mysqli_fetch_array($liveResults)) {
                     $title = $row["title"];
@@ -106,10 +99,9 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
                     $image = $row['image'];
                     $nResponses = $row['counter_responses'];
                     $status = ($nResponses == 0) ? "Sin resolver" : "Resuelta";
-                    $statusColor = ($nResponses == 0) ? "warning" : "success";
-                    $statusBgColor = ($nResponses == 0) ? "red" : "blue";
+                    $statusClass = ($nResponses == 0) ? "status-box--pending" : "status-box--completed";
 
-                    printf("<tr style='cursor: pointer' onclick='window.location = \"detail.php?id=$id\"'><td><div style='background-color: $statusBgColor; width: 25px; height: 25px;' class='d-flex  align-items-center justify-content-center'></div></td><td>%s</td><td>%s</td><td>%s</td>
+                    printf("<tr style='cursor: pointer' onclick='window.location = \"detail.php?id=$id\"'><td><div class='d-flex status-box $statusClass rounded-circle align-items-center justify-content-center'></div></td><td>%s</td><td>%s</td><td>%s</td>
                   <td class='image-container'>",  $user, $title, $content,);
                     if ($image != null) {
                         echo "<i class='show-icon bi bi-image-fill'></i>";
@@ -122,6 +114,10 @@ $userType = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : null;
                 ?>
             </tbody>
         </table>
+
+        <?php
+        include('./statusResume.php');
+        ?>
     </div>
 
     <!-- Footer-->
